@@ -115,7 +115,31 @@ reserves <- shp_import_fn("../data/Bald_all_Reserve_grps.shp")
 units <- shp_import_fn("../data/UnitEstimate.shp")
 ```
 
-### Units and treatment map
+### GMUG and treatment area map
+
+```{r}
+ggplot() + 
+  geom_sf(
+    data = gmug
+    , alpha = 0
+    , lwd = 1, color = "black" 
+  ) +
+  geom_sf(
+    data = units %>% sf::st_union() %>% sf::st_buffer(dist = 500)
+    , fill = "royalblue"
+    , lwd = NA
+  ) +
+  labs(
+    title = "GMUG boundary and treatment area in blue"
+  ) +
+  theme_bw() + 
+  theme(
+    legend.position = "none"
+  )
+```
+
+
+### Treatment units and group map
 
 ```{r}
 ggplot() + 
@@ -127,6 +151,10 @@ ggplot() +
   geom_sf(data = openings, fill = "white", color = "firebrick", lwd = 1) +
   geom_sf(data = reserves, fill = "black", color = "black") +
   scale_fill_viridis_d(option = "turbo", alpha = 0.4) +
+  labs(
+    title = "Harvest treatment units and groups"
+    , subtitle = "Reserves = black, Openings = white"
+  ) +
   theme_bw() + 
   theme(
     legend.position = "none"

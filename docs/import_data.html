@@ -154,7 +154,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><a href="import_data.html#load-treatment-data" id="toc-load-treatment-data"><span class="toc-section-number">2.2</span> Load Treatment data<span></span></a>
 <ul>
-<li><a href="import_data.html#units-and-treatment-map" id="toc-units-and-treatment-map"><span class="toc-section-number">2.2.1</span> Units and treatment map<span></span></a></li>
+<li><a href="import_data.html#gmug-and-treatment-area-map" id="toc-gmug-and-treatment-area-map"><span class="toc-section-number">2.2.1</span> GMUG and treatment area map<span></span></a></li>
+<li><a href="import_data.html#treatment-units-and-group-map" id="toc-treatment-units-and-group-map"><span class="toc-section-number">2.2.2</span> Treatment units and group map<span></span></a></li>
 </ul></li>
 <li><a href="import_data.html#load-elevation-data" id="toc-load-elevation-data"><span class="toc-section-number">2.3</span> Load Elevation Data<span></span></a>
 <ul>
@@ -255,70 +256,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-27"><a href="import_data.html#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-28"><a href="import_data.html#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co"># harvest units</span></span>
 <span id="cb4-29"><a href="import_data.html#cb4-29" aria-hidden="true" tabindex="-1"></a>units <span class="ot">&lt;-</span> <span class="fu">shp_import_fn</span>(<span class="st">&quot;../data/UnitEstimate.shp&quot;</span>)</span></code></pre></div>
-<div id="units-and-treatment-map" class="section level3 hasAnchor" number="2.2.1">
-<h3><span class="header-section-number">2.2.1</span> Units and treatment map<a href="import_data.html#units-and-treatment-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="gmug-and-treatment-area-map" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> GMUG and treatment area map<a href="import_data.html#gmug-and-treatment-area-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="import_data.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb5-2"><a href="import_data.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(</span>
-<span id="cb5-3"><a href="import_data.html#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> units</span>
-<span id="cb5-4"><a href="import_data.html#cb5-4" aria-hidden="true" tabindex="-1"></a>    , <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> unit_numbe)</span>
-<span id="cb5-5"><a href="import_data.html#cb5-5" aria-hidden="true" tabindex="-1"></a>    , <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span> </span>
+<span id="cb5-3"><a href="import_data.html#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> gmug</span>
+<span id="cb5-4"><a href="import_data.html#cb5-4" aria-hidden="true" tabindex="-1"></a>    , <span class="at">alpha =</span> <span class="dv">0</span></span>
+<span id="cb5-5"><a href="import_data.html#cb5-5" aria-hidden="true" tabindex="-1"></a>    , <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span> </span>
 <span id="cb5-6"><a href="import_data.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-7"><a href="import_data.html#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> openings, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb5-8"><a href="import_data.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> reserves, <span class="at">fill =</span> <span class="st">&quot;black&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb5-9"><a href="import_data.html#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;turbo&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb5-10"><a href="import_data.html#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb5-11"><a href="import_data.html#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb5-12"><a href="import_data.html#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
-<span id="cb5-13"><a href="import_data.html#cb5-13" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<span id="cb5-7"><a href="import_data.html#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb5-8"><a href="import_data.html#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> units <span class="sc">%&gt;%</span> sf<span class="sc">::</span><span class="fu">st_union</span>() <span class="sc">%&gt;%</span> sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">500</span>)</span>
+<span id="cb5-9"><a href="import_data.html#cb5-9" aria-hidden="true" tabindex="-1"></a>    , <span class="at">fill =</span> <span class="st">&quot;royalblue&quot;</span></span>
+<span id="cb5-10"><a href="import_data.html#cb5-10" aria-hidden="true" tabindex="-1"></a>    , <span class="at">lwd =</span> <span class="cn">NA</span></span>
+<span id="cb5-11"><a href="import_data.html#cb5-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="import_data.html#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-13"><a href="import_data.html#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;GMUG and treatment area in blue&quot;</span></span>
+<span id="cb5-14"><a href="import_data.html#cb5-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-15"><a href="import_data.html#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb5-16"><a href="import_data.html#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-17"><a href="import_data.html#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
+<span id="cb5-18"><a href="import_data.html#cb5-18" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
+</div>
+<div id="treatment-units-and-group-map" class="section level3 hasAnchor" number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Treatment units and group map<a href="import_data.html#treatment-units-and-group-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="import_data.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb6-2"><a href="import_data.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb6-3"><a href="import_data.html#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> units</span>
+<span id="cb6-4"><a href="import_data.html#cb6-4" aria-hidden="true" tabindex="-1"></a>    , <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> unit_numbe)</span>
+<span id="cb6-5"><a href="import_data.html#cb6-5" aria-hidden="true" tabindex="-1"></a>    , <span class="at">lwd =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span> </span>
+<span id="cb6-6"><a href="import_data.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="import_data.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> openings, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="import_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> reserves, <span class="at">fill =</span> <span class="st">&quot;black&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="import_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;turbo&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="import_data.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-11"><a href="import_data.html#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Harvest treatment units and groups&quot;</span></span>
+<span id="cb6-12"><a href="import_data.html#cb6-12" aria-hidden="true" tabindex="-1"></a>    , <span class="at">subtitle =</span> <span class="st">&quot;Reserves = black, Openings = white&quot;</span></span>
+<span id="cb6-13"><a href="import_data.html#cb6-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-14"><a href="import_data.html#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb6-15"><a href="import_data.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-16"><a href="import_data.html#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
+<span id="cb6-17"><a href="import_data.html#cb6-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
 </div>
 </div>
 <div id="load-elevation-data" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Load Elevation Data<a href="import_data.html#load-elevation-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The function <code>elevatr::get_elev_raster</code> was used to obtain a digital elevation model (DEM) raster (~6.8m resolution).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="import_data.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
-<span id="cb6-2"><a href="import_data.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
-<span id="cb6-3"><a href="import_data.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># read elevation data</span></span>
-<span id="cb6-4"><a href="import_data.html#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
-<span id="cb6-5"><a href="import_data.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
-<span id="cb6-6"><a href="import_data.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">&quot;../data/gmug_elev.tif&quot;</span>) <span class="sc">==</span> <span class="cn">FALSE</span>){</span>
-<span id="cb6-7"><a href="import_data.html#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># z =14 is highest resolution (~6.8m)</span></span>
-<span id="cb6-8"><a href="import_data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>      elev <span class="ot">&lt;-</span> elevatr<span class="sc">::</span><span class="fu">get_elev_raster</span>(</span>
-<span id="cb6-9"><a href="import_data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">locations =</span> units <span class="sc">%&gt;%</span> </span>
-<span id="cb6-10"><a href="import_data.html#cb6-10" aria-hidden="true" tabindex="-1"></a>            sf<span class="sc">::</span><span class="fu">st_union</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-11"><a href="import_data.html#cb6-11" aria-hidden="true" tabindex="-1"></a>            sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">100</span>)</span>
-<span id="cb6-12"><a href="import_data.html#cb6-12" aria-hidden="true" tabindex="-1"></a>          , <span class="at">z =</span> <span class="dv">14</span></span>
-<span id="cb6-13"><a href="import_data.html#cb6-13" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-14"><a href="import_data.html#cb6-14" aria-hidden="true" tabindex="-1"></a>        stars<span class="sc">::</span><span class="fu">st_as_stars</span>()</span>
-<span id="cb6-15"><a href="import_data.html#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># save</span></span>
-<span id="cb6-16"><a href="import_data.html#cb6-16" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">write_stars</span>(elev, <span class="st">&quot;../data/elev.tif&quot;</span>, <span class="at">append =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-17"><a href="import_data.html#cb6-17" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
-<span id="cb6-18"><a href="import_data.html#cb6-18" aria-hidden="true" tabindex="-1"></a>    elev <span class="ot">&lt;-</span> stars<span class="sc">::</span><span class="fu">read_stars</span>(<span class="st">&quot;../data/elev.tif&quot;</span>)</span>
-<span id="cb6-19"><a href="import_data.html#cb6-19" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="import_data.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb7-2"><a href="import_data.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb7-3"><a href="import_data.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># read elevation data</span></span>
+<span id="cb7-4"><a href="import_data.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb7-5"><a href="import_data.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb7-6"><a href="import_data.html#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">&quot;../data/gmug_elev.tif&quot;</span>) <span class="sc">==</span> <span class="cn">FALSE</span>){</span>
+<span id="cb7-7"><a href="import_data.html#cb7-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># z =14 is highest resolution (~6.8m)</span></span>
+<span id="cb7-8"><a href="import_data.html#cb7-8" aria-hidden="true" tabindex="-1"></a>      elev <span class="ot">&lt;-</span> elevatr<span class="sc">::</span><span class="fu">get_elev_raster</span>(</span>
+<span id="cb7-9"><a href="import_data.html#cb7-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">locations =</span> units <span class="sc">%&gt;%</span> </span>
+<span id="cb7-10"><a href="import_data.html#cb7-10" aria-hidden="true" tabindex="-1"></a>            sf<span class="sc">::</span><span class="fu">st_union</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-11"><a href="import_data.html#cb7-11" aria-hidden="true" tabindex="-1"></a>            sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">100</span>)</span>
+<span id="cb7-12"><a href="import_data.html#cb7-12" aria-hidden="true" tabindex="-1"></a>          , <span class="at">z =</span> <span class="dv">14</span></span>
+<span id="cb7-13"><a href="import_data.html#cb7-13" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-14"><a href="import_data.html#cb7-14" aria-hidden="true" tabindex="-1"></a>        stars<span class="sc">::</span><span class="fu">st_as_stars</span>()</span>
+<span id="cb7-15"><a href="import_data.html#cb7-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># save</span></span>
+<span id="cb7-16"><a href="import_data.html#cb7-16" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">write_stars</span>(elev, <span class="st">&quot;../data/elev.tif&quot;</span>, <span class="at">append =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-17"><a href="import_data.html#cb7-17" aria-hidden="true" tabindex="-1"></a>  }<span class="cf">else</span>{</span>
+<span id="cb7-18"><a href="import_data.html#cb7-18" aria-hidden="true" tabindex="-1"></a>    elev <span class="ot">&lt;-</span> stars<span class="sc">::</span><span class="fu">read_stars</span>(<span class="st">&quot;../data/elev.tif&quot;</span>)</span>
+<span id="cb7-19"><a href="import_data.html#cb7-19" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
 <div id="elevation-plot" class="section level3 hasAnchor" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Elevation plot<a href="import_data.html#elevation-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="import_data.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb7-2"><a href="import_data.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> elev) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="import_data.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">&quot;viridis&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-4"><a href="import_data.html#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> units, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-5"><a href="import_data.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb7-6"><a href="import_data.html#cb7-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;GMUG Treatment Units Elevation Map&quot;</span></span>
-<span id="cb7-7"><a href="import_data.html#cb7-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(elev)<span class="sc">$</span>input</span>
-<span id="cb7-8"><a href="import_data.html#cb7-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb7-9"><a href="import_data.html#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-10"><a href="import_data.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb7-11"><a href="import_data.html#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb7-12"><a href="import_data.html#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb7-13"><a href="import_data.html#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb7-14"><a href="import_data.html#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb7-15"><a href="import_data.html#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)</span>
-<span id="cb7-16"><a href="import_data.html#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , panel.grid = element_blank()</span></span>
-<span id="cb7-17"><a href="import_data.html#cb7-17" aria-hidden="true" tabindex="-1"></a>    , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb7-18"><a href="import_data.html#cb7-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb7-19"><a href="import_data.html#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(</span>
-<span id="cb7-20"><a href="import_data.html#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">&quot;Elev. (m)&quot;</span>)</span>
-<span id="cb7-21"><a href="import_data.html#cb7-21" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-9-1.png" width="960" /></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="import_data.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb8-2"><a href="import_data.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> elev) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="import_data.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">&quot;viridis&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="import_data.html#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> units, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="import_data.html#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-6"><a href="import_data.html#cb8-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;GMUG Treatment Units Elevation Map&quot;</span></span>
+<span id="cb8-7"><a href="import_data.html#cb8-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(elev)<span class="sc">$</span>input</span>
+<span id="cb8-8"><a href="import_data.html#cb8-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="import_data.html#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="import_data.html#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="import_data.html#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="import_data.html#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb8-13"><a href="import_data.html#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb8-14"><a href="import_data.html#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb8-15"><a href="import_data.html#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb8-16"><a href="import_data.html#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , panel.grid = element_blank()</span></span>
+<span id="cb8-17"><a href="import_data.html#cb8-17" aria-hidden="true" tabindex="-1"></a>    , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb8-18"><a href="import_data.html#cb8-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-19"><a href="import_data.html#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(</span>
+<span id="cb8-20"><a href="import_data.html#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">&quot;Elev. (m)&quot;</span>)</span>
+<span id="cb8-21"><a href="import_data.html#cb8-21" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-10-1.png" width="960" /></p>
 
 </div>
 </div>

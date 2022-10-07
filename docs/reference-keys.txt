@@ -3,6 +3,7 @@ import_data
 national-forest-management-data-download
 gmug-map
 load-treatment-data
-units-and-treatment-map
+gmug-and-treatment-area-map
+treatment-units-and-group-map
 load-elevation-data
 elevation-plot
