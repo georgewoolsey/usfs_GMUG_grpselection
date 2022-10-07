@@ -1,4 +1,4 @@
-# Import Vector Data {#vector_data}
+# Import Data {#import_data}
 
 ```{r, include=FALSE, warning=F, message=F}
 # data mgmt
