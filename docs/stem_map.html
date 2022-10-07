@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en-US" xml:lang="en-US">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Analyze Lidar Data | Black Hills Experimental Forest Prescribed Fire Planning</title>
+  <meta name="description" content="Using the bookdown package to write a book for BHEF Rx fire planning. The output format for this example is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Analyze Lidar Data | Black Hills Experimental Forest Prescribed Fire Planning" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Using the bookdown package to write a book for BHEF Rx fire planning. The output format for this example is bookdown::gitbook." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Analyze Lidar Data | Black Hills Experimental Forest Prescribed Fire Planning" />
+  
+  <meta name="twitter:description" content="Using the bookdown package to write a book for BHEF Rx fire planning. The output format for this example is bookdown::gitbook." />
+  
+
+<meta name="author" content="George Woolsey" />
+
+
+<meta name="date" content="2022-08-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="vector_data.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction<span></span></a></li>
+<li><a href="objective.html#objective" id="toc-objective"><span class="toc-section-number">2</span> Objective<span></span></a></li>
+<li><a href="vector_data.html#vector_data" id="toc-vector_data"><span class="toc-section-number">3</span> Import Vector Data<span></span></a>
+<ul>
+<li><a href="vector_data.html#national-forest-management-data-download" id="toc-national-forest-management-data-download"><span class="toc-section-number">3.1</span> National Forest Management data download<span></span></a></li>
+<li><a href="vector_data.html#load-research-plot-data" id="toc-load-research-plot-data"><span class="toc-section-number">3.2</span> Load Research Plot data<span></span></a></li>
+<li><a href="vector_data.html#load-stem-map-data" id="toc-load-stem-map-data"><span class="toc-section-number">3.3</span> Load Stem Map data<span></span></a></li>
+<li><a href="vector_data.html#load-rx-fire-shapefile" id="toc-load-rx-fire-shapefile"><span class="toc-section-number">3.4</span> Load Rx Fire shapefile<span></span></a></li>
+<li><a href="vector_data.html#load-national-forests-shapefile" id="toc-load-national-forests-shapefile"><span class="toc-section-number">3.5</span> Load National Forests shapefile<span></span></a></li>
+<li><a href="vector_data.html#load-experimental-forests-shapefile" id="toc-load-experimental-forests-shapefile"><span class="toc-section-number">3.6</span> Load Experimental Forests shapefile<span></span></a></li>
+<li><a href="vector_data.html#harvests" id="toc-harvests"><span class="toc-section-number">3.7</span> Load FACTS Timber Harvests<span></span></a>
+<ul>
+<li><a href="vector_data.html#harvests-by-treatment-type" id="toc-harvests-by-treatment-type"><span class="toc-section-number">3.7.1</span> Harvests by treatment type<span></span></a></li>
+</ul></li>
+<li><a href="vector_data.html#join-research-plot-to-harvest" id="toc-join-research-plot-to-harvest"><span class="toc-section-number">3.8</span> Join Research Plot to Harvest<span></span></a></li>
+<li><a href="vector_data.html#join-stem-map-to-research-plot-harvest" id="toc-join-stem-map-to-research-plot-harvest"><span class="toc-section-number">3.9</span> Join Stem Map to Research Plot &amp; Harvest<span></span></a>
+<ul>
+<li><a href="vector_data.html#stem-map-descriptive-statistics." id="toc-stem-map-descriptive-statistics."><span class="toc-section-number">3.9.1</span> Stem Map Descriptive statistics.<span></span></a></li>
+</ul></li>
+<li><a href="vector_data.html#map-harvests-research-plots-stem-map" id="toc-map-harvests-research-plots-stem-map"><span class="toc-section-number">3.10</span> Map Harvests, Research Plots, Stem Map<span></span></a></li>
+<li><a href="vector_data.html#write-out-data" id="toc-write-out-data"><span class="toc-section-number">3.11</span> Write Out Data<span></span></a></li>
+</ul></li>
+<li><a href="stem_map.html#stem_map" id="toc-stem_map"><span class="toc-section-number">4</span> Analyze Lidar Data<span></span></a>
+<ul>
+<li><a href="stem_map.html#download-lidar-data-from-natl-map" id="toc-download-lidar-data-from-natl-map"><span class="toc-section-number">4.1</span> Download Lidar Data From Nat’l Map<span></span></a></li>
+<li><a href="stem_map.html#load-vector-data" id="toc-load-vector-data"><span class="toc-section-number">4.2</span> Load Vector Data<span></span></a></li>
+<li><a href="stem_map.html#load-elevation-data" id="toc-load-elevation-data"><span class="toc-section-number">4.3</span> Load Elevation Data<span></span></a></li>
+<li><a href="stem_map.html#load-lidar-data" id="toc-load-lidar-data"><span class="toc-section-number">4.4</span> Load Lidar Data<span></span></a>
+<ul>
+<li><a href="stem_map.html#height-normalization-using-dem" id="toc-height-normalization-using-dem"><span class="toc-section-number">4.4.1</span> Height normalization using DEM<span></span></a></li>
+<li><a href="stem_map.html#canopy-height-model" id="toc-canopy-height-model"><span class="toc-section-number">4.4.2</span> Canopy Height model<span></span></a></li>
+<li><a href="stem_map.html#individual-tree-detection-itd" id="toc-individual-tree-detection-itd"><span class="toc-section-number">4.4.3</span> Individual Tree Detection (ITD)<span></span></a></li>
+<li><a href="stem_map.html#individual-tree-segmentation-its" id="toc-individual-tree-segmentation-its"><span class="toc-section-number">4.4.4</span> Individual Tree Segmentation (ITS)<span></span></a></li>
+</ul></li>
+<li><a href="stem_map.html#lidar-derived-crown-groups-summary" id="toc-lidar-derived-crown-groups-summary"><span class="toc-section-number">4.5</span> Lidar-Derived Crown Groups Summary<span></span></a>
+<ul>
+<li><a href="stem_map.html#crown-group-summary-statistics" id="toc-crown-group-summary-statistics"><span class="toc-section-number">4.5.1</span> Crown Group Summary Statistics<span></span></a></li>
+</ul></li>
+<li><a href="stem_map.html#map-crowns-and-rx-fire-area" id="toc-map-crowns-and-rx-fire-area"><span class="toc-section-number">4.6</span> Map Crowns and Rx Fire Area<span></span></a></li>
+<li><a href="stem_map.html#write-out-data-1" id="toc-write-out-data-1"><span class="toc-section-number">4.7</span> Write Out Data<span></span></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Black Hills Experimental Forest Prescribed Fire Planning</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="stem_map" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Analyze Lidar Data<a href="stem_map.html#stem_map" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="stem_map.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># turn off the s2 processing </span></span>
+<span id="cb15-2"><a href="stem_map.html#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## https://stackoverflow.com/questions/68478179/how-to-resolve-spherical-geometry-failures-when-joining-spatial-data</span></span>
+<span id="cb15-3"><a href="stem_map.html#cb15-3" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">sf_use_s2</span>(<span class="cn">FALSE</span>)</span></code></pre></div>
+<div id="download-lidar-data-from-natl-map" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Download Lidar Data From Nat’l Map<a href="stem_map.html#download-lidar-data-from-natl-map" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <a href="https://apps.nationalmap.gov/downloader/">USGS National Map</a> was used to obtain a list of file download links for “Elevation Source Data (3DEP) - Lidar, IfSAR” data available marked as “Lidar Point Cloud (LPC)”. This download file list was placed in the <code>data</code> folder where the code below utilizes it to download data. The “thumbnail” option in the Nat’l Map was used to determine that the “Fugro” data will suffice to cover the BHEF area. Also, downloaded NAIP imagery while had ROI drawn in Nat’l Map.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="stem_map.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb16-2"><a href="stem_map.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb16-3"><a href="stem_map.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># lidar data</span></span>
+<span id="cb16-4"><a href="stem_map.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb16-5"><a href="stem_map.html#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="do">#######################################################</span></span>
+<span id="cb16-6"><a href="stem_map.html#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="stem_map.html#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># open download text file</span></span>
+<span id="cb16-8"><a href="stem_map.html#cb16-8" aria-hidden="true" tabindex="-1"></a>urls <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">&quot;../data/usgs_lidar_data.txt&quot;</span>, <span class="at">header =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-9"><a href="stem_map.html#cb16-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">url_path =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-10"><a href="stem_map.html#cb16-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&quot;FUGRO&quot;</span>, <span class="fu">toupper</span>(url_path)) <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-11"><a href="stem_map.html#cb16-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb16-12"><a href="stem_map.html#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">orig_fname =</span> <span class="fu">word</span>(<span class="fu">gsub</span>(<span class="st">&quot;/&quot;</span>, <span class="st">&quot; &quot;</span>, url_path), <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb16-13"><a href="stem_map.html#cb16-13" aria-hidden="true" tabindex="-1"></a>    , <span class="at">fname_sans_typ =</span> <span class="fu">gsub</span>(<span class="st">&quot;.laz&quot;</span>, <span class="st">&quot;&quot;</span>, orig_fname)</span>
+<span id="cb16-14"><a href="stem_map.html#cb16-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-15"><a href="stem_map.html#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="stem_map.html#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="stem_map.html#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># create parent directory for data</span></span>
+<span id="cb16-18"><a href="stem_map.html#cb16-18" aria-hidden="true" tabindex="-1"></a>  hey_dir <span class="ot">&lt;-</span> <span class="st">&quot;../data/lidar/&quot;</span></span>
+<span id="cb16-19"><a href="stem_map.html#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">dir.exists</span>(hey_dir)<span class="sc">==</span><span class="cn">FALSE</span>){</span>
+<span id="cb16-20"><a href="stem_map.html#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(hey_dir)</span>
+<span id="cb16-21"><a href="stem_map.html#cb16-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-22"><a href="stem_map.html#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#loop through to download lidar data</span></span>
+<span id="cb16-23"><a href="stem_map.html#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(urls)){</span>
+<span id="cb16-24"><a href="stem_map.html#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># set up names</span></span>
+<span id="cb16-25"><a href="stem_map.html#cb16-25" aria-hidden="true" tabindex="-1"></a>    f_nm <span class="ot">&lt;-</span> <span class="fu">paste0</span>(hey_dir</span>
+<span id="cb16-26"><a href="stem_map.html#cb16-26" aria-hidden="true" tabindex="-1"></a>      , urls<span class="sc">$</span>orig_fname[i]</span>
+<span id="cb16-27"><a href="stem_map.html#cb16-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-28"><a href="stem_map.html#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">options</span>(<span class="at">timeout =</span> <span class="dv">60</span> <span class="sc">*</span> <span class="dv">15</span>)</span>
+<span id="cb16-29"><a href="stem_map.html#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="do">########################</span></span>
+<span id="cb16-30"><a href="stem_map.html#cb16-30" aria-hidden="true" tabindex="-1"></a>    <span class="do">## download and unzip</span></span>
+<span id="cb16-31"><a href="stem_map.html#cb16-31" aria-hidden="true" tabindex="-1"></a>    <span class="do">########################</span></span>
+<span id="cb16-32"><a href="stem_map.html#cb16-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">file.exists</span>(f_nm)<span class="sc">==</span><span class="cn">FALSE</span>){</span>
+<span id="cb16-33"><a href="stem_map.html#cb16-33" aria-hidden="true" tabindex="-1"></a>      <span class="co"># download</span></span>
+<span id="cb16-34"><a href="stem_map.html#cb16-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">download.file</span>(urls<span class="sc">$</span>url_path[i], <span class="at">destfile =</span> f_nm)</span>
+<span id="cb16-35"><a href="stem_map.html#cb16-35" aria-hidden="true" tabindex="-1"></a>    }<span class="cf">else</span>{</span>
+<span id="cb16-36"><a href="stem_map.html#cb16-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span>(<span class="fu">paste0</span>(f_nm, <span class="st">&quot; file already exists&quot;</span>))</span>
+<span id="cb16-37"><a href="stem_map.html#cb16-37" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-38"><a href="stem_map.html#cb16-38" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+</div>
+<div id="load-vector-data" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Load Vector Data<a href="stem_map.html#load-vector-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Spatial data was loaded and cleaned in <a href="vector_data.html#vector_data">prior chapter</a>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="stem_map.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save cleaned data for reading to R later</span></span>
+<span id="cb17-2"><a href="stem_map.html#cb17-2" aria-hidden="true" tabindex="-1"></a>forests_bhnf <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">&quot;../data/forests_bhnf.gpkg&quot;</span>)</span>
+<span id="cb17-3"><a href="stem_map.html#cb17-3" aria-hidden="true" tabindex="-1"></a>bhef_boundary <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">&quot;../data/bhef_boundary.gpkg&quot;</span>)</span>
+<span id="cb17-4"><a href="stem_map.html#cb17-4" aria-hidden="true" tabindex="-1"></a>bhef_harvests <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">&quot;../data/bhef_harvests.gpkg&quot;</span>)</span>
+<span id="cb17-5"><a href="stem_map.html#cb17-5" aria-hidden="true" tabindex="-1"></a>research_plots <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">&quot;../data/research_plots.gpkg&quot;</span>)</span>
+<span id="cb17-6"><a href="stem_map.html#cb17-6" aria-hidden="true" tabindex="-1"></a>stem_map <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">&quot;../data/stem_map.gpkg&quot;</span>)</span>
+<span id="cb17-7"><a href="stem_map.html#cb17-7" aria-hidden="true" tabindex="-1"></a>rx_fire <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_read</span>(<span class="st">&quot;../data/rx_fire.gpkg&quot;</span>)</span></code></pre></div>
+</div>
+<div id="load-elevation-data" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Load Elevation Data<a href="stem_map.html#load-elevation-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using <code>elevatr::get_elev_raster</code> to get a digital elevation model (DEM) raster (~6.8m resolution).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="stem_map.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in elevation data</span></span>
+<span id="cb18-2"><a href="stem_map.html#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># z =14 is highest resolution (~6.8m)</span></span>
+<span id="cb18-3"><a href="stem_map.html#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">file.exists</span>(<span class="st">&quot;../data/bhef_elev.tif&quot;</span>) <span class="sc">==</span> <span class="cn">FALSE</span>){</span>
+<span id="cb18-4"><a href="stem_map.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  elev <span class="ot">&lt;-</span> elevatr<span class="sc">::</span><span class="fu">get_elev_raster</span>(bhef_boundary, <span class="at">z =</span> <span class="dv">14</span>)</span>
+<span id="cb18-5"><a href="stem_map.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sf::st_crs(elev) == sf::st_crs(bhef_boundary)</span></span>
+<span id="cb18-6"><a href="stem_map.html#cb18-6" aria-hidden="true" tabindex="-1"></a>  bhef_elev <span class="ot">&lt;-</span> stars<span class="sc">::</span><span class="fu">st_as_stars</span>(elev)</span>
+<span id="cb18-7"><a href="stem_map.html#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sf::st_transform(crs = sf::st_crs(bhef_boundary))</span></span>
+<span id="cb18-8"><a href="stem_map.html#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># save</span></span>
+<span id="cb18-9"><a href="stem_map.html#cb18-9" aria-hidden="true" tabindex="-1"></a>  stars<span class="sc">::</span><span class="fu">write_stars</span>(bhef_elev, <span class="st">&quot;../data/bhef_elev.tif&quot;</span>, <span class="at">append =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-10"><a href="stem_map.html#cb18-10" aria-hidden="true" tabindex="-1"></a>}<span class="cf">else</span>{</span>
+<span id="cb18-11"><a href="stem_map.html#cb18-11" aria-hidden="true" tabindex="-1"></a>  bhef_elev <span class="ot">&lt;-</span> stars<span class="sc">::</span><span class="fu">read_stars</span>(<span class="st">&quot;../data/bhef_elev.tif&quot;</span>)</span>
+<span id="cb18-12"><a href="stem_map.html#cb18-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-13"><a href="stem_map.html#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="stem_map.html#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb18-15"><a href="stem_map.html#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> bhef_elev[bhef_boundary]) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="stem_map.html#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">&quot;cividis&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-17"><a href="stem_map.html#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb18-18"><a href="stem_map.html#cb18-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;BHEF Elevation Map&quot;</span></span>
+<span id="cb18-19"><a href="stem_map.html#cb18-19" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(bhef_elev)<span class="sc">$</span>input</span>
+<span id="cb18-20"><a href="stem_map.html#cb18-20" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb18-21"><a href="stem_map.html#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb18-22"><a href="stem_map.html#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb18-23"><a href="stem_map.html#cb18-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb18-24"><a href="stem_map.html#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb18-25"><a href="stem_map.html#cb18-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb18-26"><a href="stem_map.html#cb18-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , panel.grid = element_blank()</span></span>
+<span id="cb18-27"><a href="stem_map.html#cb18-27" aria-hidden="true" tabindex="-1"></a>    , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb18-28"><a href="stem_map.html#cb18-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-29"><a href="stem_map.html#cb18-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(</span>
+<span id="cb18-30"><a href="stem_map.html#cb18-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span><span class="st">&quot;Elev. (m)&quot;</span>)</span>
+<span id="cb18-31"><a href="stem_map.html#cb18-31" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="bhef_rxfire_plan_files/figure-html/unnamed-chunk-24-1.png" width="960" /></p>
+</div>
+<div id="load-lidar-data" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Load Lidar Data<a href="stem_map.html#load-lidar-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use the <code>lidR</code> package for manipulating and visualizing point cloud data. See the very <a href="https://r-lidar.github.io/lidRbook/index.html">helpful book</a> by Roussel, J.R., Goodbody, T.R.H., and Tompalski P. (2021) for more information.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="stem_map.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list laz files</span></span>
+<span id="cb19-2"><a href="stem_map.html#cb19-2" aria-hidden="true" tabindex="-1"></a>  lazs <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;../data/lidar/&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.laz$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-3"><a href="stem_map.html#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># change projection of DEM </span></span>
+<span id="cb19-4"><a href="stem_map.html#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # creating a new regular grid in a new CRS</span></span>
+<span id="cb19-5"><a href="stem_map.html#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># newgrid &lt;- bhef_boundary %&gt;% </span></span>
+<span id="cb19-6"><a href="stem_map.html#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   sf::st_transform(crs = sf::st_crs( lidR::readLAS(lazs[1], select = &quot;xyz&quot;) )) %&gt;% </span></span>
+<span id="cb19-7"><a href="stem_map.html#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   sf::st_bbox() %&gt;%</span></span>
+<span id="cb19-8"><a href="stem_map.html#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   stars::st_as_stars()</span></span>
+<span id="cb19-9"><a href="stem_map.html#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # set up old grid to warp back</span></span>
+<span id="cb19-10"><a href="stem_map.html#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># oldgrid &lt;- bhef_boundary %&gt;% </span></span>
+<span id="cb19-11"><a href="stem_map.html#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   sf::st_bbox() %&gt;%</span></span>
+<span id="cb19-12"><a href="stem_map.html#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   stars::st_as_stars()</span></span>
+<span id="cb19-13"><a href="stem_map.html#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # warping the old raster to the new grid</span></span>
+<span id="cb19-14"><a href="stem_map.html#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># bhef_elev_reproj &lt;- bhef_elev %&gt;%</span></span>
+<span id="cb19-15"><a href="stem_map.html#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   stars::st_warp(newgrid)</span></span>
+<span id="cb19-16"><a href="stem_map.html#cb19-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-17"><a href="stem_map.html#cb19-17" aria-hidden="true" tabindex="-1"></a>  bhef_elev_reproj <span class="ot">&lt;-</span> bhef_elev <span class="sc">%&gt;%</span> stars<span class="sc">::</span><span class="fu">st_warp</span>(<span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>( lidR<span class="sc">::</span><span class="fu">readLAS</span>(lazs[<span class="dv">1</span>], <span class="at">select =</span> <span class="st">&quot;xyz&quot;</span>) ))</span>
+<span id="cb19-18"><a href="stem_map.html#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb19-19"><a href="stem_map.html#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="co"># read laz files</span></span>
+<span id="cb19-20"><a href="stem_map.html#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb19-21"><a href="stem_map.html#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If several files are read at once the returned LAS object is considered as one LAS file.</span></span>
+<span id="cb19-22"><a href="stem_map.html#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># las &lt;- lidR::readLAS(lazs[2], select = &quot;xyz&quot;)  # load XYZ only</span></span>
+<span id="cb19-23"><a href="stem_map.html#cb19-23" aria-hidden="true" tabindex="-1"></a>  las <span class="ot">&lt;-</span> lidR<span class="sc">::</span><span class="fu">readLAS</span>(lazs, <span class="at">select =</span> <span class="st">&quot;xyz&quot;</span>)  <span class="co"># load XYZ only</span></span>
+<span id="cb19-24"><a href="stem_map.html#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># lidR::las_check(las)</span></span>
+<span id="cb19-25"><a href="stem_map.html#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove duplicate points</span></span>
+<span id="cb19-26"><a href="stem_map.html#cb19-26" aria-hidden="true" tabindex="-1"></a>  las <span class="ot">&lt;-</span> lidR<span class="sc">::</span><span class="fu">filter_duplicates</span>(las)</span>
+<span id="cb19-27"><a href="stem_map.html#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># lidR::las_check(las)</span></span>
+<span id="cb19-28"><a href="stem_map.html#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># summary(las$Z)</span></span>
+<span id="cb19-29"><a href="stem_map.html#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sf::st_crs(las)</span></span>
+<span id="cb19-30"><a href="stem_map.html#cb19-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># temp_plot &lt;- plot(las, color = &quot;Z&quot;, breaks = &quot;quantile&quot;, bg = &quot;white&quot;)</span></span>
+<span id="cb19-31"><a href="stem_map.html#cb19-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># temp_plot</span></span>
+<span id="cb19-32"><a href="stem_map.html#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # add_treetops3d(temp_plot, tree_tops)</span></span>
+<span id="cb19-33"><a href="stem_map.html#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb19-34"><a href="stem_map.html#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="co"># remove outliers</span></span>
+<span id="cb19-35"><a href="stem_map.html#cb19-35" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb19-36"><a href="stem_map.html#cb19-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use Statistical Outliers Removal (SOR)</span></span>
+<span id="cb19-37"><a href="stem_map.html#cb19-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># k = number of neighbors</span></span>
+<span id="cb19-38"><a href="stem_map.html#cb19-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># m = multiplier in : avg distance + m * std deviation</span></span>
+<span id="cb19-39"><a href="stem_map.html#cb19-39" aria-hidden="true" tabindex="-1"></a>    las <span class="ot">&lt;-</span> lidR<span class="sc">::</span><span class="fu">classify_noise</span>(las, <span class="fu">sor</span>(<span class="at">k =</span> <span class="dv">15</span>, <span class="at">m =</span> <span class="dv">7</span>))</span>
+<span id="cb19-40"><a href="stem_map.html#cb19-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(las, color = &quot;Classification&quot;, bg = &quot;white&quot;, size = 3)</span></span>
+<span id="cb19-41"><a href="stem_map.html#cb19-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove outliers using filter_poi()</span></span>
+<span id="cb19-42"><a href="stem_map.html#cb19-42" aria-hidden="true" tabindex="-1"></a>    las <span class="ot">&lt;-</span> lidR<span class="sc">::</span><span class="fu">filter_poi</span>(las, Classification <span class="sc">!=</span> LASNOISE)</span>
+<span id="cb19-43"><a href="stem_map.html#cb19-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(las, color = &quot;Z&quot;, breaks = &quot;quantile&quot;, bg = &quot;white&quot;)</span></span>
+<span id="cb19-44"><a href="stem_map.html#cb19-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># #repeat process with Isolated Voxels Filter IVF</span></span>
+<span id="cb19-45"><a href="stem_map.html#cb19-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   las &lt;- lidR::classify_noise(las, ivf(res = 5, n = 6))</span></span>
+<span id="cb19-46"><a href="stem_map.html#cb19-46" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   # plot(las, color = &quot;Classification&quot;, bg = &quot;white&quot;, size = 3)</span></span>
+<span id="cb19-47"><a href="stem_map.html#cb19-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # Remove outliers using lidR::filter_poi()</span></span>
+<span id="cb19-48"><a href="stem_map.html#cb19-48" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   las &lt;- lidR::filter_poi(las, Classification != LASNOISE)</span></span>
+<span id="cb19-49"><a href="stem_map.html#cb19-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(las, color = &quot;Z&quot;, breaks = &quot;quantile&quot;, bg = &quot;white&quot;)</span></span>
+<span id="cb19-50"><a href="stem_map.html#cb19-50" aria-hidden="true" tabindex="-1"></a><span class="co"># #####################################################</span></span>
+<span id="cb19-51"><a href="stem_map.html#cb19-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Ground classification</span></span>
+<span id="cb19-52"><a href="stem_map.html#cb19-52" aria-hidden="true" tabindex="-1"></a><span class="co"># !!!!!!!!!!!!!!!!!!!!!!!!!! This is computationally intensive :&#39;(</span></span>
+<span id="cb19-53"><a href="stem_map.html#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="co"># #####################################################</span></span>
+<span id="cb19-54"><a href="stem_map.html#cb19-54" aria-hidden="true" tabindex="-1"></a><span class="co"># ##################################################</span></span>
+<span id="cb19-55"><a href="stem_map.html#cb19-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Progressive Morphological Filter The implementation of PMF algorithm in lidR</span></span>
+<span id="cb19-56"><a href="stem_map.html#cb19-56" aria-hidden="true" tabindex="-1"></a><span class="co"># is based on the method described in Zhang et al. (2003)</span></span>
+<span id="cb19-57"><a href="stem_map.html#cb19-57" aria-hidden="true" tabindex="-1"></a><span class="co"># ##################################################</span></span>
+<span id="cb19-58"><a href="stem_map.html#cb19-58" aria-hidden="true" tabindex="-1"></a><span class="co"># # # b numeric. This is the parameter b in Zhang et al. (2003) (eq. 4 and 5).</span></span>
+<span id="cb19-59"><a href="stem_map.html#cb19-59" aria-hidden="true" tabindex="-1"></a><span class="co"># # # dh0 numeric. This is dh0 in Zhang et al. (2003) (eq. 7).</span></span>
+<span id="cb19-60"><a href="stem_map.html#cb19-60" aria-hidden="true" tabindex="-1"></a><span class="co"># # # dhmax numeric. This is dhmax in Zhang et al. (2003) (eq. 7).</span></span>
+<span id="cb19-61"><a href="stem_map.html#cb19-61" aria-hidden="true" tabindex="-1"></a><span class="co"># # # s numeric. This is s in Zhang et al. (2003) (eq. 7).</span></span>
+<span id="cb19-62"><a href="stem_map.html#cb19-62" aria-hidden="true" tabindex="-1"></a><span class="co"># # # max_ws numeric. Maximum window size to be used in filtering ground returns. This</span></span>
+<span id="cb19-63"><a href="stem_map.html#cb19-63" aria-hidden="true" tabindex="-1"></a><span class="co"># # # limits the number of windows created.</span></span>
+<span id="cb19-64"><a href="stem_map.html#cb19-64" aria-hidden="true" tabindex="-1"></a><span class="co"># # # exp logical. The window size can be increased linearly or exponentially (eq. 4 or 5).</span></span>
+<span id="cb19-65"><a href="stem_map.html#cb19-65" aria-hidden="true" tabindex="-1"></a><span class="co"># # lidR::util_makeZhangParam(</span></span>
+<span id="cb19-66"><a href="stem_map.html#cb19-66" aria-hidden="true" tabindex="-1"></a><span class="co"># #   b = 2,</span></span>
+<span id="cb19-67"><a href="stem_map.html#cb19-67" aria-hidden="true" tabindex="-1"></a><span class="co"># #   dh0 = 0.2,</span></span>
+<span id="cb19-68"><a href="stem_map.html#cb19-68" aria-hidden="true" tabindex="-1"></a><span class="co"># #   dhmax = 210,</span></span>
+<span id="cb19-69"><a href="stem_map.html#cb19-69" aria-hidden="true" tabindex="-1"></a><span class="co"># #   s = 1.2,</span></span>
+<span id="cb19-70"><a href="stem_map.html#cb19-70" aria-hidden="true" tabindex="-1"></a><span class="co"># #   max_ws = 20,</span></span>
+<span id="cb19-71"><a href="stem_map.html#cb19-71" aria-hidden="true" tabindex="-1"></a><span class="co"># #   exp = FALSE</span></span>
+<span id="cb19-72"><a href="stem_map.html#cb19-72" aria-hidden="true" tabindex="-1"></a><span class="co"># # )</span></span>
+<span id="cb19-73"><a href="stem_map.html#cb19-73" aria-hidden="true" tabindex="-1"></a><span class="co"># las &lt;- lidR::classify_ground(las, algorithm = pmf(</span></span>
+<span id="cb19-74"><a href="stem_map.html#cb19-74" aria-hidden="true" tabindex="-1"></a><span class="co">#   ws = lidR::util_makeZhangParam()$ws</span></span>
+<span id="cb19-75"><a href="stem_map.html#cb19-75" aria-hidden="true" tabindex="-1"></a><span class="co">#   , th = lidR::util_makeZhangParam()$th</span></span>
+<span id="cb19-76"><a href="stem_map.html#cb19-76" aria-hidden="true" tabindex="-1"></a><span class="co">#   )</span></span>
+<span id="cb19-77"><a href="stem_map.html#cb19-77" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span></code></pre></div>
+<div id="height-normalization-using-dem" class="section level3 hasAnchor" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Height normalization using DEM<a href="stem_map.html#height-normalization-using-dem" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="stem_map.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb20-2"><a href="stem_map.html#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Height normalization using DEM </span></span>
+<span id="cb20-3"><a href="stem_map.html#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># could create own DEM with lidar data ... </span></span>
+<span id="cb20-4"><a href="stem_map.html#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but will use out of the box product for now</span></span>
+<span id="cb20-5"><a href="stem_map.html#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb20-6"><a href="stem_map.html#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># subtract DEM from lidar returns</span></span>
+<span id="cb20-7"><a href="stem_map.html#cb20-7" aria-hidden="true" tabindex="-1"></a>    nlas <span class="ot">&lt;-</span> las <span class="sc">-</span> bhef_elev_reproj</span>
+<span id="cb20-8"><a href="stem_map.html#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># correct for below ground returns</span></span>
+<span id="cb20-9"><a href="stem_map.html#cb20-9" aria-hidden="true" tabindex="-1"></a>    nlas<span class="sc">@</span>data<span class="sc">$</span>Z <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb20-10"><a href="stem_map.html#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ceiling</span>(nlas<span class="sc">@</span>data<span class="sc">$</span>Z) <span class="sc">==</span> <span class="dv">0</span> </span>
+<span id="cb20-11"><a href="stem_map.html#cb20-11" aria-hidden="true" tabindex="-1"></a>        <span class="sc">|</span> <span class="fu">floor</span>(nlas<span class="sc">@</span>data<span class="sc">$</span>Z) <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb20-12"><a href="stem_map.html#cb20-12" aria-hidden="true" tabindex="-1"></a>        <span class="sc">|</span> nlas<span class="sc">@</span>data<span class="sc">$</span>Z <span class="sc">&lt;=</span> <span class="dv">0</span></span>
+<span id="cb20-13"><a href="stem_map.html#cb20-13" aria-hidden="true" tabindex="-1"></a>      , <span class="dv">0</span>, nlas<span class="sc">@</span>data<span class="sc">$</span>Z</span>
+<span id="cb20-14"><a href="stem_map.html#cb20-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-15"><a href="stem_map.html#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># nlas &lt;- filter_poi(nlas, Z &gt;= 0) # remove below ground points</span></span>
+<span id="cb20-16"><a href="stem_map.html#cb20-16" aria-hidden="true" tabindex="-1"></a>    nlas<span class="sc">@</span>data<span class="sc">$</span>Z <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nlas<span class="sc">@</span>data<span class="sc">$</span>Z <span class="sc">&lt;=</span> <span class="dv">0</span>, <span class="dv">0</span>, nlas<span class="sc">@</span>data<span class="sc">$</span>Z)</span>
+<span id="cb20-17"><a href="stem_map.html#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># update classification</span></span>
+<span id="cb20-18"><a href="stem_map.html#cb20-18" aria-hidden="true" tabindex="-1"></a>    nlas<span class="sc">@</span>data<span class="sc">$</span>Classification <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nlas<span class="sc">@</span>data<span class="sc">$</span>Z<span class="sc">==</span><span class="dv">0</span>, <span class="dv">2</span>, nlas<span class="sc">@</span>data<span class="sc">$</span>Classification)</span>
+<span id="cb20-19"><a href="stem_map.html#cb20-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter out top 0.2% heights</span></span>
+<span id="cb20-20"><a href="stem_map.html#cb20-20" aria-hidden="true" tabindex="-1"></a>    nlas <span class="ot">&lt;-</span> <span class="fu">filter_poi</span>(nlas, Z <span class="sc">&lt;=</span> stats<span class="sc">::</span><span class="fu">quantile</span>((nlas<span class="sc">@</span>data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(Classification<span class="sc">==</span><span class="dv">1</span>))<span class="sc">$</span>Z, <span class="fl">0.998</span>))</span>
+<span id="cb20-21"><a href="stem_map.html#cb20-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(nlas, color = &quot;Z&quot;, breaks = &quot;pretty&quot;, bg = &quot;white&quot;)</span></span>
+<span id="cb20-22"><a href="stem_map.html#cb20-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># summary(nlas$Z)</span></span>
+<span id="cb20-23"><a href="stem_map.html#cb20-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># table(nlas$Classification)</span></span>
+<span id="cb20-24"><a href="stem_map.html#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co"># ######################################################</span></span>
+<span id="cb20-25"><a href="stem_map.html#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co"># # Height normalization using point cloud interpolation</span></span>
+<span id="cb20-26"><a href="stem_map.html#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co"># # !!!!!! must run ground classification above first</span></span>
+<span id="cb20-27"><a href="stem_map.html#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ######################################################</span></span>
+<span id="cb20-28"><a href="stem_map.html#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   # point cloud normalization using interpolation</span></span>
+<span id="cb20-29"><a href="stem_map.html#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="co">#     nlas &lt;- normalize_height(las, knnidw())</span></span>
+<span id="cb20-30"><a href="stem_map.html#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co">#     # plot(nlas, color = &quot;Z&quot;, breaks = &quot;pretty&quot;, bg = &quot;white&quot;)</span></span>
+<span id="cb20-31"><a href="stem_map.html#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="co">#     # plot(lidR::filter_ground(nlas), color = &quot;Classification&quot;, bg = &quot;white&quot;)</span></span>
+<span id="cb20-32"><a href="stem_map.html#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="co">#     # summary(nlas$Z)</span></span>
+<span id="cb20-33"><a href="stem_map.html#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     # table(nlas$Classification)</span></span>
+<span id="cb20-34"><a href="stem_map.html#cb20-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-35"><a href="stem_map.html#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="co"># descriptive stats</span></span>
+<span id="cb20-36"><a href="stem_map.html#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(nlas<span class="sc">@</span>data <span class="sc">%&gt;%</span> </span>
+<span id="cb20-37"><a href="stem_map.html#cb20-37" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">group_by</span>(</span>
+<span id="cb20-38"><a href="stem_map.html#cb20-38" aria-hidden="true" tabindex="-1"></a>          Classification</span>
+<span id="cb20-39"><a href="stem_map.html#cb20-39" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-40"><a href="stem_map.html#cb20-40" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb20-41"><a href="stem_map.html#cb20-41" aria-hidden="true" tabindex="-1"></a>          <span class="co"># plots = dplyr::n_distinct(plot)</span></span>
+<span id="cb20-42"><a href="stem_map.html#cb20-42" aria-hidden="true" tabindex="-1"></a>          <span class="at">points =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
+<span id="cb20-43"><a href="stem_map.html#cb20-43" aria-hidden="true" tabindex="-1"></a>          , <span class="at">min_z =</span> <span class="fu">min</span>(Z)</span>
+<span id="cb20-44"><a href="stem_map.html#cb20-44" aria-hidden="true" tabindex="-1"></a>          , <span class="at">max_z =</span> <span class="fu">max</span>(Z)</span>
+<span id="cb20-45"><a href="stem_map.html#cb20-45" aria-hidden="true" tabindex="-1"></a>          , <span class="at">mean_z =</span> <span class="fu">mean</span>(Z)</span>
+<span id="cb20-46"><a href="stem_map.html#cb20-46" aria-hidden="true" tabindex="-1"></a>          , <span class="at">median_z =</span> <span class="fu">median</span>(Z)</span>
+<span id="cb20-47"><a href="stem_map.html#cb20-47" aria-hidden="true" tabindex="-1"></a>          , <span class="at">stdev_z =</span> <span class="fu">sd</span>(Z)</span>
+<span id="cb20-48"><a href="stem_map.html#cb20-48" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-49"><a href="stem_map.html#cb20-49" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">arrange</span>(Classification) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-50"><a href="stem_map.html#cb20-50" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb20-51"><a href="stem_map.html#cb20-51" aria-hidden="true" tabindex="-1"></a>      <span class="at">Classification =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb20-52"><a href="stem_map.html#cb20-52" aria-hidden="true" tabindex="-1"></a>        Classification <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Surface&quot;</span></span>
+<span id="cb20-53"><a href="stem_map.html#cb20-53" aria-hidden="true" tabindex="-1"></a>        , Classification <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">&quot;Ground&quot;</span></span>
+<span id="cb20-54"><a href="stem_map.html#cb20-54" aria-hidden="true" tabindex="-1"></a>        , <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Other&quot;</span></span>
+<span id="cb20-55"><a href="stem_map.html#cb20-55" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb20-56"><a href="stem_map.html#cb20-56" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb20-57"><a href="stem_map.html#cb20-57" aria-hidden="true" tabindex="-1"></a>  , <span class="at">format =</span> <span class="st">&quot;html&quot;</span> </span>
+<span id="cb20-58"><a href="stem_map.html#cb20-58" aria-hidden="true" tabindex="-1"></a>  , <span class="at">caption =</span> <span class="st">&quot;Point Cloud Summary Statistics for Return Height (Z)&quot;</span></span>
+<span id="cb20-59"><a href="stem_map.html#cb20-59" aria-hidden="true" tabindex="-1"></a>  , <span class="at">digits =</span> <span class="dv">1</span></span>
+<span id="cb20-60"><a href="stem_map.html#cb20-60" aria-hidden="true" tabindex="-1"></a>  , <span class="at">col.names =</span> <span class="fu">c</span>(</span>
+<span id="cb20-61"><a href="stem_map.html#cb20-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Classification&quot;</span></span>
+<span id="cb20-62"><a href="stem_map.html#cb20-62" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;points&quot;</span></span>
+<span id="cb20-63"><a href="stem_map.html#cb20-63" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;min&quot;</span></span>
+<span id="cb20-64"><a href="stem_map.html#cb20-64" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;max&quot;</span></span>
+<span id="cb20-65"><a href="stem_map.html#cb20-65" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;mean&quot;</span></span>
+<span id="cb20-66"><a href="stem_map.html#cb20-66" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;median&quot;</span></span>
+<span id="cb20-67"><a href="stem_map.html#cb20-67" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;st.dev.&quot;</span></span>
+<span id="cb20-68"><a href="stem_map.html#cb20-68" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb20-69"><a href="stem_map.html#cb20-69" aria-hidden="true" tabindex="-1"></a>  , <span class="at">align=</span><span class="fu">rep</span>(<span class="st">&#39;c&#39;</span>, <span class="dv">5</span>)</span>
+<span id="cb20-70"><a href="stem_map.html#cb20-70" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-71"><a href="stem_map.html#cb20-71" aria-hidden="true" tabindex="-1"></a><span class="co"># kable_classic() %&gt;%</span></span>
+<span id="cb20-72"><a href="stem_map.html#cb20-72" aria-hidden="true" tabindex="-1"></a><span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot;Point Return Height (m)&quot;</span> <span class="ot">=</span> <span class="dv">5</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-73"><a href="stem_map.html#cb20-73" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_material</span>(<span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-74"><a href="stem_map.html#cb20-74" aria-hidden="true" tabindex="-1"></a><span class="co"># column_spec(., 2, width = &quot;20em&quot;) %&gt;% </span></span>
+<span id="cb20-75"><a href="stem_map.html#cb20-75" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">11</span>) </span>
+<span id="cb20-76"><a href="stem_map.html#cb20-76" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-77"><a href="stem_map.html#cb20-77" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot() + geom_histogram(data = (nlas@data %&gt;% dplyr::filter(Classification == 1)), aes(Z), binwidth = 1)</span></span></code></pre></div>
+</div>
+<div id="canopy-height-model" class="section level3 hasAnchor" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Canopy Height model<a href="stem_map.html#canopy-height-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="stem_map.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb21-2"><a href="stem_map.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Canopy Height model</span></span>
+<span id="cb21-3"><a href="stem_map.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb21-4"><a href="stem_map.html#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Points-to-raster algorithm with a resolution of 1 meter</span></span>
+<span id="cb21-5"><a href="stem_map.html#cb21-5" aria-hidden="true" tabindex="-1"></a>    chm <span class="ot">&lt;-</span> lidR<span class="sc">::</span><span class="fu">rasterize_canopy</span>(</span>
+<span id="cb21-6"><a href="stem_map.html#cb21-6" aria-hidden="true" tabindex="-1"></a>      nlas</span>
+<span id="cb21-7"><a href="stem_map.html#cb21-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">res =</span> <span class="dv">1</span></span>
+<span id="cb21-8"><a href="stem_map.html#cb21-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">#  for each pixel of the output raster the function attributes the height of the highest point found</span></span>
+<span id="cb21-9"><a href="stem_map.html#cb21-9" aria-hidden="true" tabindex="-1"></a>      , <span class="fu">p2r</span>(<span class="at">subcircle =</span> <span class="fl">0.0</span></span>
+<span id="cb21-10"><a href="stem_map.html#cb21-10" aria-hidden="true" tabindex="-1"></a>            <span class="co"># , na.fill = tin()</span></span>
+<span id="cb21-11"><a href="stem_map.html#cb21-11" aria-hidden="true" tabindex="-1"></a>            , <span class="at">na.fill =</span> <span class="fu">knnidw</span>(</span>
+<span id="cb21-12"><a href="stem_map.html#cb21-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">k =</span> <span class="dv">10</span></span>
+<span id="cb21-13"><a href="stem_map.html#cb21-13" aria-hidden="true" tabindex="-1"></a>              , <span class="at">p =</span> <span class="dv">2</span></span>
+<span id="cb21-14"><a href="stem_map.html#cb21-14" aria-hidden="true" tabindex="-1"></a>              , <span class="at">rmax =</span> <span class="dv">5</span></span>
+<span id="cb21-15"><a href="stem_map.html#cb21-15" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb21-16"><a href="stem_map.html#cb21-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb21-17"><a href="stem_map.html#cb21-17" aria-hidden="true" tabindex="-1"></a>      , <span class="at">pkg =</span> <span class="st">&quot;terra&quot;</span></span>
+<span id="cb21-18"><a href="stem_map.html#cb21-18" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb21-19"><a href="stem_map.html#cb21-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-20"><a href="stem_map.html#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># smooth chm pixels with median value in 3x3 matrix</span></span>
+<span id="cb21-21"><a href="stem_map.html#cb21-21" aria-hidden="true" tabindex="-1"></a>    kernel <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>)</span>
+<span id="cb21-22"><a href="stem_map.html#cb21-22" aria-hidden="true" tabindex="-1"></a>    chm_smooth <span class="ot">&lt;-</span> terra<span class="sc">::</span><span class="fu">focal</span>(chm, <span class="at">w =</span> kernel, <span class="at">fun =</span> median, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-23"><a href="stem_map.html#cb21-23" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">st_as_stars</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-24"><a href="stem_map.html#cb21-24" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">st_warp</span>(<span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(bhef_boundary)) </span>
+<span id="cb21-25"><a href="stem_map.html#cb21-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># %&gt;% </span></span>
+<span id="cb21-26"><a href="stem_map.html#cb21-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   sf::st_transform(crs = sf::st_crs(bhef_boundary))</span></span>
+<span id="cb21-27"><a href="stem_map.html#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># non smoothed</span></span>
+<span id="cb21-28"><a href="stem_map.html#cb21-28" aria-hidden="true" tabindex="-1"></a>    chm <span class="ot">&lt;-</span> chm <span class="sc">%&gt;%</span> </span>
+<span id="cb21-29"><a href="stem_map.html#cb21-29" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">st_as_stars</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-30"><a href="stem_map.html#cb21-30" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">st_warp</span>(<span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(bhef_boundary))</span>
+<span id="cb21-31"><a href="stem_map.html#cb21-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-32"><a href="stem_map.html#cb21-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># plot</span></span>
+<span id="cb21-33"><a href="stem_map.html#cb21-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ggplot() +</span></span>
+<span id="cb21-34"><a href="stem_map.html#cb21-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   stars::geom_stars(data = chm_smooth) +</span></span>
+<span id="cb21-35"><a href="stem_map.html#cb21-35" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   geom_sf(data = sf::st_crop(bhef_boundary, sf::st_bbox(chm_smooth)), alpha = 0, lwd = 0) +</span></span>
+<span id="cb21-36"><a href="stem_map.html#cb21-36" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   scale_fill_viridis_c(option = &quot;mako&quot;, alpha = 0.9) +</span></span>
+<span id="cb21-37"><a href="stem_map.html#cb21-37" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   labs(</span></span>
+<span id="cb21-38"><a href="stem_map.html#cb21-38" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     title = &quot;BHEF Canopy Height Model&quot;</span></span>
+<span id="cb21-39"><a href="stem_map.html#cb21-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     , subtitle = sf::st_crs(chm_smooth)$input</span></span>
+<span id="cb21-40"><a href="stem_map.html#cb21-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   ) +</span></span>
+<span id="cb21-41"><a href="stem_map.html#cb21-41" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   scale_x_continuous(expand = c(0, 0)) +</span></span>
+<span id="cb21-42"><a href="stem_map.html#cb21-42" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   scale_y_continuous(expand = c(0, 0)) +</span></span>
+<span id="cb21-43"><a href="stem_map.html#cb21-43" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   theme_bw() +</span></span>
+<span id="cb21-44"><a href="stem_map.html#cb21-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   theme(</span></span>
+<span id="cb21-45"><a href="stem_map.html#cb21-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     # legend.position = &quot;bottom&quot;</span></span>
+<span id="cb21-46"><a href="stem_map.html#cb21-46" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     # , legend.direction = &quot;horizontal&quot;</span></span>
+<span id="cb21-47"><a href="stem_map.html#cb21-47" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     axis.text = element_text(size = 8)</span></span>
+<span id="cb21-48"><a href="stem_map.html#cb21-48" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     # , panel.grid = element_blank()</span></span>
+<span id="cb21-49"><a href="stem_map.html#cb21-49" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     , panel.border = element_blank()</span></span>
+<span id="cb21-50"><a href="stem_map.html#cb21-50" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   ) +</span></span>
+<span id="cb21-51"><a href="stem_map.html#cb21-51" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   guides(</span></span>
+<span id="cb21-52"><a href="stem_map.html#cb21-52" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     fill = guide_legend(title=&quot;Hgt. (m)&quot;)</span></span>
+<span id="cb21-53"><a href="stem_map.html#cb21-53" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   )  </span></span></code></pre></div>
+</div>
+<div id="individual-tree-detection-itd" class="section level3 hasAnchor" number="4.4.3">
+<h3><span class="header-section-number">4.4.3</span> Individual Tree Detection (ITD)<a href="stem_map.html#individual-tree-detection-itd" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="stem_map.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb22-2"><a href="stem_map.html#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual Tree Detection (ITD)</span></span>
+<span id="cb22-3"><a href="stem_map.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb22-4"><a href="stem_map.html#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># local maximum filtering (LMF) with variable window size</span></span>
+<span id="cb22-5"><a href="stem_map.html#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># points below 2 m will equate to a window size of 3 m, </span></span>
+<span id="cb22-6"><a href="stem_map.html#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># while points above 20 meters equate to a window size of 5 m. </span></span>
+<span id="cb22-7"><a href="stem_map.html#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Anything between 2 and 20 meter will have a non-linear relationship</span></span>
+<span id="cb22-8"><a href="stem_map.html#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># define variable window function</span></span>
+<span id="cb22-9"><a href="stem_map.html#cb22-9" aria-hidden="true" tabindex="-1"></a>  ws_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb22-10"><a href="stem_map.html#cb22-10" aria-hidden="true" tabindex="-1"></a>      y <span class="ot">&lt;-</span> <span class="fl">2.6</span> <span class="sc">*</span> (<span class="sc">-</span>(<span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.08</span><span class="sc">*</span>(x<span class="dv">-2</span>)) <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">+</span> <span class="dv">3</span></span>
+<span id="cb22-11"><a href="stem_map.html#cb22-11" aria-hidden="true" tabindex="-1"></a>      y[x <span class="sc">&lt;</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb22-12"><a href="stem_map.html#cb22-12" aria-hidden="true" tabindex="-1"></a>      y[x <span class="sc">&gt;</span> <span class="dv">20</span>] <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb22-13"><a href="stem_map.html#cb22-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(y)</span>
+<span id="cb22-14"><a href="stem_map.html#cb22-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb22-15"><a href="stem_map.html#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ITD on CHM</span></span>
+<span id="cb22-16"><a href="stem_map.html#cb22-16" aria-hidden="true" tabindex="-1"></a>  tree_tops <span class="ot">&lt;-</span> lidR<span class="sc">::</span><span class="fu">locate_trees</span>(chm_smooth, <span class="fu">lmf</span>(<span class="at">ws =</span> ws_fn)) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-17"><a href="stem_map.html#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create classes based on Steel et al. 2021</span></span>
+<span id="cb22-18"><a href="stem_map.html#cb22-18" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb22-19"><a href="stem_map.html#cb22-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">tree_class =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb22-20"><a href="stem_map.html#cb22-20" aria-hidden="true" tabindex="-1"></a>        Z <span class="sc">&gt;</span> <span class="dv">8</span> <span class="sc">~</span> <span class="dv">3</span> <span class="co"># canopy</span></span>
+<span id="cb22-21"><a href="stem_map.html#cb22-21" aria-hidden="true" tabindex="-1"></a>        , Z <span class="sc">&gt;=</span> <span class="dv">2</span> <span class="sc">~</span> <span class="dv">2</span> <span class="co"># subcanopy</span></span>
+<span id="cb22-22"><a href="stem_map.html#cb22-22" aria-hidden="true" tabindex="-1"></a>        , Z <span class="sc">&gt;=</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span> <span class="co"># understory</span></span>
+<span id="cb22-23"><a href="stem_map.html#cb22-23" aria-hidden="true" tabindex="-1"></a>        , <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span> <span class="co"># ground</span></span>
+<span id="cb22-24"><a href="stem_map.html#cb22-24" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb22-25"><a href="stem_map.html#cb22-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-26"><a href="stem_map.html#cb22-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-27"><a href="stem_map.html#cb22-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># plot</span></span>
+<span id="cb22-28"><a href="stem_map.html#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ggplot() +</span></span>
+<span id="cb22-29"><a href="stem_map.html#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   stars::geom_stars(data = chm_smooth) +</span></span>
+<span id="cb22-30"><a href="stem_map.html#cb22-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   geom_sf(data = tree_tops, color = viridis::viridis(n=1, direction = -1), alpha = 0.7, shape = &quot;.&quot;) +</span></span>
+<span id="cb22-31"><a href="stem_map.html#cb22-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   scale_fill_viridis_c(option = &quot;mako&quot;, alpha = 0.9) +</span></span>
+<span id="cb22-32"><a href="stem_map.html#cb22-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   labs(</span></span>
+<span id="cb22-33"><a href="stem_map.html#cb22-33" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     title = &quot;BHEF Canopy Height Model with Tree Tops Identified (yellow)&quot;</span></span>
+<span id="cb22-34"><a href="stem_map.html#cb22-34" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     , subtitle = sf::st_crs(chm_smooth)$input</span></span>
+<span id="cb22-35"><a href="stem_map.html#cb22-35" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   ) +</span></span>
+<span id="cb22-36"><a href="stem_map.html#cb22-36" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   theme_bw() +</span></span>
+<span id="cb22-37"><a href="stem_map.html#cb22-37" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   scale_x_continuous(expand = c(0, 0)) +</span></span>
+<span id="cb22-38"><a href="stem_map.html#cb22-38" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   scale_y_continuous(expand = c(0, 0)) +</span></span>
+<span id="cb22-39"><a href="stem_map.html#cb22-39" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   theme(</span></span>
+<span id="cb22-40"><a href="stem_map.html#cb22-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     axis.text = element_text(size = 8)</span></span>
+<span id="cb22-41"><a href="stem_map.html#cb22-41" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     # , panel.grid = element_blank()</span></span>
+<span id="cb22-42"><a href="stem_map.html#cb22-42" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     , panel.border = element_blank()</span></span>
+<span id="cb22-43"><a href="stem_map.html#cb22-43" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   ) +</span></span>
+<span id="cb22-44"><a href="stem_map.html#cb22-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   guides(</span></span>
+<span id="cb22-45"><a href="stem_map.html#cb22-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">#     fill = guide_legend(title=&quot;Hgt. (m)&quot;)</span></span>
+<span id="cb22-46"><a href="stem_map.html#cb22-46" aria-hidden="true" tabindex="-1"></a>  <span class="co">#   )</span></span>
+<span id="cb22-47"><a href="stem_map.html#cb22-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-48"><a href="stem_map.html#cb22-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># hey_plot &lt;- plot(nlas, color = &quot;Z&quot;, breaks = &quot;pretty&quot;, bg = &quot;white&quot;)</span></span>
+<span id="cb22-49"><a href="stem_map.html#cb22-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add_treetops3d(hey_plot, tree_tops &lt;- lidR::locate_trees(chm_smooth, lmf(ws = ws_fn)), col = &quot;black&quot;)</span></span>
+<span id="cb22-50"><a href="stem_map.html#cb22-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ?lidR::pixel_metrics()</span></span></code></pre></div>
+<div id="distribution-of-tree-top-heights" class="section level4 hasAnchor" number="4.4.3.1">
+<h4><span class="header-section-number">4.4.3.1</span> Distribution of Tree Top Heights<a href="stem_map.html#distribution-of-tree-top-heights" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="stem_map.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb23-2"><a href="stem_map.html#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># height range of tree tops</span></span>
+<span id="cb23-3"><a href="stem_map.html#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb23-4"><a href="stem_map.html#cb23-4" aria-hidden="true" tabindex="-1"></a>tree_tops <span class="sc">%&gt;%</span> sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-5"><a href="stem_map.html#cb23-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">height_ceil =</span> <span class="fu">ceiling</span>(Z)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-6"><a href="stem_map.html#cb23-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(height_ceil) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-7"><a href="stem_map.html#cb23-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-8"><a href="stem_map.html#cb23-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-9"><a href="stem_map.html#cb23-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb23-10"><a href="stem_map.html#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">pct_tot =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)</span>
+<span id="cb23-11"><a href="stem_map.html#cb23-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-12"><a href="stem_map.html#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(.) <span class="sc">+</span></span>
+<span id="cb23-13"><a href="stem_map.html#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># geom_col(aes(x = height_ceil, y = n, fill = n)) +</span></span>
+<span id="cb23-14"><a href="stem_map.html#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> height_ceil, <span class="at">y =</span> pct_tot, <span class="at">fill =</span> n), <span class="at">color =</span> <span class="st">&quot;gray25&quot;</span>, <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-15"><a href="stem_map.html#cb23-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>(<span class="at">accuracy =</span> 1L)) <span class="sc">+</span></span>
+<span id="cb23-16"><a href="stem_map.html#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(tree_tops<span class="sc">$</span>Z), <span class="fu">max</span>(tree_tops<span class="sc">$</span>Z)<span class="sc">+</span><span class="dv">1</span>, <span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb23-17"><a href="stem_map.html#cb23-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_c</span>(<span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">option =</span> <span class="st">&quot;mako&quot;</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb23-18"><a href="stem_map.html#cb23-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb23-19"><a href="stem_map.html#cb23-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">&quot;Distribution of Tree Top Heights (m)&quot;</span></span>
+<span id="cb23-20"><a href="stem_map.html#cb23-20" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb23-21"><a href="stem_map.html#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Tree Height (m) Bin&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-22"><a href="stem_map.html#cb23-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;% Tree tops&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-23"><a href="stem_map.html#cb23-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb23-24"><a href="stem_map.html#cb23-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb23-25"><a href="stem_map.html#cb23-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position=</span><span class="st">&quot;none&quot;</span></span>
+<span id="cb23-26"><a href="stem_map.html#cb23-26" aria-hidden="true" tabindex="-1"></a>    ) </span></code></pre></div>
+<p><img src="bhef_rxfire_plan_files/figure-html/unnamed-chunk-31-1.png" width="960" /></p>
+</div>
+</div>
+<div id="individual-tree-segmentation-its" class="section level3 hasAnchor" number="4.4.4">
+<h3><span class="header-section-number">4.4.4</span> Individual Tree Segmentation (ITS)<a href="stem_map.html#individual-tree-segmentation-its" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Segment the canopy height model raster grid as individual trees. Create a vector representation of tree groupings and summary statistics of height for each group.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="stem_map.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb24-2"><a href="stem_map.html#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Individual Tree Segmentation (ITS)</span></span>
+<span id="cb24-3"><a href="stem_map.html#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="do">######################################################</span></span>
+<span id="cb24-4"><a href="stem_map.html#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># implements an algorithm for tree segmentation based on </span></span>
+<span id="cb24-5"><a href="stem_map.html#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Dalponte and Coomes (2016) algorithm (see reference). </span></span>
+<span id="cb24-6"><a href="stem_map.html#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This is a seeds + growing region algorithm.</span></span>
+<span id="cb24-7"><a href="stem_map.html#cb24-7" aria-hidden="true" tabindex="-1"></a>  algo <span class="ot">&lt;-</span> lidR<span class="sc">::</span><span class="fu">dalponte2016</span>(<span class="at">chm =</span> chm, <span class="at">treetops =</span> tree_tops, <span class="at">th_tree =</span> <span class="dv">2</span>)</span>
+<span id="cb24-8"><a href="stem_map.html#cb24-8" aria-hidden="true" tabindex="-1"></a>  crowns_st <span class="ot">&lt;-</span> <span class="fu">algo</span>()</span>
+<span id="cb24-9"><a href="stem_map.html#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># quick plot</span></span>
+<span id="cb24-10"><a href="stem_map.html#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># plot(crowns_st, col = lidR::pastel.colors(200), main = &quot;Individual Tree Crowns&quot;)</span></span>
+<span id="cb24-11"><a href="stem_map.html#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="stem_map.html#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co"># transform crowns stars object to vector data</span></span>
+<span id="cb24-13"><a href="stem_map.html#cb24-13" aria-hidden="true" tabindex="-1"></a>  crowns_sf <span class="ot">&lt;-</span> crowns_st <span class="sc">%&gt;%</span> </span>
+<span id="cb24-14"><a href="stem_map.html#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># convert to vector data and merge polygons with identical pixel values</span></span>
+<span id="cb24-15"><a href="stem_map.html#cb24-15" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_as_sf</span>(<span class="at">as_points =</span> <span class="cn">FALSE</span>, <span class="at">merge =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-16"><a href="stem_map.html#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># transform to same crs as rest of data</span></span>
+<span id="cb24-17"><a href="stem_map.html#cb24-17" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(bhef_boundary)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-18"><a href="stem_map.html#cb24-18" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb24-19"><a href="stem_map.html#cb24-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">tree_id =</span> values</span>
+<span id="cb24-20"><a href="stem_map.html#cb24-20" aria-hidden="true" tabindex="-1"></a>      , <span class="at">crown_area =</span> sf<span class="sc">::</span><span class="fu">st_area</span>(.)</span>
+<span id="cb24-21"><a href="stem_map.html#cb24-21" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-22"><a href="stem_map.html#cb24-22" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">relocate</span>(tree_id, crown_area) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-23"><a href="stem_map.html#cb24-23" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(tree_id, crown_area) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-24"><a href="stem_map.html#cb24-24" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_set_precision</span>(<span class="fl">1e7</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-25"><a href="stem_map.html#cb24-25" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_make_valid</span>(.) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-26"><a href="stem_map.html#cb24-26" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(sf<span class="sc">::</span><span class="fu">st_is_valid</span>(.))</span>
+<span id="cb24-27"><a href="stem_map.html#cb24-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-28"><a href="stem_map.html#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="co"># combine crown groups</span></span>
+<span id="cb24-29"><a href="stem_map.html#cb24-29" aria-hidden="true" tabindex="-1"></a>  crowns_group <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_cast</span>(</span>
+<span id="cb24-30"><a href="stem_map.html#cb24-30" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_union</span>(crowns_sf)</span>
+<span id="cb24-31"><a href="stem_map.html#cb24-31" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;POLYGON&quot;</span>)</span>
+<span id="cb24-32"><a href="stem_map.html#cb24-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># quick plot</span></span>
+<span id="cb24-33"><a href="stem_map.html#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(crowns_group, col = lidR::pastel.colors(200), main = &quot;Tree Crown Groups&quot;)</span></span>
+<span id="cb24-34"><a href="stem_map.html#cb24-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-35"><a href="stem_map.html#cb24-35" aria-hidden="true" tabindex="-1"></a>  <span class="co">#create id column</span></span>
+<span id="cb24-36"><a href="stem_map.html#cb24-36" aria-hidden="true" tabindex="-1"></a>    crowns_group <span class="ot">&lt;-</span> crowns_group <span class="sc">%&gt;%</span> </span>
+<span id="cb24-37"><a href="stem_map.html#cb24-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">merge</span>(., <span class="fu">data.frame</span>(<span class="at">geo_type =</span> sf<span class="sc">::</span><span class="fu">st_geometry_type</span>(crowns_group)), <span class="at">by.x=</span><span class="dv">0</span>, <span class="at">by.y=</span><span class="dv">0</span>, <span class="at">all.x=</span><span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-38"><a href="stem_map.html#cb24-38" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">crown_group_id =</span> <span class="fu">as.numeric</span>(<span class="fu">as.factor</span>(Row.names)))  <span class="sc">%&gt;%</span> </span>
+<span id="cb24-39"><a href="stem_map.html#cb24-39" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(geo_type, Row.names)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-40"><a href="stem_map.html#cb24-40" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">relocate</span>(crown_group_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-41"><a href="stem_map.html#cb24-41" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_as_sf</span>(., <span class="at">sf_column_name =</span> <span class="st">&quot;geometry&quot;</span>, <span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(bhef_boundary))</span>
+<span id="cb24-42"><a href="stem_map.html#cb24-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-43"><a href="stem_map.html#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="co"># join back to individual tree crowns and summarize</span></span>
+<span id="cb24-44"><a href="stem_map.html#cb24-44" aria-hidden="true" tabindex="-1"></a>  crowns_group_sum <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_intersection</span>(tree_tops, crowns_group) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-45"><a href="stem_map.html#cb24-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if need to keep group at tree level... break here</span></span>
+<span id="cb24-46"><a href="stem_map.html#cb24-46" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-47"><a href="stem_map.html#cb24-47" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(crown_group_id) <span class="sc">%&gt;%</span></span>
+<span id="cb24-48"><a href="stem_map.html#cb24-48" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb24-49"><a href="stem_map.html#cb24-49" aria-hidden="true" tabindex="-1"></a>      <span class="at">count_trees =</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(treeID)</span>
+<span id="cb24-50"><a href="stem_map.html#cb24-50" aria-hidden="true" tabindex="-1"></a>      , <span class="at">min_hgt_m =</span> <span class="fu">min</span>(Z, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb24-51"><a href="stem_map.html#cb24-51" aria-hidden="true" tabindex="-1"></a>      , <span class="at">max_hgt_m =</span> <span class="fu">max</span>(Z, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb24-52"><a href="stem_map.html#cb24-52" aria-hidden="true" tabindex="-1"></a>      , <span class="at">mean_hgt_m =</span> <span class="fu">mean</span>(Z, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb24-53"><a href="stem_map.html#cb24-53" aria-hidden="true" tabindex="-1"></a>      , <span class="at">median_hgt_m =</span> <span class="fu">median</span>(Z, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb24-54"><a href="stem_map.html#cb24-54" aria-hidden="true" tabindex="-1"></a>      , <span class="at">median_hgt_m =</span> <span class="fu">median</span>(Z, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-55"><a href="stem_map.html#cb24-55" aria-hidden="true" tabindex="-1"></a>      , <span class="at">quant10_hgt_m =</span> <span class="fu">as.numeric</span>( <span class="fu">quantile</span>(Z, <span class="at">probs =</span> .<span class="dv">10</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) )</span>
+<span id="cb24-56"><a href="stem_map.html#cb24-56" aria-hidden="true" tabindex="-1"></a>      , <span class="at">quant25_hgt_m =</span> <span class="fu">as.numeric</span>( <span class="fu">quantile</span>(Z, <span class="at">probs =</span> .<span class="dv">25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) )</span>
+<span id="cb24-57"><a href="stem_map.html#cb24-57" aria-hidden="true" tabindex="-1"></a>      , <span class="at">quant50_hgt_m =</span> <span class="fu">as.numeric</span>( <span class="fu">quantile</span>(Z, <span class="at">probs =</span> .<span class="dv">50</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) )</span>
+<span id="cb24-58"><a href="stem_map.html#cb24-58" aria-hidden="true" tabindex="-1"></a>      , <span class="at">quant75_hgt_m =</span> <span class="fu">as.numeric</span>( <span class="fu">quantile</span>(Z, <span class="at">probs =</span> .<span class="dv">75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) )</span>
+<span id="cb24-59"><a href="stem_map.html#cb24-59" aria-hidden="true" tabindex="-1"></a>      , <span class="at">quant90_hgt_m =</span> <span class="fu">as.numeric</span>( <span class="fu">quantile</span>(Z, <span class="at">probs =</span> .<span class="dv">90</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) )</span>
+<span id="cb24-60"><a href="stem_map.html#cb24-60" aria-hidden="true" tabindex="-1"></a>      , <span class="at">count_trees_canopy =</span> <span class="fu">sum</span>(<span class="fu">ifelse</span>(tree_class <span class="sc">==</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-61"><a href="stem_map.html#cb24-61" aria-hidden="true" tabindex="-1"></a>      , <span class="at">count_trees_subcanopy =</span> <span class="fu">sum</span>(<span class="fu">ifelse</span>(tree_class <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-62"><a href="stem_map.html#cb24-62" aria-hidden="true" tabindex="-1"></a>      , <span class="at">count_trees_understory =</span> <span class="fu">sum</span>(<span class="fu">ifelse</span>(tree_class <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-63"><a href="stem_map.html#cb24-63" aria-hidden="true" tabindex="-1"></a>      , <span class="at">count_trees_ground =</span> <span class="fu">sum</span>(<span class="fu">ifelse</span>(tree_class <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-64"><a href="stem_map.html#cb24-64" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-65"><a href="stem_map.html#cb24-65" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb24-66"><a href="stem_map.html#cb24-66" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">arrange</span>(crown_group_id) <span class="sc">%&gt;%</span></span>
+<span id="cb24-67"><a href="stem_map.html#cb24-67" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb24-68"><a href="stem_map.html#cb24-68" aria-hidden="true" tabindex="-1"></a>      <span class="at">crown_group_class =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb24-69"><a href="stem_map.html#cb24-69" aria-hidden="true" tabindex="-1"></a>        count_trees <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Individual Tree&quot;</span></span>
+<span id="cb24-70"><a href="stem_map.html#cb24-70" aria-hidden="true" tabindex="-1"></a>        , count_trees <span class="sc">&lt;=</span> <span class="dv">10</span> </span>
+<span id="cb24-71"><a href="stem_map.html#cb24-71" aria-hidden="true" tabindex="-1"></a>          <span class="sc">&amp;</span> count_trees_canopy<span class="sc">/</span>count_trees <span class="sc">&gt;=</span> .<span class="dv">75</span> <span class="sc">~</span>  <span class="st">&quot;Small Group - Canopy&quot;</span></span>
+<span id="cb24-72"><a href="stem_map.html#cb24-72" aria-hidden="true" tabindex="-1"></a>        , count_trees <span class="sc">&lt;=</span> <span class="dv">10</span> </span>
+<span id="cb24-73"><a href="stem_map.html#cb24-73" aria-hidden="true" tabindex="-1"></a>          <span class="sc">&amp;</span> count_trees_subcanopy<span class="sc">/</span>count_trees <span class="sc">&gt;=</span> .<span class="dv">75</span> <span class="sc">~</span>  <span class="st">&quot;Small Group - Subcanopy&quot;</span></span>
+<span id="cb24-74"><a href="stem_map.html#cb24-74" aria-hidden="true" tabindex="-1"></a>        , count_trees <span class="sc">&lt;=</span> <span class="dv">10</span> <span class="sc">~</span>  <span class="st">&quot;Small Group - Mixed&quot;</span></span>
+<span id="cb24-75"><a href="stem_map.html#cb24-75" aria-hidden="true" tabindex="-1"></a>        , count_trees <span class="sc">&lt;=</span> <span class="dv">40</span> </span>
+<span id="cb24-76"><a href="stem_map.html#cb24-76" aria-hidden="true" tabindex="-1"></a>          <span class="sc">&amp;</span> count_trees_canopy<span class="sc">/</span>count_trees <span class="sc">&gt;=</span> .<span class="dv">75</span> <span class="sc">~</span>  <span class="st">&quot;Medium Group - Canopy&quot;</span></span>
+<span id="cb24-77"><a href="stem_map.html#cb24-77" aria-hidden="true" tabindex="-1"></a>        , count_trees <span class="sc">&lt;=</span> <span class="dv">40</span> </span>
+<span id="cb24-78"><a href="stem_map.html#cb24-78" aria-hidden="true" tabindex="-1"></a>          <span class="sc">&amp;</span> count_trees_subcanopy<span class="sc">/</span>count_trees <span class="sc">&gt;=</span> .<span class="dv">75</span> <span class="sc">~</span>  <span class="st">&quot;Medium Group - Subcanopy&quot;</span></span>
+<span id="cb24-79"><a href="stem_map.html#cb24-79" aria-hidden="true" tabindex="-1"></a>        , count_trees <span class="sc">&lt;=</span> <span class="dv">40</span> <span class="sc">~</span>  <span class="st">&quot;Medium Group - Mixed&quot;</span></span>
+<span id="cb24-80"><a href="stem_map.html#cb24-80" aria-hidden="true" tabindex="-1"></a>        , count_trees_canopy<span class="sc">/</span>count_trees <span class="sc">&gt;=</span> .<span class="dv">75</span> <span class="sc">~</span> <span class="st">&quot;Continuous - Canopy&quot;</span></span>
+<span id="cb24-81"><a href="stem_map.html#cb24-81" aria-hidden="true" tabindex="-1"></a>        , count_trees_subcanopy<span class="sc">/</span>count_trees <span class="sc">&gt;=</span> .<span class="dv">75</span> <span class="sc">~</span> <span class="st">&quot;Continuous - Subcanopy&quot;</span></span>
+<span id="cb24-82"><a href="stem_map.html#cb24-82" aria-hidden="true" tabindex="-1"></a>        , <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Continuous - Mixed&quot;</span></span>
+<span id="cb24-83"><a href="stem_map.html#cb24-83" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb24-84"><a href="stem_map.html#cb24-84" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-85"><a href="stem_map.html#cb24-85" aria-hidden="true" tabindex="-1"></a><span class="co">#attach summary statistics to spatial crown groups</span></span>
+<span id="cb24-86"><a href="stem_map.html#cb24-86" aria-hidden="true" tabindex="-1"></a>  crowns_group <span class="ot">&lt;-</span> crowns_group <span class="sc">%&gt;%</span> </span>
+<span id="cb24-87"><a href="stem_map.html#cb24-87" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">left_join</span>(crowns_group_sum, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;crown_group_id&quot;</span> <span class="ot">=</span> <span class="st">&quot;crown_group_id&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-88"><a href="stem_map.html#cb24-88" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb24-89"><a href="stem_map.html#cb24-89" aria-hidden="true" tabindex="-1"></a>      <span class="at">crown_group_area_ha =</span> <span class="fu">as.numeric</span>(sf<span class="sc">::</span><span class="fu">st_area</span>(.)) <span class="sc">/</span> <span class="dv">10000</span></span>
+<span id="cb24-90"><a href="stem_map.html#cb24-90" aria-hidden="true" tabindex="-1"></a>      , <span class="at">trees_per_ha =</span> count_trees <span class="sc">/</span> crown_group_area_ha</span>
+<span id="cb24-91"><a href="stem_map.html#cb24-91" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+</div>
+</div>
+<div id="lidar-derived-crown-groups-summary" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Lidar-Derived Crown Groups Summary<a href="stem_map.html#lidar-derived-crown-groups-summary" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="stem_map.html#cb25-1" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_intersection</span>(crowns_group, research_plots[<span class="dv">1</span>,]) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="stem_map.html#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb25-3"><a href="stem_map.html#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb25-4"><a href="stem_map.html#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> crown_group_class), <span class="at">lwd =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="stem_map.html#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;turbo&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span> </span>
+<span id="cb25-6"><a href="stem_map.html#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb25-7"><a href="stem_map.html#cb25-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;BHEF Crown Groups (1 ha sample area)&quot;</span></span>
+<span id="cb25-8"><a href="stem_map.html#cb25-8" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(crowns_group)<span class="sc">$</span>input</span>
+<span id="cb25-9"><a href="stem_map.html#cb25-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb25-10"><a href="stem_map.html#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb25-11"><a href="stem_map.html#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb25-12"><a href="stem_map.html#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb25-13"><a href="stem_map.html#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb25-14"><a href="stem_map.html#cb25-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
+<span id="cb25-15"><a href="stem_map.html#cb25-15" aria-hidden="true" tabindex="-1"></a>      , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb25-16"><a href="stem_map.html#cb25-16" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb25-17"><a href="stem_map.html#cb25-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># , panel.grid = element_blank()</span></span>
+<span id="cb25-18"><a href="stem_map.html#cb25-18" aria-hidden="true" tabindex="-1"></a>      , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb25-19"><a href="stem_map.html#cb25-19" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
+<p><img src="bhef_rxfire_plan_files/figure-html/unnamed-chunk-35-1.png" width="960" /></p>
+<div id="crown-group-summary-statistics" class="section level3 hasAnchor" number="4.5.1">
+<h3><span class="header-section-number">4.5.1</span> Crown Group Summary Statistics<a href="stem_map.html#crown-group-summary-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="stem_map.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table</span></span>
+<span id="cb26-2"><a href="stem_map.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(crowns_group <span class="sc">%&gt;%</span> sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="stem_map.html#cb26-3" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">group_by</span>(</span>
+<span id="cb26-4"><a href="stem_map.html#cb26-4" aria-hidden="true" tabindex="-1"></a>          crown_group_class</span>
+<span id="cb26-5"><a href="stem_map.html#cb26-5" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-6"><a href="stem_map.html#cb26-6" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb26-7"><a href="stem_map.html#cb26-7" aria-hidden="true" tabindex="-1"></a>          <span class="co"># plots = dplyr::n_distinct(plot)</span></span>
+<span id="cb26-8"><a href="stem_map.html#cb26-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">crown_groups =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
+<span id="cb26-9"><a href="stem_map.html#cb26-9" aria-hidden="true" tabindex="-1"></a>          , <span class="at">mean_m2 =</span> <span class="fu">mean</span>(crown_group_area_ha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">*</span> <span class="dv">10000</span></span>
+<span id="cb26-10"><a href="stem_map.html#cb26-10" aria-hidden="true" tabindex="-1"></a>          , <span class="at">trees_per_ha =</span> <span class="fu">mean</span>(trees_per_ha, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-11"><a href="stem_map.html#cb26-11" aria-hidden="true" tabindex="-1"></a>          , <span class="at">mean_count_trees =</span> <span class="fu">mean</span>(count_trees, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-12"><a href="stem_map.html#cb26-12" aria-hidden="true" tabindex="-1"></a>          , <span class="at">mean_count_trees_canopy =</span> <span class="fu">sum</span>(count_trees_canopy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-13"><a href="stem_map.html#cb26-13" aria-hidden="true" tabindex="-1"></a>          , <span class="at">mean_count_trees_subcanopy =</span> <span class="fu">sum</span>(count_trees_subcanopy, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-14"><a href="stem_map.html#cb26-14" aria-hidden="true" tabindex="-1"></a>          , <span class="at">mean_hgt_m =</span> <span class="fu">mean</span>(min_hgt_m, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-15"><a href="stem_map.html#cb26-15" aria-hidden="true" tabindex="-1"></a>          <span class="co"># , min_hgt_m = min(min_hgt_m, na.rm = TRUE)</span></span>
+<span id="cb26-16"><a href="stem_map.html#cb26-16" aria-hidden="true" tabindex="-1"></a>          <span class="co"># , max_hgt_m = max(max_hgt_m, na.rm = TRUE)</span></span>
+<span id="cb26-17"><a href="stem_map.html#cb26-17" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-18"><a href="stem_map.html#cb26-18" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(mean_count_trees))</span>
+<span id="cb26-19"><a href="stem_map.html#cb26-19" aria-hidden="true" tabindex="-1"></a>  , <span class="at">format =</span> <span class="st">&quot;html&quot;</span> </span>
+<span id="cb26-20"><a href="stem_map.html#cb26-20" aria-hidden="true" tabindex="-1"></a>  , <span class="at">caption =</span> <span class="st">&quot;Tree Crown Groups Summary Statistics&quot;</span></span>
+<span id="cb26-21"><a href="stem_map.html#cb26-21" aria-hidden="true" tabindex="-1"></a>  , <span class="at">digits =</span> <span class="dv">1</span></span>
+<span id="cb26-22"><a href="stem_map.html#cb26-22" aria-hidden="true" tabindex="-1"></a>  , <span class="at">col.names =</span> <span class="fu">c</span>(</span>
+<span id="cb26-23"><a href="stem_map.html#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Classification&quot;</span></span>
+<span id="cb26-24"><a href="stem_map.html#cb26-24" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;# crown groups&quot;</span></span>
+<span id="cb26-25"><a href="stem_map.html#cb26-25" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;area (m2)&quot;</span></span>
+<span id="cb26-26"><a href="stem_map.html#cb26-26" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;TPH&quot;</span></span>
+<span id="cb26-27"><a href="stem_map.html#cb26-27" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;# trees&quot;</span></span>
+<span id="cb26-28"><a href="stem_map.html#cb26-28" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;# canopy trees&quot;</span></span>
+<span id="cb26-29"><a href="stem_map.html#cb26-29" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;# subcanopy trees&quot;</span></span>
+<span id="cb26-30"><a href="stem_map.html#cb26-30" aria-hidden="true" tabindex="-1"></a>    , <span class="st">&quot;height (m)&quot;</span></span>
+<span id="cb26-31"><a href="stem_map.html#cb26-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , &quot;min hgt (m)&quot;</span></span>
+<span id="cb26-32"><a href="stem_map.html#cb26-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , &quot;max hgt (m)&quot;</span></span>
+<span id="cb26-33"><a href="stem_map.html#cb26-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-34"><a href="stem_map.html#cb26-34" aria-hidden="true" tabindex="-1"></a>  , <span class="at">align=</span><span class="fu">rep</span>(<span class="st">&#39;c&#39;</span>, <span class="dv">5</span>)</span>
+<span id="cb26-35"><a href="stem_map.html#cb26-35" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-36"><a href="stem_map.html#cb26-36" aria-hidden="true" tabindex="-1"></a><span class="co"># kable_classic() %&gt;%</span></span>
+<span id="cb26-37"><a href="stem_map.html#cb26-37" aria-hidden="true" tabindex="-1"></a><span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot;Mean&quot;</span> <span class="ot">=</span> <span class="dv">6</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-38"><a href="stem_map.html#cb26-38" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_material</span>(<span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-39"><a href="stem_map.html#cb26-39" aria-hidden="true" tabindex="-1"></a><span class="co"># column_spec(., 2, width = &quot;20em&quot;) %&gt;% </span></span>
+<span id="cb26-40"><a href="stem_map.html#cb26-40" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">11</span>) </span></code></pre></div>
+</div>
+</div>
+<div id="map-crowns-and-rx-fire-area" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Map Crowns and Rx Fire Area<a href="stem_map.html#map-crowns-and-rx-fire-area" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="stem_map.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make map</span></span>
+<span id="cb27-2"><a href="stem_map.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co"># different background map types: https://leaflet-extras.github.io/leaflet-providers/preview/</span></span>
+<span id="cb27-3"><a href="stem_map.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># names(leaflet.providers::providers_loaded()$providers)</span></span>
+<span id="cb27-4"><a href="stem_map.html#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mapviewOptions</span>(<span class="at">homebutton =</span> <span class="cn">FALSE</span>, <span class="at">basemaps =</span> <span class="fu">c</span>(<span class="st">&quot;Esri.WorldImagery&quot;</span>))</span>
+<span id="cb27-5"><a href="stem_map.html#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># crop data</span></span>
+<span id="cb27-6"><a href="stem_map.html#cb27-6" aria-hidden="true" tabindex="-1"></a>bhef_crowns_group <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_intersection</span>(</span>
+<span id="cb27-7"><a href="stem_map.html#cb27-7" aria-hidden="true" tabindex="-1"></a>  crowns_group </span>
+<span id="cb27-8"><a href="stem_map.html#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># dplyr::filter(crown_group_area_ha &lt;= 2)</span></span>
+<span id="cb27-9"><a href="stem_map.html#cb27-9" aria-hidden="true" tabindex="-1"></a>  , bhef_boundary <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(name)</span>
+<span id="cb27-10"><a href="stem_map.html#cb27-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-11"><a href="stem_map.html#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co"># map</span></span>
+<span id="cb27-12"><a href="stem_map.html#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mapview</span>(bhef_boundary</span>
+<span id="cb27-13"><a href="stem_map.html#cb27-13" aria-hidden="true" tabindex="-1"></a>        , <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb27-14"><a href="stem_map.html#cb27-14" aria-hidden="true" tabindex="-1"></a>        , <span class="at">lwd =</span> <span class="dv">3</span></span>
+<span id="cb27-15"><a href="stem_map.html#cb27-15" aria-hidden="true" tabindex="-1"></a>        , <span class="at">alpha.regions =</span> <span class="dv">0</span></span>
+<span id="cb27-16"><a href="stem_map.html#cb27-16" aria-hidden="true" tabindex="-1"></a>        , <span class="at">label =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-17"><a href="stem_map.html#cb27-17" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-18"><a href="stem_map.html#cb27-18" aria-hidden="true" tabindex="-1"></a>        , <span class="at">popup =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-19"><a href="stem_map.html#cb27-19" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb27-20"><a href="stem_map.html#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="fu">mapview</span>(rx_fire</span>
+<span id="cb27-21"><a href="stem_map.html#cb27-21" aria-hidden="true" tabindex="-1"></a>        , <span class="at">color =</span> <span class="st">&quot;red&quot;</span></span>
+<span id="cb27-22"><a href="stem_map.html#cb27-22" aria-hidden="true" tabindex="-1"></a>        , <span class="at">lwd =</span> <span class="dv">2</span></span>
+<span id="cb27-23"><a href="stem_map.html#cb27-23" aria-hidden="true" tabindex="-1"></a>        , <span class="at">alpha.regions =</span> <span class="dv">0</span></span>
+<span id="cb27-24"><a href="stem_map.html#cb27-24" aria-hidden="true" tabindex="-1"></a>        , <span class="at">label =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-25"><a href="stem_map.html#cb27-25" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-26"><a href="stem_map.html#cb27-26" aria-hidden="true" tabindex="-1"></a>        , <span class="at">popup =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-27"><a href="stem_map.html#cb27-27" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb27-28"><a href="stem_map.html#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="fu">mapview</span>(bhef_crowns_group</span>
+<span id="cb27-29"><a href="stem_map.html#cb27-29" aria-hidden="true" tabindex="-1"></a>        , <span class="at">zcol =</span> <span class="st">&quot;crown_group_class&quot;</span></span>
+<span id="cb27-30"><a href="stem_map.html#cb27-30" aria-hidden="true" tabindex="-1"></a>        , <span class="at">col.regions =</span> viridis<span class="sc">::</span><span class="fu">viridis</span>(<span class="at">n=</span><span class="fu">length</span>(<span class="fu">unique</span>(bhef_crowns_group<span class="sc">$</span>crown_group_class)))</span>
+<span id="cb27-31"><a href="stem_map.html#cb27-31" aria-hidden="true" tabindex="-1"></a>        , <span class="at">alpha.regions =</span> <span class="fl">0.8</span></span>
+<span id="cb27-32"><a href="stem_map.html#cb27-32" aria-hidden="true" tabindex="-1"></a>        , <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;lab&quot;</span>)</span>
+<span id="cb27-33"><a href="stem_map.html#cb27-33" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-34"><a href="stem_map.html#cb27-34" aria-hidden="true" tabindex="-1"></a>          , <span class="at">popup =</span> <span class="fu">popupTable</span>(</span>
+<span id="cb27-35"><a href="stem_map.html#cb27-35" aria-hidden="true" tabindex="-1"></a>              bhef_crowns_group</span>
+<span id="cb27-36"><a href="stem_map.html#cb27-36" aria-hidden="true" tabindex="-1"></a>              , <span class="at">zcol =</span> <span class="fu">c</span>(</span>
+<span id="cb27-37"><a href="stem_map.html#cb27-37" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;crown_group_class&quot;</span></span>
+<span id="cb27-38"><a href="stem_map.html#cb27-38" aria-hidden="true" tabindex="-1"></a>                , <span class="st">&quot;count_trees&quot;</span></span>
+<span id="cb27-39"><a href="stem_map.html#cb27-39" aria-hidden="true" tabindex="-1"></a>                , <span class="st">&quot;min_hgt_m&quot;</span></span>
+<span id="cb27-40"><a href="stem_map.html#cb27-40" aria-hidden="true" tabindex="-1"></a>                , <span class="st">&quot;max_hgt_m&quot;</span></span>
+<span id="cb27-41"><a href="stem_map.html#cb27-41" aria-hidden="true" tabindex="-1"></a>                , <span class="st">&quot;mean_hgt_m&quot;</span></span>
+<span id="cb27-42"><a href="stem_map.html#cb27-42" aria-hidden="true" tabindex="-1"></a>                , <span class="st">&quot;count_trees_canopy&quot;</span></span>
+<span id="cb27-43"><a href="stem_map.html#cb27-43" aria-hidden="true" tabindex="-1"></a>                , <span class="st">&quot;count_trees_subcanopy&quot;</span></span>
+<span id="cb27-44"><a href="stem_map.html#cb27-44" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb27-45"><a href="stem_map.html#cb27-45" aria-hidden="true" tabindex="-1"></a>              , <span class="at">row.numbers =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-46"><a href="stem_map.html#cb27-46" aria-hidden="true" tabindex="-1"></a>              , <span class="at">feature.id =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-47"><a href="stem_map.html#cb27-47" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb27-48"><a href="stem_map.html#cb27-48" aria-hidden="true" tabindex="-1"></a>) </span></code></pre></div>
+</div>
+<div id="write-out-data-1" class="section level2 hasAnchor" number="4.7">
+<h2><span class="header-section-number">4.7</span> Write Out Data<a href="stem_map.html#write-out-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="stem_map.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save cleaned data for reading to R later</span></span>
+<span id="cb28-2"><a href="stem_map.html#cb28-2" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(crowns_group, <span class="st">&quot;../data/crowns_group.gpkg&quot;</span>, <span class="at">append =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="vector_data.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

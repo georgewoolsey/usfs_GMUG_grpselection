@@ -1,0 +1,55 @@
+--- 
+title: "GMUG National Forests Group Selection Study"
+author: "George Woolsey"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: 
+  bookdown::gitbook: default
+  # bookdown::render_book("index.Rmd", bookdown::gitbook(lib_dir = "src"))
+documentclass: book
+bibliography: [packages.bib]
+biblio-style: apalike
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/research-institute-for-nature-and-forest.csl
+suppress-bibliography: false
+lang: en-US
+zotero: true
+link-citations: true
+description: "Using the bookdown package to write a book for BHEF Rx fire planning. The output format for this example is bookdown::gitbook."
+---
+
+# Objective
+
+The objective of this analysis is to describe the site conditions for a group selection treatment on the Grand Mesa Uncompahgre and Gunnison National Forests (GMUG). The study being installed includes different sized group selection openings or reserve groups. This analysis seeks to quantify: 
+
+1. the frequency of group opening or reserve group sizes for each of the harvest units.
+2. The frequency in each of the opening sizes or reserves within each harvest unit by aspect (the compass direction or azimuth that a terrain surface faces).
+3. The shape of the openings sizes in terms of the compass direction that the terrain surface faces with respect to the long axis and short axis
+
+This experiment aims to represent group openings with different sizes and the aspects in order to measure differences in light, snow accumulation, and seedling growth.  Ideally, sample stratification will be determined by group size and aspect.
+
+According to the [FACTS Activity Code Description](https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/fseprd539041.pdf), a "Group Selection Cut" (code 4152) is:
+
+*An uneven-aged regeneration method in which trees are cut in small groups and new age classes are established. The width of groups is commonly less than approximately twice the height of the mature trees. Individual trees in the matrix may or may not be harvested to provide improved growing conditions for remaining trees. Multiple entries of this activity ultimately results in an uneven-aged stand of 3 or more age classes.*
+
+```{r include=FALSE, echo=FALSE}
+knitr::write_bib(c(
+  .packages(),
+  'bookdown'
+  , 'knitr'
+  , 'rmarkdown'
+  , 'tidyverse'
+  , 'lubridate'
+  , 'RColorBrewer'
+  , 'scales'
+  , 'ggrepel'
+  , 'viridis'
+  , 'kableExtra'
+  , 'sf'
+  , 'stars'
+  , 'lwgeom'
+  , 'mapview'
+  , 'leafpop'
+  , 'elevatr'
+  , 'terra'
+), 'packages.bib')
+```
