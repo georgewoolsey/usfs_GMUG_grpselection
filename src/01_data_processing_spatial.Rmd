@@ -12,10 +12,13 @@ library(kableExtra)
 # spatial
 library(sf)
 library(stars)
+library(starsExtra) # functions for working with stars objects
 library(lwgeom) 
 library(mapview) #Interactive maps
 library(leafpop) #map html popup
 library(elevatr) # elevation data (DEMs)
+library(pracma) # Practical Numerical Math Functions
+
 # knit options
 knitr::opts_chunk$set(
   echo = TRUE
@@ -97,7 +100,7 @@ shp_import_fn <- function(pth){
       )
     )) %>% 
     sf::st_transform(crs = sf::st_crs(forests)) %>% 
-    dplyr::mutate(area = sf::st_area(.))
+    dplyr::mutate(area_m2 = as.numeric(sf::st_area(.)))
   #rename sf geom column
   names(dta)[names(dta)==tolower(attr(dta, "sf_column"))] = "geometry"
   sf::st_geometry(dta) = "geometry"
@@ -135,9 +138,11 @@ ggplot() +
   theme_bw() + 
   theme(
     legend.position = "none"
-  )
+    , axis.text.y = element_text(size = 7)
+    , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+    , panel.border = element_blank()
+  ) 
 ```
-
 
 ### Treatment units and group map
 
@@ -158,7 +163,10 @@ ggplot() +
   theme_bw() + 
   theme(
     legend.position = "none"
-  )
+    , axis.text.y = element_text(size = 7)
+    , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+    , panel.border = element_blank()
+  ) 
 ```
 
 
@@ -172,7 +180,7 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
 # read elevation data
 #######################################################
 #######################################################
-  if(file.exists("../data/gmug_elev.tif") == FALSE){
+  if(file.exists("../data/elev.tif") == FALSE){
       # z =14 is highest resolution (~6.8m)
       elev <- elevatr::get_elev_raster(
           locations = units %>% 
@@ -180,7 +188,8 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
             sf::st_buffer(dist = 100)
           , z = 14
         ) %>% 
-        stars::st_as_stars()
+        stars::st_as_stars() %>% 
+        setNames("elev")
       # save
       stars::write_stars(elev, "../data/elev.tif", append = FALSE)
   }else{
@@ -192,7 +201,12 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
 
 ```{r, warning=F, message=F, fig.width = 10, fig.height = 6}
 # plot
-ggplot() + stars::geom_stars(data = elev) +
+ggplot() + stars::geom_stars(data = elev[
+    units %>% 
+      sf::st_union() %>% 
+      sf::st_buffer(dist = 200) %>% 
+      sf::st_bbox()
+  ]) +
   scale_fill_viridis_c(option = "viridis", alpha = 0.9, na.value = "transparent") +
   geom_sf(data = units, alpha = 0, lwd = 1, color = "black") +
   labs(
@@ -205,8 +219,14 @@ ggplot() + stars::geom_stars(data = elev) +
   scale_y_continuous(expand = c(0, 0)) +
   theme_bw() +
   theme(
-    axis.text = element_text(size = 8)
-    # , panel.grid = element_blank()
+    legend.position = "bottom"
+    , legend.direction = "horizontal"
+    , legend.margin = margin(0,0,0,0)
+    , legend.box.margin = margin(-21,0,2,0)
+    , legend.text = element_text(size = 7)
+    , legend.title = element_text(size = 7)
+    , axis.text.y = element_text(size = 7)
+    , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
     , panel.border = element_blank()
   ) +
   guides(
@@ -218,3 +238,59 @@ ggplot() + stars::geom_stars(data = elev) +
 ```{r, echo=FALSE, include=FALSE}
 gc()
 ```
+
+## Aspect and HLI
+
+Aspect of a slope (the direction or azimuth that a slope faces) strongly influences potential direct incident radiation and temperature. Untransformed, aspect is a poor variable for quantitative analysis, since 1° is adjacent to 360° – the numbers are very different even though the aspect is about the same. The following equation for Heat Load Index (HLI) rescales aspect to a scale of zero to one, with zero being the coolest slope (northeast) and one being the warmest slope (southwest). HLI is a proxy for aspect-driven solar heating.
+
+$$
+\textrm{Heat load index} = \frac{1 - \cos(\theta - 45)}{2}
+$$
+where $\theta$ = aspect in degrees east of north. While this and related equations are useful, they do not consider the steepness of the slope. For example, a 1° south-facing slope would receive the same heat load index as a 30° south-facing slope, even though the latter will be considerably warmer.
+
+HLI calculations have been developed which combine slope, folded aspect (i.e., “southwestness”), and latitude to estimate terrain-driven solar heating at a given location ([McCune & Keon 2002: eq. 2](https://onlinelibrary.wiley.com/doi/10.1111/j.1654-1103.2002.tb02087.x)). To calculate HLI, we used equation 2 of [McCune & Keon 2002: eq. 2](https://onlinelibrary.wiley.com/doi/10.1111/j.1654-1103.2002.tb02087.x). Following calculation, we aggregated these data to each group selection boundary (median HLI). Higher values of HLI are typical on steep southwesterly slopes, while low values are common on steep northeasterly slopes. Moderate values are common in flatter terrain and on northwesterly and southeasterly aspects. 
+
+Aspect must first be "folded" about the north-south line, rescaling 0-360° to 0-180°, such that NE = NW, E = W, etc: 
+
+$$
+\textrm{Folded aspect°} = 180° \, - \, | Aspect° – 180° |
+$$
+```{r}
+# calculate slope and aspect from DEM
+topo <- c(
+    elev
+    , starsExtra::slope(elev)
+    , starsExtra::aspect(elev)
+  ) %>% 
+  setNames(
+    c("elev", "slope", "aspect")
+  ) %>% 
+  dplyr::mutate(
+    slope_rad = pracma::deg2rad(as.numeric(slope))
+    , folded_aspect = 180 - abs(as.numeric(aspect)-180)
+    , folded_aspect_rad = pracma::deg2rad(folded_aspect)
+  )
+
+# apply median aspect and slope to vector
+slope_units <- aggregate(topo %>% dplyr::select(slope_rad), units, median) # %>% sf::st_as_sf() %>% sf::st_set_geometry(NULL) %>% View()
+aspect_units <- aggregate(topo %>% dplyr::select(folded_aspect_rad), units, median)
+center_units <- sf::st_centroid(units)$geometry %>% 
+  sf::st_transform(crs = 4326) %>% 
+  sf::st_coordinates()
+
+units <- units %>% 
+  dplyr::mutate(
+    slope = slope_units$slope_rad
+    , aspect = aspect_units$folded_aspect_rad
+    , latitude = pracma::deg2rad(as.numeric(center_units[,2]))
+  )
+
+units %>% sf::st_set_geometry(NULL) %>% View()
+
+
+```
+
+```{r}
+# hey
+```
+
