@@ -263,32 +263,107 @@ topo <- c(
     , starsExtra::aspect(elev)
   ) %>% 
   setNames(
-    c("elev", "slope", "aspect")
+    c("elev", "slope_deg", "aspect_deg")
   ) %>% 
   dplyr::mutate(
-    slope_rad = pracma::deg2rad(as.numeric(slope))
-    , folded_aspect = 180 - abs(as.numeric(aspect)-180)
-    , folded_aspect_rad = pracma::deg2rad(folded_aspect)
+    slope_rad = pracma::deg2rad(as.numeric(slope_deg))
+    , aspect_rad = pracma::deg2rad(as.numeric(aspect_deg))
+    , folded_aspect_deg = 180 - abs(as.numeric(aspect_deg)-180)
+    , folded_aspect_rad = pracma::deg2rad(folded_aspect_deg)
   )
+# map
+```
 
-# apply median aspect and slope to vector
-slope_units <- aggregate(topo %>% dplyr::select(slope_rad), units, median) # %>% sf::st_as_sf() %>% sf::st_set_geometry(NULL) %>% View()
-aspect_units <- aggregate(topo %>% dplyr::select(folded_aspect_rad), units, median)
-center_units <- sf::st_centroid(units)$geometry %>% 
-  sf::st_transform(crs = 4326) %>% 
-  sf::st_coordinates()
+### Topography maps
 
-units <- units %>% 
-  dplyr::mutate(
-    slope_rad = slope_units$slope_rad
-    , folded_aspect_rad = aspect_units$folded_aspect_rad
-    , latitude_rad = pracma::deg2rad(as.numeric(center_units[,2]))
-    , slope_deg = pracma::rad2deg(slope_units$slope_rad)
-    , folded_aspect_deg = pracma::rad2deg(aspect_units$folded_aspect_rad)
-    , latitude_deg = as.numeric(center_units[,2])
-  )
+```{r}
+vars <- c(
+  "elev"
+  , "slope_deg"
+  , "aspect_deg"
+  , "folded_aspect_deg"
+)
+vars_title <- c(
+  "Elevation (m)"
+  , "Slope (\u00B0)"
+  , "Aspect (\u00B0)"
+  , "Folded Aspect (\u00B0)"
+)
+vars_color <- c(
+  "viridis"
+  , "cividis"
+  , "rocket"
+  , "mako"
+)
+plts <- list()
+for(x in 1:length(vars)){
+  plts[[x]] <- 
+      ggplot() + stars::geom_stars(data = (topo %>% dplyr::select(vars[x]))[
+        units %>% 
+          sf::st_union() %>% 
+          sf::st_buffer(dist = 200) %>% 
+          sf::st_bbox()
+      ]) +
+      scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent") +
+      geom_sf(data = units, alpha = 0, lwd = 1, color = "black") +
+      labs(
+          title = vars_title[x]
+        ) +
+      xlab("") +
+      ylab("") +
+      scale_x_continuous(expand = c(0, 0)) +
+      scale_y_continuous(expand = c(0, 0)) +
+      theme_bw() +
+      theme(
+        legend.position = "bottom"
+        , legend.direction = "horizontal"
+        , legend.margin = margin(0,0,0,0)
+        , legend.box.margin = margin(-21,0,2,0)
+        , legend.text = element_text(size = 7)
+        , legend.title = element_text(size = 7)
+        , axis.text.y = element_text(size = 7)
+        , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+        , panel.border = element_blank()
+      ) +
+      guides(
+        fill = guide_legend(title=vars_title[x])
+      )
+}
 
-units %>% sf::st_set_geometry(NULL) %>% View()
+# combine plots
+cowplot::plot_grid(plotlist =  plts, nrow = 2, ncol = 2)
+```
+
+
+
+```{r}
+# functions to aggregate raster data to vector data
+topo_calc_fn <- function(dta){
+  # calculate median aspect and slope by vector
+  temp_slope <- aggregate(topo %>% dplyr::select(slope_rad), dta, median) 
+  temp_aspect <- aggregate(topo %>% dplyr::select(aspect_rad), dta, median) 
+  temp_folded_aspect <- aggregate(topo %>% dplyr::select(folded_aspect_rad), dta, median)
+  # vector center
+  temp_center <- sf::st_centroid(dta)$geometry %>% 
+    sf::st_transform(crs = 4326) %>% 
+    sf::st_coordinates()
+  # attach to input data
+  new_dta <- dta %>% 
+    dplyr::mutate(
+      slope_rad = temp_slope$slope_rad
+      , aspect_rad = temp_aspect$aspect_rad
+      , folded_aspect_rad = temp_folded_aspect$folded_aspect_rad
+      , latitude_rad = pracma::deg2rad(as.numeric(temp_center[,2]))
+      , slope_deg = pracma::rad2deg(temp_slope$slope_rad)
+      , aspect_deg = pracma::rad2deg(temp_aspect$aspect_rad)
+      , folded_aspect_deg = pracma::rad2deg(temp_folded_aspect$folded_aspect_rad)
+      , latitude_deg = as.numeric(temp_center[,2])
+    )
+  return(new_dta)
+}
+# apply to data
+# openings <- openings %>% topo_calc_fn()
+# reserves <- reserves %>% topo_calc_fn()
 
 
 

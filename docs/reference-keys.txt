@@ -7,3 +7,5 @@ gmug-and-treatment-area-map
 treatment-units-and-group-map
 load-elevation-data
 elevation-plot
+aspect-and-hli
+topography-maps
