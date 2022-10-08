@@ -280,12 +280,16 @@ center_units <- sf::st_centroid(units)$geometry %>%
 
 units <- units %>% 
   dplyr::mutate(
-    slope = slope_units$slope_rad
-    , aspect = aspect_units$folded_aspect_rad
-    , latitude = pracma::deg2rad(as.numeric(center_units[,2]))
+    slope_rad = slope_units$slope_rad
+    , folded_aspect_rad = aspect_units$folded_aspect_rad
+    , latitude_rad = pracma::deg2rad(as.numeric(center_units[,2]))
+    , slope_deg = pracma::rad2deg(slope_units$slope_rad)
+    , folded_aspect_deg = pracma::rad2deg(aspect_units$folded_aspect_rad)
+    , latitude_deg = as.numeric(center_units[,2])
   )
 
 units %>% sf::st_set_geometry(NULL) %>% View()
+
 
 
 ```
