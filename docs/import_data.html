@@ -23,7 +23,7 @@
 <meta name="author" content="George Woolsey" />
 
 
-<meta name="date" content="2022-10-08" />
+<meta name="date" content="2022-10-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -503,47 +503,63 @@ where <span class="math inline">\(\theta\)</span> = aspect in degrees east of no
 <span id="cb12-16"><a href="import_data.html#cb12-16" aria-hidden="true" tabindex="-1"></a>vars_color <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
 <span id="cb12-17"><a href="import_data.html#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;viridis&quot;</span></span>
 <span id="cb12-18"><a href="import_data.html#cb12-18" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;cividis&quot;</span></span>
-<span id="cb12-19"><a href="import_data.html#cb12-19" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;rocket&quot;</span></span>
-<span id="cb12-20"><a href="import_data.html#cb12-20" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;mako&quot;</span></span>
+<span id="cb12-19"><a href="import_data.html#cb12-19" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;inferno&quot;</span></span>
+<span id="cb12-20"><a href="import_data.html#cb12-20" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;plasma&quot;</span></span>
 <span id="cb12-21"><a href="import_data.html#cb12-21" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;turbo&quot;</span></span>
 <span id="cb12-22"><a href="import_data.html#cb12-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-23"><a href="import_data.html#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co"># plts &lt;- list()</span></span>
-<span id="cb12-24"><a href="import_data.html#cb12-24" aria-hidden="true" tabindex="-1"></a>plt_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb12-25"><a href="import_data.html#cb12-25" aria-hidden="true" tabindex="-1"></a>  (</span>
-<span id="cb12-26"><a href="import_data.html#cb12-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> (topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(vars[x]))[</span>
-<span id="cb12-27"><a href="import_data.html#cb12-27" aria-hidden="true" tabindex="-1"></a>        units <span class="sc">%&gt;%</span> </span>
-<span id="cb12-28"><a href="import_data.html#cb12-28" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_union</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb12-29"><a href="import_data.html#cb12-29" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">200</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-30"><a href="import_data.html#cb12-30" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_bbox</span>()</span>
-<span id="cb12-31"><a href="import_data.html#cb12-31" aria-hidden="true" tabindex="-1"></a>      ]) <span class="sc">+</span></span>
-<span id="cb12-32"><a href="import_data.html#cb12-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-33"><a href="import_data.html#cb12-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> units, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-34"><a href="import_data.html#cb12-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
-<span id="cb12-35"><a href="import_data.html#cb12-35" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> vars_title[x]</span>
-<span id="cb12-36"><a href="import_data.html#cb12-36" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
-<span id="cb12-37"><a href="import_data.html#cb12-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-38"><a href="import_data.html#cb12-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-39"><a href="import_data.html#cb12-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb12-40"><a href="import_data.html#cb12-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb12-41"><a href="import_data.html#cb12-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb12-42"><a href="import_data.html#cb12-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
-<span id="cb12-43"><a href="import_data.html#cb12-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb12-44"><a href="import_data.html#cb12-44" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-45"><a href="import_data.html#cb12-45" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-46"><a href="import_data.html#cb12-46" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-47"><a href="import_data.html#cb12-47" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb12-48"><a href="import_data.html#cb12-48" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb12-49"><a href="import_data.html#cb12-49" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb12-50"><a href="import_data.html#cb12-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(</span>
-<span id="cb12-51"><a href="import_data.html#cb12-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span>vars_title[x])</span>
-<span id="cb12-52"><a href="import_data.html#cb12-52" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb12-53"><a href="import_data.html#cb12-53" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-54"><a href="import_data.html#cb12-54" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-55"><a href="import_data.html#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-56"><a href="import_data.html#cb12-56" aria-hidden="true" tabindex="-1"></a><span class="co"># combine plots</span></span>
-<span id="cb12-57"><a href="import_data.html#cb12-57" aria-hidden="true" tabindex="-1"></a><span class="co"># cowplot::plot_grid(plotlist =  plts, ncol = 2)</span></span>
-<span id="cb12-58"><a href="import_data.html#cb12-58" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-59"><a href="import_data.html#cb12-59" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_fn)</span></code></pre></div>
+<span id="cb12-23"><a href="import_data.html#cb12-23" aria-hidden="true" tabindex="-1"></a>vars_llim <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb12-24"><a href="import_data.html#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(topo<span class="sc">$</span>elev, <span class="at">na.rm=</span>T)<span class="sc">*</span>.<span class="dv">95</span></span>
+<span id="cb12-25"><a href="import_data.html#cb12-25" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb12-26"><a href="import_data.html#cb12-26" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb12-27"><a href="import_data.html#cb12-27" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb12-28"><a href="import_data.html#cb12-28" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb12-29"><a href="import_data.html#cb12-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-30"><a href="import_data.html#cb12-30" aria-hidden="true" tabindex="-1"></a>vars_Ulim <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb12-31"><a href="import_data.html#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(topo<span class="sc">$</span>elev, <span class="at">na.rm=</span>T)<span class="sc">*</span><span class="fl">1.05</span></span>
+<span id="cb12-32"><a href="import_data.html#cb12-32" aria-hidden="true" tabindex="-1"></a>  , <span class="fu">max</span>(<span class="fu">as.numeric</span>(topo<span class="sc">$</span>slope_deg), <span class="at">na.rm=</span>T)<span class="sc">*</span><span class="fl">1.05</span></span>
+<span id="cb12-33"><a href="import_data.html#cb12-33" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">360</span></span>
+<span id="cb12-34"><a href="import_data.html#cb12-34" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">180</span></span>
+<span id="cb12-35"><a href="import_data.html#cb12-35" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">1</span></span>
+<span id="cb12-36"><a href="import_data.html#cb12-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-37"><a href="import_data.html#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="co"># plts &lt;- list()</span></span>
+<span id="cb12-38"><a href="import_data.html#cb12-38" aria-hidden="true" tabindex="-1"></a>plt_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb12-39"><a href="import_data.html#cb12-39" aria-hidden="true" tabindex="-1"></a>  (</span>
+<span id="cb12-40"><a href="import_data.html#cb12-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> (topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(vars[x]))[</span>
+<span id="cb12-41"><a href="import_data.html#cb12-41" aria-hidden="true" tabindex="-1"></a>        units <span class="sc">%&gt;%</span> </span>
+<span id="cb12-42"><a href="import_data.html#cb12-42" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_union</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-43"><a href="import_data.html#cb12-43" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">200</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-44"><a href="import_data.html#cb12-44" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_bbox</span>()</span>
+<span id="cb12-45"><a href="import_data.html#cb12-45" aria-hidden="true" tabindex="-1"></a>      ]) <span class="sc">+</span></span>
+<span id="cb12-46"><a href="import_data.html#cb12-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span></span>
+<span id="cb12-47"><a href="import_data.html#cb12-47" aria-hidden="true" tabindex="-1"></a>          , <span class="at">limits =</span> <span class="fu">c</span>(vars_llim[x], vars_Ulim[x])</span>
+<span id="cb12-48"><a href="import_data.html#cb12-48" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb12-49"><a href="import_data.html#cb12-49" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> units, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-50"><a href="import_data.html#cb12-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
+<span id="cb12-51"><a href="import_data.html#cb12-51" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> vars_title[x]</span>
+<span id="cb12-52"><a href="import_data.html#cb12-52" aria-hidden="true" tabindex="-1"></a>          , <span class="at">fill =</span> vars_title[x]</span>
+<span id="cb12-53"><a href="import_data.html#cb12-53" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
+<span id="cb12-54"><a href="import_data.html#cb12-54" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-55"><a href="import_data.html#cb12-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-56"><a href="import_data.html#cb12-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb12-57"><a href="import_data.html#cb12-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb12-58"><a href="import_data.html#cb12-58" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb12-59"><a href="import_data.html#cb12-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
+<span id="cb12-60"><a href="import_data.html#cb12-60" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
+<span id="cb12-61"><a href="import_data.html#cb12-61" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
+<span id="cb12-62"><a href="import_data.html#cb12-62" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb12-63"><a href="import_data.html#cb12-63" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb12-64"><a href="import_data.html#cb12-64" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb12-65"><a href="import_data.html#cb12-65" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb12-66"><a href="import_data.html#cb12-66" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb12-67"><a href="import_data.html#cb12-67" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb12-68"><a href="import_data.html#cb12-68" aria-hidden="true" tabindex="-1"></a>      ) </span>
+<span id="cb12-69"><a href="import_data.html#cb12-69" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-70"><a href="import_data.html#cb12-70" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-71"><a href="import_data.html#cb12-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-72"><a href="import_data.html#cb12-72" aria-hidden="true" tabindex="-1"></a><span class="co"># combine plots</span></span>
+<span id="cb12-73"><a href="import_data.html#cb12-73" aria-hidden="true" tabindex="-1"></a><span class="co"># cowplot::plot_grid(plotlist =  plts, ncol = 2)</span></span>
+<span id="cb12-74"><a href="import_data.html#cb12-74" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-75"><a href="import_data.html#cb12-75" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_fn)</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-2.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-3.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-4.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-5.png" width="960" /></p>
 </div>
 </div>
@@ -594,38 +610,40 @@ where <span class="math inline">\(\theta\)</span> = aspect in degrees east of no
 <span id="cb14-7"><a href="import_data.html#cb14-7" aria-hidden="true" tabindex="-1"></a>        temp_dta <span class="sc">%&gt;%</span> </span>
 <span id="cb14-8"><a href="import_data.html#cb14-8" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">30</span>)</span>
 <span id="cb14-9"><a href="import_data.html#cb14-9" aria-hidden="true" tabindex="-1"></a>      ]) <span class="sc">+</span></span>
-<span id="cb14-10"><a href="import_data.html#cb14-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-11"><a href="import_data.html#cb14-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> temp_dta</span>
-<span id="cb14-12"><a href="import_data.html#cb14-12" aria-hidden="true" tabindex="-1"></a>        , <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="fl">1.1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
-<span id="cb14-13"><a href="import_data.html#cb14-13" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb14-14"><a href="import_data.html#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
-<span id="cb14-15"><a href="import_data.html#cb14-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&quot;Example group (area = &quot;</span></span>
-<span id="cb14-16"><a href="import_data.html#cb14-16" aria-hidden="true" tabindex="-1"></a>                         , scales<span class="sc">::</span><span class="fu">comma</span>(temp_dta<span class="sc">$</span>area_m2, <span class="at">accuracy =</span> <span class="dv">1</span>)</span>
-<span id="cb14-17"><a href="import_data.html#cb14-17" aria-hidden="true" tabindex="-1"></a>                         , <span class="st">&quot; m sq.)&quot;</span></span>
-<span id="cb14-18"><a href="import_data.html#cb14-18" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb14-19"><a href="import_data.html#cb14-19" aria-hidden="true" tabindex="-1"></a>          , <span class="at">subtitle =</span> vars_title[x]</span>
-<span id="cb14-20"><a href="import_data.html#cb14-20" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
-<span id="cb14-21"><a href="import_data.html#cb14-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-22"><a href="import_data.html#cb14-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-23"><a href="import_data.html#cb14-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb14-24"><a href="import_data.html#cb14-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb14-25"><a href="import_data.html#cb14-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb14-26"><a href="import_data.html#cb14-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
-<span id="cb14-27"><a href="import_data.html#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb14-28"><a href="import_data.html#cb14-28" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-29"><a href="import_data.html#cb14-29" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-30"><a href="import_data.html#cb14-30" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-31"><a href="import_data.html#cb14-31" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb14-32"><a href="import_data.html#cb14-32" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb14-33"><a href="import_data.html#cb14-33" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb14-34"><a href="import_data.html#cb14-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(</span>
-<span id="cb14-35"><a href="import_data.html#cb14-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span>vars_title[x])</span>
-<span id="cb14-36"><a href="import_data.html#cb14-36" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb14-37"><a href="import_data.html#cb14-37" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-38"><a href="import_data.html#cb14-38" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-39"><a href="import_data.html#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-40"><a href="import_data.html#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-41"><a href="import_data.html#cb14-41" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_grp_fn)</span></code></pre></div>
+<span id="cb14-10"><a href="import_data.html#cb14-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span></span>
+<span id="cb14-11"><a href="import_data.html#cb14-11" aria-hidden="true" tabindex="-1"></a>          , <span class="at">limits =</span> <span class="fu">c</span>(vars_llim[x], vars_Ulim[x])</span>
+<span id="cb14-12"><a href="import_data.html#cb14-12" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb14-13"><a href="import_data.html#cb14-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> temp_dta</span>
+<span id="cb14-14"><a href="import_data.html#cb14-14" aria-hidden="true" tabindex="-1"></a>        , <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="fl">1.1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb14-15"><a href="import_data.html#cb14-15" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb14-16"><a href="import_data.html#cb14-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
+<span id="cb14-17"><a href="import_data.html#cb14-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&quot;Example group (area = &quot;</span></span>
+<span id="cb14-18"><a href="import_data.html#cb14-18" aria-hidden="true" tabindex="-1"></a>                         , scales<span class="sc">::</span><span class="fu">comma</span>(temp_dta<span class="sc">$</span>area_m2, <span class="at">accuracy =</span> <span class="dv">1</span>)</span>
+<span id="cb14-19"><a href="import_data.html#cb14-19" aria-hidden="true" tabindex="-1"></a>                         , <span class="st">&quot; m sq.)&quot;</span></span>
+<span id="cb14-20"><a href="import_data.html#cb14-20" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb14-21"><a href="import_data.html#cb14-21" aria-hidden="true" tabindex="-1"></a>          , <span class="at">subtitle =</span> vars_title[x]</span>
+<span id="cb14-22"><a href="import_data.html#cb14-22" aria-hidden="true" tabindex="-1"></a>          , <span class="at">fill =</span> vars_title[x]</span>
+<span id="cb14-23"><a href="import_data.html#cb14-23" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
+<span id="cb14-24"><a href="import_data.html#cb14-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-25"><a href="import_data.html#cb14-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-26"><a href="import_data.html#cb14-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb14-27"><a href="import_data.html#cb14-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb14-28"><a href="import_data.html#cb14-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb14-29"><a href="import_data.html#cb14-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
+<span id="cb14-30"><a href="import_data.html#cb14-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
+<span id="cb14-31"><a href="import_data.html#cb14-31" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
+<span id="cb14-32"><a href="import_data.html#cb14-32" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb14-33"><a href="import_data.html#cb14-33" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb14-34"><a href="import_data.html#cb14-34" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb14-35"><a href="import_data.html#cb14-35" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb14-36"><a href="import_data.html#cb14-36" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb14-37"><a href="import_data.html#cb14-37" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb14-38"><a href="import_data.html#cb14-38" aria-hidden="true" tabindex="-1"></a>      ) </span>
+<span id="cb14-39"><a href="import_data.html#cb14-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-40"><a href="import_data.html#cb14-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-41"><a href="import_data.html#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="import_data.html#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-43"><a href="import_data.html#cb14-43" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_grp_fn)</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-2.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-3.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-4.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-5.png" width="960" /></p>
 
 </div>

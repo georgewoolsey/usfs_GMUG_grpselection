@@ -381,9 +381,23 @@ vars_title <- c(
 vars_color <- c(
   "viridis"
   , "cividis"
-  , "rocket"
-  , "mako"
+  , "inferno"
+  , "plasma"
   , "turbo"
+)
+vars_llim <- c(
+  min(topo$elev, na.rm=T)*.95
+  , 0
+  , 0
+  , 0
+  , 0
+)
+vars_Ulim <- c(
+  max(topo$elev, na.rm=T)*1.05
+  , max(as.numeric(topo$slope_deg), na.rm=T)*1.05
+  , 360
+  , 180
+  , 1
 )
 # plts <- list()
 plt_fn <- function(x){
@@ -394,10 +408,13 @@ plt_fn <- function(x){
           sf::st_buffer(dist = 200) %>% 
           sf::st_bbox()
       ]) +
-      scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent") +
+      scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent"
+          , limits = c(vars_llim[x], vars_Ulim[x])
+      ) +
       geom_sf(data = units, alpha = 0, lwd = 1, color = "black") +
       labs(
           title = vars_title[x]
+          , fill = vars_title[x]
         ) +
       xlab("") +
       ylab("") +
@@ -405,16 +422,15 @@ plt_fn <- function(x){
       scale_y_continuous(expand = c(0, 0)) +
       theme_bw() +
       theme(
-        legend.margin = margin(0,0,0,0)
+        legend.position = "bottom"
+        , legend.direction = "horizontal"
+        , legend.margin = margin(0,0,0,0)
         , legend.text = element_text(size = 7)
         , legend.title = element_text(size = 7)
         , axis.text.y = element_text(size = 7)
         , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
         , panel.border = element_blank()
-      ) +
-      guides(
-        fill = guide_legend(title=vars_title[x])
-      )
+      ) 
   )
 }
 
@@ -476,7 +492,9 @@ plt_grp_fn <- function(x){
         temp_dta %>% 
           sf::st_buffer(dist = 30)
       ]) +
-      scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent") +
+      scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent"
+          , limits = c(vars_llim[x], vars_Ulim[x])
+      ) +
       geom_sf(data = temp_dta
         , alpha = 0, lwd = 1.1, color = "black"
       ) +
@@ -486,6 +504,7 @@ plt_grp_fn <- function(x){
                          , " m sq.)"
               )
           , subtitle = vars_title[x]
+          , fill = vars_title[x]
         ) +
       xlab("") +
       ylab("") +
@@ -493,16 +512,15 @@ plt_grp_fn <- function(x){
       scale_y_continuous(expand = c(0, 0)) +
       theme_bw() +
       theme(
-        legend.margin = margin(0,0,0,0)
+        legend.position = "bottom"
+        , legend.direction = "horizontal"
+        , legend.margin = margin(0,0,0,0)
         , legend.text = element_text(size = 7)
         , legend.title = element_text(size = 7)
         , axis.text.y = element_text(size = 7)
         , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
         , panel.border = element_blank()
-      ) +
-      guides(
-        fill = guide_legend(title=vars_title[x])
-      )
+      ) 
   )
 }
 
