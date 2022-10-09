@@ -405,9 +405,7 @@ plt_fn <- function(x){
       scale_y_continuous(expand = c(0, 0)) +
       theme_bw() +
       theme(
-        legend.position = "bottom"
-        , legend.margin = margin(0,0,0,0)
-        , legend.box.margin = margin(-21,0,2,0)
+        legend.margin = margin(0,0,0,0)
         , legend.text = element_text(size = 7)
         , legend.title = element_text(size = 7)
         , axis.text.y = element_text(size = 7)
@@ -495,9 +493,7 @@ plt_grp_fn <- function(x){
       scale_y_continuous(expand = c(0, 0)) +
       theme_bw() +
       theme(
-        legend.position = "bottom"
-        , legend.margin = margin(0,0,0,0)
-        , legend.box.margin = margin(-21,0,2,0)
+        legend.margin = margin(0,0,0,0)
         , legend.text = element_text(size = 7)
         , legend.title = element_text(size = 7)
         , axis.text.y = element_text(size = 7)

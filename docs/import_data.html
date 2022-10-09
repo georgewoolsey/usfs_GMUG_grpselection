@@ -527,26 +527,23 @@ where <span class="math inline">\(\theta\)</span> = aspect in degrees east of no
 <span id="cb12-40"><a href="import_data.html#cb12-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
 <span id="cb12-41"><a href="import_data.html#cb12-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb12-42"><a href="import_data.html#cb12-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
-<span id="cb12-43"><a href="import_data.html#cb12-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
-<span id="cb12-44"><a href="import_data.html#cb12-44" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
-<span id="cb12-45"><a href="import_data.html#cb12-45" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb12-46"><a href="import_data.html#cb12-46" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.box.margin =</span> <span class="fu">margin</span>(<span class="sc">-</span><span class="dv">21</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)</span>
-<span id="cb12-47"><a href="import_data.html#cb12-47" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-48"><a href="import_data.html#cb12-48" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-49"><a href="import_data.html#cb12-49" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-50"><a href="import_data.html#cb12-50" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb12-51"><a href="import_data.html#cb12-51" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb12-52"><a href="import_data.html#cb12-52" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb12-53"><a href="import_data.html#cb12-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(</span>
-<span id="cb12-54"><a href="import_data.html#cb12-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span>vars_title[x])</span>
-<span id="cb12-55"><a href="import_data.html#cb12-55" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb12-56"><a href="import_data.html#cb12-56" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-57"><a href="import_data.html#cb12-57" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-58"><a href="import_data.html#cb12-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-59"><a href="import_data.html#cb12-59" aria-hidden="true" tabindex="-1"></a><span class="co"># combine plots</span></span>
-<span id="cb12-60"><a href="import_data.html#cb12-60" aria-hidden="true" tabindex="-1"></a><span class="co"># cowplot::plot_grid(plotlist =  plts, ncol = 2)</span></span>
-<span id="cb12-61"><a href="import_data.html#cb12-61" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-62"><a href="import_data.html#cb12-62" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_fn)</span></code></pre></div>
+<span id="cb12-43"><a href="import_data.html#cb12-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb12-44"><a href="import_data.html#cb12-44" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb12-45"><a href="import_data.html#cb12-45" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb12-46"><a href="import_data.html#cb12-46" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb12-47"><a href="import_data.html#cb12-47" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb12-48"><a href="import_data.html#cb12-48" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb12-49"><a href="import_data.html#cb12-49" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb12-50"><a href="import_data.html#cb12-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(</span>
+<span id="cb12-51"><a href="import_data.html#cb12-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span>vars_title[x])</span>
+<span id="cb12-52"><a href="import_data.html#cb12-52" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb12-53"><a href="import_data.html#cb12-53" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-54"><a href="import_data.html#cb12-54" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-55"><a href="import_data.html#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-56"><a href="import_data.html#cb12-56" aria-hidden="true" tabindex="-1"></a><span class="co"># combine plots</span></span>
+<span id="cb12-57"><a href="import_data.html#cb12-57" aria-hidden="true" tabindex="-1"></a><span class="co"># cowplot::plot_grid(plotlist =  plts, ncol = 2)</span></span>
+<span id="cb12-58"><a href="import_data.html#cb12-58" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-59"><a href="import_data.html#cb12-59" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_fn)</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-2.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-3.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-4.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-5.png" width="960" /></p>
 </div>
 </div>
@@ -614,24 +611,21 @@ where <span class="math inline">\(\theta\)</span> = aspect in degrees east of no
 <span id="cb14-24"><a href="import_data.html#cb14-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
 <span id="cb14-25"><a href="import_data.html#cb14-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb14-26"><a href="import_data.html#cb14-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
-<span id="cb14-27"><a href="import_data.html#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
-<span id="cb14-28"><a href="import_data.html#cb14-28" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
-<span id="cb14-29"><a href="import_data.html#cb14-29" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb14-30"><a href="import_data.html#cb14-30" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.box.margin =</span> <span class="fu">margin</span>(<span class="sc">-</span><span class="dv">21</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)</span>
-<span id="cb14-31"><a href="import_data.html#cb14-31" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-32"><a href="import_data.html#cb14-32" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-33"><a href="import_data.html#cb14-33" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-34"><a href="import_data.html#cb14-34" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb14-35"><a href="import_data.html#cb14-35" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb14-36"><a href="import_data.html#cb14-36" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb14-37"><a href="import_data.html#cb14-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(</span>
-<span id="cb14-38"><a href="import_data.html#cb14-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span>vars_title[x])</span>
-<span id="cb14-39"><a href="import_data.html#cb14-39" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb14-40"><a href="import_data.html#cb14-40" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-41"><a href="import_data.html#cb14-41" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-42"><a href="import_data.html#cb14-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-43"><a href="import_data.html#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-44"><a href="import_data.html#cb14-44" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_grp_fn)</span></code></pre></div>
+<span id="cb14-27"><a href="import_data.html#cb14-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb14-28"><a href="import_data.html#cb14-28" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb14-29"><a href="import_data.html#cb14-29" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb14-30"><a href="import_data.html#cb14-30" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb14-31"><a href="import_data.html#cb14-31" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb14-32"><a href="import_data.html#cb14-32" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb14-33"><a href="import_data.html#cb14-33" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb14-34"><a href="import_data.html#cb14-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">guides</span>(</span>
+<span id="cb14-35"><a href="import_data.html#cb14-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">title=</span>vars_title[x])</span>
+<span id="cb14-36"><a href="import_data.html#cb14-36" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb14-37"><a href="import_data.html#cb14-37" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-38"><a href="import_data.html#cb14-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-39"><a href="import_data.html#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="import_data.html#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-41"><a href="import_data.html#cb14-41" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_grp_fn)</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-2.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-3.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-4.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-17-5.png" width="960" /></p>
 
 </div>
