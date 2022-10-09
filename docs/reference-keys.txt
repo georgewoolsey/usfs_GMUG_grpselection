@@ -3,9 +3,13 @@ import_data
 national-forest-management-data-download
 gmug-map
 load-treatment-data
+group-summary-statistics
+group-sizes
 gmug-and-treatment-area-map
 treatment-units-and-group-map
 load-elevation-data
 elevation-plot
 aspect-and-hli
 topography-maps
+attach-topography-and-hli-to-groups
+example-group-and-topography

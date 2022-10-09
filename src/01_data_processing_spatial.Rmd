@@ -9,6 +9,7 @@ library(RColorBrewer)
 library(scales)
 library(viridis)
 library(kableExtra)
+library(latex2exp)
 # spatial
 library(sf)
 library(stars)
@@ -18,6 +19,7 @@ library(mapview) #Interactive maps
 library(leafpop) #map html popup
 library(elevatr) # elevation data (DEMs)
 library(pracma) # Practical Numerical Math Functions
+# library(rayshader) # mapping
 
 # knit options
 knitr::opts_chunk$set(
@@ -100,7 +102,9 @@ shp_import_fn <- function(pth){
       )
     )) %>% 
     sf::st_transform(crs = sf::st_crs(forests)) %>% 
-    dplyr::mutate(area_m2 = as.numeric(sf::st_area(.)))
+    dplyr::mutate(area_m2 = as.numeric(sf::st_area(.))) %>% 
+    dplyr::arrange(desc(area_m2)) %>% 
+    dplyr::mutate(shape_id = dplyr::row_number())
   #rename sf geom column
   names(dta)[names(dta)==tolower(attr(dta, "sf_column"))] = "geometry"
   sf::st_geometry(dta) = "geometry"
@@ -109,14 +113,76 @@ shp_import_fn <- function(pth){
 }
 
 # group selection openings
-openings <- shp_import_fn("../data/Bald_all_groups.shp")
+openings <- shp_import_fn("../data/Bald_all_groups.shp") %>% 
+  dplyr::mutate(group = "Openings")
 
 # group selection reserve groups
-reserves <- shp_import_fn("../data/Bald_all_Reserve_grps.shp")
+reserves <- shp_import_fn("../data/Bald_all_Reserve_grps.shp") %>% 
+  dplyr::mutate(group = "Reserves")
 
 # harvest units
 units <- shp_import_fn("../data/UnitEstimate.shp")
+
+# combine
+all_groups <- dplyr::bind_rows(
+  openings %>% dplyr::select(shape_id, group, area_m2)
+  , reserves %>% dplyr::select(shape_id, group, area_m2)
+)
 ```
+
+### Group summary statistics
+
+```{r}
+#summary
+all_groups %>% sf::st_set_geometry(NULL) %>% 
+  dplyr::group_by(group) %>%
+  dplyr::summarise(
+    N = n()
+    , mean_area = mean(area_m2, na.rm = T)
+    , min_area = min(area_m2, na.rm = T) 
+    , max_area = max(area_m2, na.rm = T) 
+  ) %>% 
+  kableExtra::kable(
+    caption = "Summary statistics by group type"
+    , col.names = c(
+      "Group Type"
+      , "n"
+      , "Mean Area (m sq.)"
+      , "Min. Area (m sq.)"
+      , "Max. Area (m sq.)"
+      )
+  ) %>% 
+  kableExtra::kable_styling(font_size = 12) %>% 
+  kableExtra::column_spec(1, bold = TRUE, width = "18em")
+```
+
+### Group sizes
+
+```{r}
+all_groups %>% sf::st_set_geometry(NULL) %>% 
+  ggplot(
+    data = .
+    , mapping = aes(x = area_m2, group = group)
+  ) +
+  geom_histogram(
+    aes(y = ..density.., fill = group)
+    , bins = 15
+    , color = "gray25"
+  ) +
+  facet_grid(group~.) +
+  scale_x_continuous(breaks = scales::extended_breaks(n=10), labels = scales::comma) +
+  scale_fill_viridis_d(option = "cividis", alpha = 0.8) +
+  xlab(latex2exp::TeX("area $m^2$")) +
+  ylab("Density") +
+  labs(
+    title = "Group Area Histogram"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "none"
+  )
+```
+
 
 ### GMUG and treatment area map
 
@@ -248,7 +314,7 @@ $$
 $$
 where $\theta$ = aspect in degrees east of north. While this and related equations are useful, they do not consider the steepness of the slope. For example, a 1° south-facing slope would receive the same heat load index as a 30° south-facing slope, even though the latter will be considerably warmer.
 
-HLI calculations have been developed which combine slope, folded aspect (i.e., “southwestness”), and latitude to estimate terrain-driven solar heating at a given location ([McCune & Keon 2002: eq. 2](https://onlinelibrary.wiley.com/doi/10.1111/j.1654-1103.2002.tb02087.x)). To calculate HLI, we used equation 2 of [McCune & Keon 2002: eq. 2](https://onlinelibrary.wiley.com/doi/10.1111/j.1654-1103.2002.tb02087.x). Following calculation, we aggregated these data to each group selection boundary (median HLI). Higher values of HLI are typical on steep southwesterly slopes, while low values are common on steep northeasterly slopes. Moderate values are common in flatter terrain and on northwesterly and southeasterly aspects. 
+HLI calculations have been developed which combine slope, folded aspect (i.e., “southwestness”), and latitude to estimate terrain-driven solar heating at a given location ([McCune & Keon 2002: eq. 2](https://onlinelibrary.wiley.com/doi/10.1111/j.1654-1103.2002.tb02087.x)). To calculate HLI, we used equation 2 of [McCune & Keon 2002: eq. 2](https://onlinelibrary.wiley.com/doi/10.1111/j.1654-1103.2002.tb02087.x). Following calculation, we aggregated these data to each group selection boundary (median HLI of ~6.8m pixels). Higher values of HLI are typical on steep southwesterly slopes, while low values are common on steep northeasterly slopes. Moderate values are common in flatter terrain and on northwesterly and southeasterly aspects. 
 
 Aspect must first be "folded" about the north-south line, rescaling 0-360° to 0-180°, such that NE = NW, E = W, etc: 
 
@@ -256,6 +322,23 @@ $$
 \textrm{Folded aspect°} = 180° \, - \, | Aspect° – 180° |
 $$
 ```{r}
+# extract latitude degrees from stars object
+lats <- sf::st_coordinates(elev) %>%
+  sf::st_as_sf(coords = c("x", "y"), crs = my_crs) %>%
+  sf::st_transform(crs = 4326) %>%
+  sf::st_coordinates() %>%
+  dplyr::as_tibble() %>%
+  setNames(c("longitude","latitude")) %>%
+  dplyr::select(latitude)
+# hli function
+hli_fn <- function(slope_rad, folded_aspect_rad, latitude_rad){
+  -1.236
+  +1.350*cos(latitude_rad)*cos(slope_rad)
+  -1.376*cos(folded_aspect_rad)*sin(slope_rad)*sin(latitude_rad)
+  -0.331*sin(latitude_rad)*sin(slope_rad)
+  +0.375*sin(folded_aspect_rad)*sin(slope_rad)
+}
+
 # calculate slope and aspect from DEM
 topo <- c(
     elev
@@ -270,34 +353,41 @@ topo <- c(
     , aspect_rad = pracma::deg2rad(as.numeric(aspect_deg))
     , folded_aspect_deg = 180 - abs(as.numeric(aspect_deg)-180)
     , folded_aspect_rad = pracma::deg2rad(folded_aspect_deg)
+    , latitude_deg = lats$latitude
+    , latitude_rad = pracma::deg2rad(as.numeric(latitude_deg))
+    , hli = hli_fn(slope_rad, folded_aspect_rad, latitude_rad)
   )
-# map
+
 ```
 
 ### Topography maps
 
 ```{r}
+# map
 vars <- c(
   "elev"
   , "slope_deg"
   , "aspect_deg"
   , "folded_aspect_deg"
+  , "hli"
 )
 vars_title <- c(
   "Elevation (m)"
   , "Slope (\u00B0)"
   , "Aspect (\u00B0)"
   , "Folded Aspect (\u00B0)"
+  , "Heat Load Index (HLI)"
 )
 vars_color <- c(
   "viridis"
   , "cividis"
   , "rocket"
   , "mako"
+  , "turbo"
 )
-plts <- list()
-for(x in 1:length(vars)){
-  plts[[x]] <- 
+# plts <- list()
+plt_fn <- function(x){
+  (
       ggplot() + stars::geom_stars(data = (topo %>% dplyr::select(vars[x]))[
         units %>% 
           sf::st_union() %>% 
@@ -316,7 +406,6 @@ for(x in 1:length(vars)){
       theme_bw() +
       theme(
         legend.position = "bottom"
-        , legend.direction = "horizontal"
         , legend.margin = margin(0,0,0,0)
         , legend.box.margin = margin(-21,0,2,0)
         , legend.text = element_text(size = 7)
@@ -328,13 +417,16 @@ for(x in 1:length(vars)){
       guides(
         fill = guide_legend(title=vars_title[x])
       )
+  )
 }
 
 # combine plots
-cowplot::plot_grid(plotlist =  plts, nrow = 2, ncol = 2)
+# cowplot::plot_grid(plotlist =  plts, ncol = 2)
+c(1:length(vars)) %>%
+  purrr::map(plt_fn)
 ```
 
-
+## Attach topography and HLI to groups
 
 ```{r}
 # functions to aggregate raster data to vector data
@@ -343,33 +435,82 @@ topo_calc_fn <- function(dta){
   temp_slope <- aggregate(topo %>% dplyr::select(slope_rad), dta, median) 
   temp_aspect <- aggregate(topo %>% dplyr::select(aspect_rad), dta, median) 
   temp_folded_aspect <- aggregate(topo %>% dplyr::select(folded_aspect_rad), dta, median)
+  temp_hli <- aggregate(topo %>% dplyr::select(hli), dta, median)
   # vector center
   temp_center <- sf::st_centroid(dta)$geometry %>% 
     sf::st_transform(crs = 4326) %>% 
-    sf::st_coordinates()
+    sf::st_coordinates() %>% 
+    dplyr::as_tibble() %>% 
+    setNames(c("longitude","latitude")) %>%
+    dplyr::select(latitude)
   # attach to input data
   new_dta <- dta %>% 
     dplyr::mutate(
+      # radians
       slope_rad = temp_slope$slope_rad
       , aspect_rad = temp_aspect$aspect_rad
       , folded_aspect_rad = temp_folded_aspect$folded_aspect_rad
-      , latitude_rad = pracma::deg2rad(as.numeric(temp_center[,2]))
+      , latitude_rad = pracma::deg2rad(as.numeric(temp_center$latitude))
+      # degrees
       , slope_deg = pracma::rad2deg(temp_slope$slope_rad)
       , aspect_deg = pracma::rad2deg(temp_aspect$aspect_rad)
       , folded_aspect_deg = pracma::rad2deg(temp_folded_aspect$folded_aspect_rad)
-      , latitude_deg = as.numeric(temp_center[,2])
+      , latitude_deg = as.numeric(temp_center$latitude)
+      # hli
+      , hli = temp_hli$hli
     )
   return(new_dta)
 }
 # apply to data
-# openings <- openings %>% topo_calc_fn()
-# reserves <- reserves %>% topo_calc_fn()
-
-
+all_groups <- all_groups %>% topo_calc_fn()
 
 ```
 
+### Example group and topography
+
 ```{r}
-# hey
+plt_grp_fn <- function(x){
+  temp_dta <- all_groups %>% 
+    dplyr::filter(group == "Openings") %>% 
+    dplyr::slice_head(n = 1)
+  return(
+      ggplot() + stars::geom_stars(data = (topo %>% dplyr::select(vars[x]))[
+        temp_dta %>% 
+          sf::st_buffer(dist = 30)
+      ]) +
+      scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent") +
+      geom_sf(data = temp_dta
+        , alpha = 0, lwd = 1.1, color = "black"
+      ) +
+      labs(
+          title = paste0("Example group (area = "
+                         , scales::comma(temp_dta$area_m2, accuracy = 1)
+                         , " m sq.)"
+              )
+          , subtitle = vars_title[x]
+        ) +
+      xlab("") +
+      ylab("") +
+      scale_x_continuous(expand = c(0, 0)) +
+      scale_y_continuous(expand = c(0, 0)) +
+      theme_bw() +
+      theme(
+        legend.position = "bottom"
+        , legend.margin = margin(0,0,0,0)
+        , legend.box.margin = margin(-21,0,2,0)
+        , legend.text = element_text(size = 7)
+        , legend.title = element_text(size = 7)
+        , axis.text.y = element_text(size = 7)
+        , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+        , panel.border = element_blank()
+      ) +
+      guides(
+        fill = guide_legend(title=vars_title[x])
+      )
+  )
+}
+
+c(1:length(vars)) %>%
+  purrr::map(plt_grp_fn)
 ```
 
