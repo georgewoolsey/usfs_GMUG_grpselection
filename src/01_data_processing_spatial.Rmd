@@ -1,4 +1,4 @@
-# Import Data {#import_data}
+# Data Preparation {#data_prep}
 
 ```{r, include=FALSE, warning=F, message=F}
 # data mgmt
@@ -19,7 +19,10 @@ library(mapview) #Interactive maps
 library(leafpop) #map html popup
 library(elevatr) # elevation data (DEMs)
 library(pracma) # Practical Numerical Math Functions
-# library(rayshader) # mapping
+library(rayshader) # mapping
+library(magick)
+library(terra)
+library(raster)
 
 # knit options
 knitr::opts_chunk$set(
@@ -132,7 +135,7 @@ all_groups <- dplyr::bind_rows(
 
 ### Group summary statistics
 
-```{r}
+```{r, results='asis'}
 #summary
 all_groups %>% sf::st_set_geometry(NULL) %>% 
   dplyr::group_by(group) %>%
@@ -249,9 +252,9 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
   if(file.exists("../data/elev.tif") == FALSE){
       # z =14 is highest resolution (~6.8m)
       elev <- elevatr::get_elev_raster(
-          locations = units %>% 
+          locations = units %>%
             sf::st_union() %>% 
-            sf::st_buffer(dist = 100)
+            sf::st_buffer(dist = 2000)
           , z = 14
         ) %>% 
         stars::st_as_stars() %>% 
@@ -268,9 +271,9 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
 ```{r, warning=F, message=F, fig.width = 10, fig.height = 6}
 # plot
 ggplot() + stars::geom_stars(data = elev[
-    units %>% 
-      sf::st_union() %>% 
-      sf::st_buffer(dist = 200) %>% 
+    units %>%
+      sf::st_union() %>%
+      sf::st_buffer(dist = 500) %>%
       sf::st_bbox()
   ]) +
   scale_fill_viridis_c(option = "viridis", alpha = 0.9, na.value = "transparent") +
@@ -278,6 +281,7 @@ ggplot() + stars::geom_stars(data = elev[
   labs(
       title = "GMUG Treatment Units Elevation Map"
       , subtitle = sf::st_crs(elev)$input
+      , fill = "Elev. (m)"
     ) +
   xlab("") +
   ylab("") +
@@ -294,9 +298,6 @@ ggplot() + stars::geom_stars(data = elev[
     , axis.text.y = element_text(size = 7)
     , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
     , panel.border = element_blank()
-  ) +
-  guides(
-    fill = guide_legend(title="Elev. (m)")
   )
 
 ```
@@ -304,6 +305,39 @@ ggplot() + stars::geom_stars(data = elev[
 ```{r, echo=FALSE, include=FALSE}
 gc()
 ```
+
+```{r, include=FALSE, eval=FALSE}
+# elev_mat <- rayshader::raster_to_matrix(elev[
+elev_mat <- starsExtra::layer_to_matrix(elev[
+  units %>%
+      sf::st_union() %>%
+      sf::st_buffer(dist = 500) %>%
+      sf::st_bbox()
+])
+# rayshader
+
+elev_mat %>%
+  rayshader::sphere_shade(sunangle = 78, texture = "desert") %>%
+  rayshader::add_overlay(
+    rayshader::generate_polygon_overlay(
+      units
+      , extent = methods::as(elev, "Raster") %>% raster::extent()
+      , heightmap = elev_mat
+      , data_column_fill = NULL
+      , palette = "transparent"
+      , linecolor = "black"
+      , linewidth = 3
+    )
+  ) %>% 
+  # rayshader::plot_map()
+  rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
+
+  # Sys.sleep(0.2)
+  # rayshader::render_snapshot(clear = TRUE)
+  # rayshader::plot_map()
+  # rayshader::plot_3d(elev_mat, zscale = 10)
+```
+
 
 ## Aspect and HLI
 
@@ -332,7 +366,7 @@ lats <- sf::st_coordinates(elev) %>%
   dplyr::select(latitude)
 # hli function
 hli_fn <- function(slope_rad, folded_aspect_rad, latitude_rad){
-  -1.236
+  (1.236*-1)
   +1.350*cos(latitude_rad)*cos(slope_rad)
   -1.376*cos(folded_aspect_rad)*sin(slope_rad)*sin(latitude_rad)
   -0.331*sin(latitude_rad)*sin(slope_rad)
@@ -392,7 +426,7 @@ vars_llim <- c(
   , 0
   , 0
 )
-vars_Ulim <- c(
+vars_ulim <- c(
   max(topo$elev, na.rm=T)*1.05
   , max(as.numeric(topo$slope_deg), na.rm=T)*1.05
   , 360
@@ -409,7 +443,7 @@ plt_fn <- function(x){
           sf::st_bbox()
       ]) +
       scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent"
-          , limits = c(vars_llim[x], vars_Ulim[x])
+          , limits = c(vars_llim[x], vars_ulim[x])
       ) +
       geom_sf(data = units, alpha = 0, lwd = 1, color = "black") +
       labs(
@@ -493,7 +527,7 @@ plt_grp_fn <- function(x){
           sf::st_buffer(dist = 30)
       ]) +
       scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent"
-          , limits = c(vars_llim[x], vars_Ulim[x])
+          , limits = c(vars_llim[x], vars_ulim[x])
       ) +
       geom_sf(data = temp_dta
         , alpha = 0, lwd = 1.1, color = "black"

@@ -4,9 +4,16 @@ author: "George Woolsey"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 output: 
-  bookdown::gitbook: default
-  # bookdown::render_book("index.Rmd", bookdown::gitbook(lib_dir = "src"))
+  bookdown::gitbook:
+    includes:
+      in_header: header.html
 documentclass: book
+book_filename: "usfs_GMUG_grpselection"
+output_dir: "../docs"
+language:
+  ui:
+    chapter_name: "Chapter "
+delete_merged_file: true
 bibliography: [packages.bib]
 biblio-style: apalike
 csl: https://raw.githubusercontent.com/citation-style-language/styles/master/research-institute-for-nature-and-forest.csl
@@ -14,7 +21,7 @@ suppress-bibliography: false
 lang: en-US
 zotero: true
 link-citations: true
-description: "Using the bookdown package to write a book for BHEF Rx fire planning. The output format for this example is bookdown::gitbook."
+description: "Using the bookdown package to write a book for GMUG group selection study planning. The output format for this example is bookdown::gitbook."
 ---
 
 # Objective
