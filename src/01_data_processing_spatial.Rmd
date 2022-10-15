@@ -23,6 +23,8 @@ library(rayshader) # mapping
 library(magick)
 library(terra)
 library(raster)
+library(imagerExtra)
+library(imager)
 
 # knit options
 knitr::opts_chunk$set(
@@ -264,18 +266,19 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
   }else{
     elev <- stars::read_stars("../data/elev.tif")
   }
+elev_small <- elev[
+    units %>%
+      sf::st_union() %>%
+      sf::st_buffer(dist = 500) %>%
+      sf::st_bbox()
+  ]
 ```
 
 ### Elevation plot
 
 ```{r, warning=F, message=F, fig.width = 10, fig.height = 6}
 # plot
-ggplot() + stars::geom_stars(data = elev[
-    units %>%
-      sf::st_union() %>%
-      sf::st_buffer(dist = 500) %>%
-      sf::st_bbox()
-  ]) +
+ggplot() + stars::geom_stars(data = elev_small) +
   scale_fill_viridis_c(option = "viridis", alpha = 0.9, na.value = "transparent") +
   geom_sf(data = units, alpha = 0, lwd = 1, color = "black") +
   labs(
@@ -306,22 +309,115 @@ ggplot() + stars::geom_stars(data = elev[
 gc()
 ```
 
-```{r, include=FALSE, eval=FALSE}
-# elev_mat <- rayshader::raster_to_matrix(elev[
-elev_mat <- starsExtra::layer_to_matrix(elev[
-  units %>%
+## Load NAIP Imagery
+
+Download NAIP Imagery from [this respository](https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx)
+
+```{r}
+tifs <- list.files("../data/naip/", pattern = "\\.tif$", full.names = TRUE)
+naip_st <- stars::read_stars(tifs[1]) 
+# plot(naip_st)
+# crop
+naip_st <- naip_st %>% 
+  sf::st_crop(
+    units %>%
       sf::st_union() %>%
       sf::st_buffer(dist = 500) %>%
       sf::st_bbox()
-])
-# rayshader
+  ) %>% 
+  setNames("value") %>% 
+  dplyr::mutate(value = ifelse(is.na(value), 0, value))
 
+# set rgb image
+# band 3 = red, band 2 = green, band 1 = blue
+naip_rgb <- stars::st_rgb(
+  # naip_st[,,,1:3] # CIR
+  naip_st[,,,3:1] # RGB
+  , dimension = 3
+  , use_alpha = FALSE
+  # , stretch = "histogram"
+  , probs = c(0.005, 0.995)
+  , stretch = "percent"
+)
+
+# FUNCTION to wrangle RGB data to work with rayshader
+wrangle_rgb <- function(x){
+  # Load color imagery from Sentinel 2
+  temp_rgb <- 
+    raster::stack(x) %>% 
+    raster::crop(units %>%
+      sf::st_union() %>%
+      sf::st_buffer(dist = 500) %>%
+      sf::st_bbox()
+    )
+  # The array must be transposed since rasters and arrays are oriented 
+  # differently in R. aperm() is sued to perform a multi-dimensional transpose.
+  r_mat = rayshader::raster_to_matrix(temp_rgb[[3]])
+  g_mat = rayshader::raster_to_matrix(temp_rgb[[2]])
+  b_mat = rayshader::raster_to_matrix(temp_rgb[[1]])
+  
+  # create array
+  rgb_array = array(0, dim = c(nrow(r_mat),ncol(r_mat),3))
+  
+  rgb_array[,,1] = r_mat/255 #Red layer
+  rgb_array[,,2] = g_mat/255 #Blue layer
+  rgb_array[,,3] = b_mat/255 #Green layer
+  
+  rgb_array = aperm(rgb_array, c(2,1,3))
+  
+  # enhance contrast
+  scales::rescale(rgb_array,to=c(0, 1))
+  
+  return(rgb_array)
+}
+
+# Prepare rgb image overlay
+rgb_img <- wrangle_rgb(tifs[1])
+
+```
+
+
+```{r, include = FALSE, eval=FALSE}
+ggplot() +
+      stars::geom_stars(
+        data = naip_rgb[]
+      ) +
+      scale_fill_identity(na.value = "transparent") + # !!! don't take this out or RGB plot will kill your computer
+      # geom_sf(data = rx_fire %>%
+      #         dplyr::filter(unit == my_unit) %>%
+      #         sf::st_transform(crs = sf::st_crs(naip_st))
+      #     , alpha = 0
+      #     , lwd = 1.5
+      #     , color = "orangered"
+      # ) +
+      xlab("") +
+      ylab("") +
+      scale_x_continuous(expand = c(0, 0)) +
+      scale_y_continuous(expand = c(0, 0)) +
+      theme_bw() +
+      theme(
+        legend.position = "none"
+        , axis.text = element_text(size = 8)
+        , panel.border = element_blank()
+      )
+
+```
+
+
+### Topo Map
+
+https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx
+
+```{r, include=FALSE, eval=FALSE}
+# stars to matrix
+elev_mat <- starsExtra::layer_to_matrix(elev_small)
+# check out plot locations
 elev_mat %>%
   rayshader::sphere_shade(sunangle = 78, texture = "desert") %>%
   rayshader::add_overlay(
     rayshader::generate_polygon_overlay(
       units
-      , extent = methods::as(elev, "Raster") %>% raster::extent()
+      , extent = methods::as(elev_small, "Raster") %>% raster::extent()
       , heightmap = elev_mat
       , data_column_fill = NULL
       , palette = "transparent"
@@ -329,13 +425,57 @@ elev_mat %>%
       , linewidth = 3
     )
   ) %>% 
-  # rayshader::plot_map()
-  rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
-
+  # rayshader::plot_3d(elev_mat, zscale = 10)
+  rayshader::plot_map()
+  # rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
   # Sys.sleep(0.2)
   # rayshader::render_snapshot(clear = TRUE)
-  # rayshader::plot_map()
-  # rayshader::plot_3d(elev_mat, zscale = 10)
+
+
+# define basemap for going with rgb
+basemap <- elev_mat %>%
+  # rayshader::sphere_shade(sunangle = 78, texture = "desert") %>%
+  rayshader::height_shade(
+    # white/gray palette to overlay sat imagery on. Adds some texture without
+    # tinting the color of the output image
+    texture = (grDevices::colorRampPalette(c("gray60", "#FFFFFF")))(256)
+  ) %>% 
+  rayshader::add_overlay(
+    rayshader::sphere_shade(
+      elev_mat
+      , texture = "bw"
+      , zscale = 10
+      , colorintensity = 5
+    )
+    , alphalayer = 0.6
+  ) 
+
+```
+
+### Add NAIP
+
+```{r}
+# overlay rgb
+basemap_rgb <-
+  basemap %>% 
+  rayshader::add_overlay(
+    rgb_img
+    , alphalayer = .8
+  )
+
+basemap_rgb %>% 
+  rayshader::add_overlay(
+    rayshader::generate_polygon_overlay(
+      units
+      , extent = methods::as(elev_small, "Raster") %>% raster::extent()
+      , heightmap = elev_mat
+      , data_column_fill = NULL
+      , palette = "transparent"
+      , linecolor = "black"
+      , linewidth = 3
+    )
+  ) %>% 
+  rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
 ```
 
 
@@ -357,7 +497,7 @@ $$
 $$
 ```{r}
 # extract latitude degrees from stars object
-lats <- sf::st_coordinates(elev) %>%
+lats <- sf::st_coordinates(elev_small) %>%
   sf::st_as_sf(coords = c("x", "y"), crs = my_crs) %>%
   sf::st_transform(crs = 4326) %>%
   sf::st_coordinates() %>%
@@ -375,9 +515,9 @@ hli_fn <- function(slope_rad, folded_aspect_rad, latitude_rad){
 
 # calculate slope and aspect from DEM
 topo <- c(
-    elev
-    , starsExtra::slope(elev)
-    , starsExtra::aspect(elev)
+    elev_small
+    , starsExtra::slope(elev_small)
+    , starsExtra::aspect(elev_small)
   ) %>% 
   setNames(
     c("elev", "slope_deg", "aspect_deg")
