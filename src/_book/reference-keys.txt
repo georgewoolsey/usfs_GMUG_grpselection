@@ -10,6 +10,9 @@ gmug-and-treatment-area-map
 treatment-units-and-group-map
 load-elevation-data
 elevation-plot
+load-naip-imagery
+topo-map
+add-naip
 aspect-and-hli
 topography-maps
 attach-topography-and-hli-to-groups

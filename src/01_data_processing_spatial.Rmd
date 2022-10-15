@@ -23,8 +23,6 @@ library(rayshader) # mapping
 library(magick)
 library(terra)
 library(raster)
-library(imagerExtra)
-library(imager)
 
 # knit options
 knitr::opts_chunk$set(
@@ -269,7 +267,7 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
 elev_small <- elev[
     units %>%
       sf::st_union() %>%
-      sf::st_buffer(dist = 500) %>%
+      sf::st_buffer(dist = 1000) %>%
       sf::st_bbox()
   ]
 ```
@@ -313,7 +311,7 @@ gc()
 
 Download NAIP Imagery from [this respository](https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx)
 
-```{r}
+```{r, include = FALSE, eval=FALSE}
 tifs <- list.files("../data/naip/", pattern = "\\.tif$", full.names = TRUE)
 naip_st <- stars::read_stars(tifs[1]) 
 # plot(naip_st)
@@ -454,7 +452,7 @@ basemap <- elev_mat %>%
 
 ### Add NAIP
 
-```{r}
+```{r, include = FALSE, eval=FALSE}
 # overlay rgb
 basemap_rgb <-
   basemap %>% 
@@ -475,7 +473,8 @@ basemap_rgb %>%
       , linewidth = 3
     )
   ) %>% 
-  rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
+  rayshader::plot_map()
+  # rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
 ```
 
 
@@ -505,12 +504,17 @@ lats <- sf::st_coordinates(elev_small) %>%
   setNames(c("longitude","latitude")) %>%
   dplyr::select(latitude)
 # hli function
+  # This equation returns ln(Rad, MJ · cm–2 · yr–1). It can
+  # be returned to an arithmetic scale with the EXP(x)
+  # function.
 hli_fn <- function(slope_rad, folded_aspect_rad, latitude_rad){
-  (1.236*-1)
-  +1.350*cos(latitude_rad)*cos(slope_rad)
-  -1.376*cos(folded_aspect_rad)*sin(slope_rad)*sin(latitude_rad)
-  -0.331*sin(latitude_rad)*sin(slope_rad)
-  +0.375*sin(folded_aspect_rad)*sin(slope_rad)
+  exp(
+    (-1*1.236) +
+      1.350*cos(latitude_rad)*cos(slope_rad) +
+      (-1*1.376)*cos(folded_aspect_rad)*sin(slope_rad)*sin(latitude_rad) +
+      (-1*0.331)*sin(latitude_rad)*sin(slope_rad) +
+      0.375*sin(folded_aspect_rad)*sin(slope_rad)
+  )
 }
 
 # calculate slope and aspect from DEM
@@ -529,9 +533,12 @@ topo <- c(
     , folded_aspect_rad = pracma::deg2rad(folded_aspect_deg)
     , latitude_deg = lats$latitude
     , latitude_rad = pracma::deg2rad(as.numeric(latitude_deg))
-    , hli = hli_fn(slope_rad, folded_aspect_rad, latitude_rad)
+    , hli = dplyr::case_when(
+        hli_fn(slope_rad, folded_aspect_rad, latitude_rad) > 1 ~ 1
+        , hli_fn(slope_rad, folded_aspect_rad, latitude_rad) < 0 ~ 0
+        , TRUE ~ hli_fn(slope_rad, folded_aspect_rad, latitude_rad)
+      )
   )
-
 ```
 
 ### Topography maps
@@ -576,12 +583,8 @@ vars_ulim <- c(
 # plts <- list()
 plt_fn <- function(x){
   (
-      ggplot() + stars::geom_stars(data = (topo %>% dplyr::select(vars[x]))[
-        units %>% 
-          sf::st_union() %>% 
-          sf::st_buffer(dist = 200) %>% 
-          sf::st_bbox()
-      ]) +
+      ggplot() + 
+      stars::geom_stars(data = (topo %>% dplyr::select(vars[x]))[]) +
       scale_fill_viridis_c(option = vars_color[x], alpha = 0.9, na.value = "transparent"
           , limits = c(vars_llim[x], vars_ulim[x])
       ) +
