@@ -23,7 +23,7 @@
 <meta name="author" content="George Woolsey" />
 
 
-<meta name="date" content="2022-10-15" />
+<meta name="date" content="2022-10-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -185,22 +185,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="data_prep.html#gmug-and-treatment-area-map" id="toc-gmug-and-treatment-area-map"><span class="toc-section-number">2.2.3</span> GMUG and treatment area map<span></span></a></li>
 <li><a href="data_prep.html#treatment-units-and-group-map" id="toc-treatment-units-and-group-map"><span class="toc-section-number">2.2.4</span> Treatment units and group map<span></span></a></li>
 </ul></li>
-<li><a href="data_prep.html#load-elevation-data" id="toc-load-elevation-data"><span class="toc-section-number">2.3</span> Load Elevation Data<span></span></a>
+<li><a href="data_prep.html#load-elevation-data" id="toc-load-elevation-data"><span class="toc-section-number">2.3</span> Load Elevation Data<span></span></a></li>
+<li><a href="data_prep.html#load-naip-imagery" id="toc-load-naip-imagery"><span class="toc-section-number">2.4</span> Load NAIP Imagery<span></span></a></li>
+<li><a href="data_prep.html#treatment-area-aerial-view" id="toc-treatment-area-aerial-view"><span class="toc-section-number">2.5</span> Treatment Area Aerial View<span></span></a>
 <ul>
-<li><a href="data_prep.html#elevation-plot" id="toc-elevation-plot"><span class="toc-section-number">2.3.1</span> Elevation plot<span></span></a></li>
+<li><a href="data_prep.html#aerial-view---topography" id="toc-aerial-view---topography"><span class="toc-section-number">2.5.1</span> Aerial View - Topography<span></span></a></li>
+<li><a href="data_prep.html#aerial-view---rgb" id="toc-aerial-view---rgb"><span class="toc-section-number">2.5.2</span> Aerial View - RGB<span></span></a></li>
 </ul></li>
-<li><a href="data_prep.html#load-naip-imagery" id="toc-load-naip-imagery"><span class="toc-section-number">2.4</span> Load NAIP Imagery<span></span></a>
+<li><a href="data_prep.html#aspect-and-hli" id="toc-aspect-and-hli"><span class="toc-section-number">2.6</span> Aspect and HLI<span></span></a>
 <ul>
-<li><a href="data_prep.html#topo-map" id="toc-topo-map"><span class="toc-section-number">2.4.1</span> Topo Map<span></span></a></li>
-<li><a href="data_prep.html#add-naip" id="toc-add-naip"><span class="toc-section-number">2.4.2</span> Add NAIP<span></span></a></li>
+<li><a href="data_prep.html#topography-maps" id="toc-topography-maps"><span class="toc-section-number">2.6.1</span> Topography maps<span></span></a></li>
 </ul></li>
-<li><a href="data_prep.html#aspect-and-hli" id="toc-aspect-and-hli"><span class="toc-section-number">2.5</span> Aspect and HLI<span></span></a>
+<li><a href="data_prep.html#attach-topography-and-hli-to-groups" id="toc-attach-topography-and-hli-to-groups"><span class="toc-section-number">2.7</span> Attach topography and HLI to groups<span></span></a>
 <ul>
-<li><a href="data_prep.html#topography-maps" id="toc-topography-maps"><span class="toc-section-number">2.5.1</span> Topography maps<span></span></a></li>
-</ul></li>
-<li><a href="data_prep.html#attach-topography-and-hli-to-groups" id="toc-attach-topography-and-hli-to-groups"><span class="toc-section-number">2.6</span> Attach topography and HLI to groups<span></span></a>
-<ul>
-<li><a href="data_prep.html#example-group-and-topography" id="toc-example-group-and-topography"><span class="toc-section-number">2.6.1</span> Example group and topography<span></span></a></li>
+<li><a href="data_prep.html#example-group-and-topography" id="toc-example-group-and-topography"><span class="toc-section-number">2.7.1</span> Example group and topography<span></span></a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -492,53 +490,169 @@ Reserves
 <span id="cb9-20"><a href="data_prep.html#cb9-20" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb9-21"><a href="data_prep.html#cb9-21" aria-hidden="true" tabindex="-1"></a>elev_small <span class="ot">&lt;-</span> elev[</span>
 <span id="cb9-22"><a href="data_prep.html#cb9-22" aria-hidden="true" tabindex="-1"></a>    units <span class="sc">%&gt;%</span></span>
-<span id="cb9-23"><a href="data_prep.html#cb9-23" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-24"><a href="data_prep.html#cb9-24" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-25"><a href="data_prep.html#cb9-25" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_bbox</span>()</span>
-<span id="cb9-26"><a href="data_prep.html#cb9-26" aria-hidden="true" tabindex="-1"></a>  ]</span></code></pre></div>
-<div id="elevation-plot" class="section level3 hasAnchor" number="2.3.1">
-<h3><span class="header-section-number">2.3.1</span> Elevation plot<a href="data_prep.html#elevation-plot" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="data_prep.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb10-2"><a href="data_prep.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> elev_small) <span class="sc">+</span></span>
-<span id="cb10-3"><a href="data_prep.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">&quot;viridis&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-4"><a href="data_prep.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> units, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-5"><a href="data_prep.html#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb10-6"><a href="data_prep.html#cb10-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;GMUG Treatment Units Elevation Map&quot;</span></span>
-<span id="cb10-7"><a href="data_prep.html#cb10-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(elev)<span class="sc">$</span>input</span>
-<span id="cb10-8"><a href="data_prep.html#cb10-8" aria-hidden="true" tabindex="-1"></a>      , <span class="at">fill =</span> <span class="st">&quot;Elev. (m)&quot;</span></span>
-<span id="cb10-9"><a href="data_prep.html#cb10-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb10-10"><a href="data_prep.html#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-11"><a href="data_prep.html#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-12"><a href="data_prep.html#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb10-13"><a href="data_prep.html#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb10-14"><a href="data_prep.html#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb10-15"><a href="data_prep.html#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb10-16"><a href="data_prep.html#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
-<span id="cb10-17"><a href="data_prep.html#cb10-17" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
-<span id="cb10-18"><a href="data_prep.html#cb10-18" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb10-19"><a href="data_prep.html#cb10-19" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.box.margin =</span> <span class="fu">margin</span>(<span class="sc">-</span><span class="dv">21</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)</span>
-<span id="cb10-20"><a href="data_prep.html#cb10-20" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb10-21"><a href="data_prep.html#cb10-21" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb10-22"><a href="data_prep.html#cb10-22" aria-hidden="true" tabindex="-1"></a>    , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb10-23"><a href="data_prep.html#cb10-23" aria-hidden="true" tabindex="-1"></a>    , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb10-24"><a href="data_prep.html#cb10-24" aria-hidden="true" tabindex="-1"></a>    , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb10-25"><a href="data_prep.html#cb10-25" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="960" /></p>
-</div>
+<span id="cb9-23"><a href="data_prep.html#cb9-23" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="do">## testing</span></span>
+<span id="cb9-24"><a href="data_prep.html#cb9-24" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-25"><a href="data_prep.html#cb9-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># sf::st_buffer(dist = 1000) %&gt;%</span></span>
+<span id="cb9-26"><a href="data_prep.html#cb9-26" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="do">## testing</span></span>
+<span id="cb9-27"><a href="data_prep.html#cb9-27" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_bbox</span>()</span>
+<span id="cb9-28"><a href="data_prep.html#cb9-28" aria-hidden="true" tabindex="-1"></a>  ]</span></code></pre></div>
 </div>
 <div id="load-naip-imagery" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Load NAIP Imagery<a href="data_prep.html#load-naip-imagery" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Download NAIP Imagery from <a href="https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx">this respository</a></p>
-<div id="topo-map" class="section level3 hasAnchor" number="2.4.1">
-<h3><span class="header-section-number">2.4.1</span> Topo Map<a href="data_prep.html#topo-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><a href="https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx" class="uri">https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx</a></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="data_prep.html#cb10-1" aria-hidden="true" tabindex="-1"></a>tifs <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">&quot;../data/naip/&quot;</span>, <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">.tif$&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="data_prep.html#cb10-2" aria-hidden="true" tabindex="-1"></a>naip_st <span class="ot">&lt;-</span> stars<span class="sc">::</span><span class="fu">read_stars</span>(tifs[<span class="dv">1</span>]) </span>
+<span id="cb10-3"><a href="data_prep.html#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(naip_st)</span></span>
+<span id="cb10-4"><a href="data_prep.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># crop</span></span>
+<span id="cb10-5"><a href="data_prep.html#cb10-5" aria-hidden="true" tabindex="-1"></a>naip_st <span class="ot">&lt;-</span> naip_st <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="data_prep.html#cb10-6" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_crop</span>(</span>
+<span id="cb10-7"><a href="data_prep.html#cb10-7" aria-hidden="true" tabindex="-1"></a>    elev_small <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="data_prep.html#cb10-8" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_bbox</span>()</span>
+<span id="cb10-9"><a href="data_prep.html#cb10-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-10"><a href="data_prep.html#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-11"><a href="data_prep.html#cb10-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">value =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(value), <span class="dv">0</span>, value))</span>
+<span id="cb10-12"><a href="data_prep.html#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="do">###################</span></span>
+<span id="cb10-13"><a href="data_prep.html#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot prep</span></span>
+<span id="cb10-14"><a href="data_prep.html#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="do">###################</span></span>
+<span id="cb10-15"><a href="data_prep.html#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set rgb image for ggplot</span></span>
+<span id="cb10-16"><a href="data_prep.html#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># band 3 = red, band 2 = green, band 1 = blue</span></span>
+<span id="cb10-17"><a href="data_prep.html#cb10-17" aria-hidden="true" tabindex="-1"></a>  naip_rgb <span class="ot">&lt;-</span> stars<span class="sc">::</span><span class="fu">st_rgb</span>(</span>
+<span id="cb10-18"><a href="data_prep.html#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># naip_st[,,,1:3] # CIR</span></span>
+<span id="cb10-19"><a href="data_prep.html#cb10-19" aria-hidden="true" tabindex="-1"></a>    naip_st[,,,<span class="dv">3</span><span class="sc">:</span><span class="dv">1</span>] <span class="co"># RGB</span></span>
+<span id="cb10-20"><a href="data_prep.html#cb10-20" aria-hidden="true" tabindex="-1"></a>    , <span class="at">dimension =</span> <span class="dv">3</span></span>
+<span id="cb10-21"><a href="data_prep.html#cb10-21" aria-hidden="true" tabindex="-1"></a>    , <span class="at">use_alpha =</span> <span class="cn">FALSE</span></span>
+<span id="cb10-22"><a href="data_prep.html#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , stretch = &quot;histogram&quot;</span></span>
+<span id="cb10-23"><a href="data_prep.html#cb10-23" aria-hidden="true" tabindex="-1"></a>    , <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.005</span>, <span class="fl">0.995</span>)</span>
+<span id="cb10-24"><a href="data_prep.html#cb10-24" aria-hidden="true" tabindex="-1"></a>    , <span class="at">stretch =</span> <span class="st">&quot;percent&quot;</span></span>
+<span id="cb10-25"><a href="data_prep.html#cb10-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-26"><a href="data_prep.html#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="do">###################</span></span>
+<span id="cb10-27"><a href="data_prep.html#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co"># rayshader prep</span></span>
+<span id="cb10-28"><a href="data_prep.html#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="do">###################</span></span>
+<span id="cb10-29"><a href="data_prep.html#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># FUNCTION to wrangle RGB data to work with rayshader</span></span>
+<span id="cb10-30"><a href="data_prep.html#cb10-30" aria-hidden="true" tabindex="-1"></a>  wrangle_rgb <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb10-31"><a href="data_prep.html#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load color imagery from Sentinel 2</span></span>
+<span id="cb10-32"><a href="data_prep.html#cb10-32" aria-hidden="true" tabindex="-1"></a>    temp_rgb <span class="ot">&lt;-</span> </span>
+<span id="cb10-33"><a href="data_prep.html#cb10-33" aria-hidden="true" tabindex="-1"></a>      raster<span class="sc">::</span><span class="fu">stack</span>(x) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-34"><a href="data_prep.html#cb10-34" aria-hidden="true" tabindex="-1"></a>      raster<span class="sc">::</span><span class="fu">crop</span>(</span>
+<span id="cb10-35"><a href="data_prep.html#cb10-35" aria-hidden="true" tabindex="-1"></a>        elev_small <span class="sc">%&gt;%</span></span>
+<span id="cb10-36"><a href="data_prep.html#cb10-36" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_bbox</span>()</span>
+<span id="cb10-37"><a href="data_prep.html#cb10-37" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb10-38"><a href="data_prep.html#cb10-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The array must be transposed since rasters and arrays are oriented </span></span>
+<span id="cb10-39"><a href="data_prep.html#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># differently in R. aperm() is used to perform a multi-dimensional transpose.</span></span>
+<span id="cb10-40"><a href="data_prep.html#cb10-40" aria-hidden="true" tabindex="-1"></a>    r_mat <span class="ot">=</span> rayshader<span class="sc">::</span><span class="fu">raster_to_matrix</span>(temp_rgb[[<span class="dv">3</span>]])</span>
+<span id="cb10-41"><a href="data_prep.html#cb10-41" aria-hidden="true" tabindex="-1"></a>    g_mat <span class="ot">=</span> rayshader<span class="sc">::</span><span class="fu">raster_to_matrix</span>(temp_rgb[[<span class="dv">2</span>]])</span>
+<span id="cb10-42"><a href="data_prep.html#cb10-42" aria-hidden="true" tabindex="-1"></a>    b_mat <span class="ot">=</span> rayshader<span class="sc">::</span><span class="fu">raster_to_matrix</span>(temp_rgb[[<span class="dv">1</span>]])</span>
+<span id="cb10-43"><a href="data_prep.html#cb10-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-44"><a href="data_prep.html#cb10-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create array</span></span>
+<span id="cb10-45"><a href="data_prep.html#cb10-45" aria-hidden="true" tabindex="-1"></a>    rgb_array <span class="ot">=</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="fu">nrow</span>(r_mat),<span class="fu">ncol</span>(r_mat),<span class="dv">3</span>))</span>
+<span id="cb10-46"><a href="data_prep.html#cb10-46" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-47"><a href="data_prep.html#cb10-47" aria-hidden="true" tabindex="-1"></a>    rgb_array[,,<span class="dv">1</span>] <span class="ot">=</span> r_mat<span class="sc">/</span><span class="dv">255</span> <span class="co">#Red layer</span></span>
+<span id="cb10-48"><a href="data_prep.html#cb10-48" aria-hidden="true" tabindex="-1"></a>    rgb_array[,,<span class="dv">2</span>] <span class="ot">=</span> g_mat<span class="sc">/</span><span class="dv">255</span> <span class="co">#Blue layer</span></span>
+<span id="cb10-49"><a href="data_prep.html#cb10-49" aria-hidden="true" tabindex="-1"></a>    rgb_array[,,<span class="dv">3</span>] <span class="ot">=</span> b_mat<span class="sc">/</span><span class="dv">255</span> <span class="co">#Green layer</span></span>
+<span id="cb10-50"><a href="data_prep.html#cb10-50" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-51"><a href="data_prep.html#cb10-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Array Transposition</span></span>
+<span id="cb10-52"><a href="data_prep.html#cb10-52" aria-hidden="true" tabindex="-1"></a>    rgb_array <span class="ot">=</span> <span class="fu">aperm</span>(rgb_array, <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb10-53"><a href="data_prep.html#cb10-53" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-54"><a href="data_prep.html#cb10-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># enhance contrast</span></span>
+<span id="cb10-55"><a href="data_prep.html#cb10-55" aria-hidden="true" tabindex="-1"></a>    scales<span class="sc">::</span><span class="fu">rescale</span>(rgb_array, <span class="at">to=</span><span class="fu">c</span>(<span class="fl">0.005</span>, <span class="fl">0.995</span>))</span>
+<span id="cb10-56"><a href="data_prep.html#cb10-56" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-57"><a href="data_prep.html#cb10-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(rgb_array)</span>
+<span id="cb10-58"><a href="data_prep.html#cb10-58" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-59"><a href="data_prep.html#cb10-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-60"><a href="data_prep.html#cb10-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Prepare rgb image overlay</span></span>
+<span id="cb10-61"><a href="data_prep.html#cb10-61" aria-hidden="true" tabindex="-1"></a>  rgb_img <span class="ot">&lt;-</span> <span class="fu">wrangle_rgb</span>(tifs[<span class="dv">1</span>])</span>
+<span id="cb10-62"><a href="data_prep.html#cb10-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-63"><a href="data_prep.html#cb10-63" aria-hidden="true" tabindex="-1"></a><span class="co"># stars to matrix for passing to rayshader</span></span>
+<span id="cb10-64"><a href="data_prep.html#cb10-64" aria-hidden="true" tabindex="-1"></a>elev_mat <span class="ot">&lt;-</span> starsExtra<span class="sc">::</span><span class="fu">layer_to_matrix</span>(elev_small)</span></code></pre></div>
 </div>
-<div id="add-naip" class="section level3 hasAnchor" number="2.4.2">
-<h3><span class="header-section-number">2.4.2</span> Add NAIP<a href="data_prep.html#add-naip" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="treatment-area-aerial-view" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Treatment Area Aerial View<a href="data_prep.html#treatment-area-aerial-view" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="aerial-view---topography" class="section level3 hasAnchor" number="2.5.1">
+<h3><span class="header-section-number">2.5.1</span> Aerial View - Topography<a href="data_prep.html#aerial-view---topography" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Define topography map and basemap.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data_prep.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># on the fly view without setting up basemap</span></span>
+<span id="cb11-2"><a href="data_prep.html#cb11-2" aria-hidden="true" tabindex="-1"></a>topo_plot <span class="ot">&lt;-</span> elev_mat <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="data_prep.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">sphere_shade</span>(<span class="at">sunangle =</span> <span class="dv">78</span>, <span class="at">texture =</span> <span class="st">&quot;desert&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="data_prep.html#cb11-4" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">add_overlay</span>(</span>
+<span id="cb11-5"><a href="data_prep.html#cb11-5" aria-hidden="true" tabindex="-1"></a>    rayshader<span class="sc">::</span><span class="fu">generate_polygon_overlay</span>(</span>
+<span id="cb11-6"><a href="data_prep.html#cb11-6" aria-hidden="true" tabindex="-1"></a>      units</span>
+<span id="cb11-7"><a href="data_prep.html#cb11-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">extent =</span> methods<span class="sc">::</span><span class="fu">as</span>(elev_small, <span class="st">&quot;Raster&quot;</span>) <span class="sc">%&gt;%</span> raster<span class="sc">::</span><span class="fu">extent</span>()</span>
+<span id="cb11-8"><a href="data_prep.html#cb11-8" aria-hidden="true" tabindex="-1"></a>      , <span class="at">heightmap =</span> elev_mat</span>
+<span id="cb11-9"><a href="data_prep.html#cb11-9" aria-hidden="true" tabindex="-1"></a>      , <span class="at">data_column_fill =</span> <span class="cn">NULL</span></span>
+<span id="cb11-10"><a href="data_prep.html#cb11-10" aria-hidden="true" tabindex="-1"></a>      , <span class="at">palette =</span> <span class="st">&quot;transparent&quot;</span></span>
+<span id="cb11-11"><a href="data_prep.html#cb11-11" aria-hidden="true" tabindex="-1"></a>      , <span class="at">linecolor =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb11-12"><a href="data_prep.html#cb11-12" aria-hidden="true" tabindex="-1"></a>      , <span class="at">linewidth =</span> <span class="dv">3</span></span>
+<span id="cb11-13"><a href="data_prep.html#cb11-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-14"><a href="data_prep.html#cb11-14" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb11-15"><a href="data_prep.html#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># define basemap for going with rgb</span></span>
+<span id="cb11-16"><a href="data_prep.html#cb11-16" aria-hidden="true" tabindex="-1"></a>basemap <span class="ot">&lt;-</span> elev_mat <span class="sc">%&gt;%</span></span>
+<span id="cb11-17"><a href="data_prep.html#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rayshader::sphere_shade(sunangle = 78, texture = &quot;desert&quot;) %&gt;%</span></span>
+<span id="cb11-18"><a href="data_prep.html#cb11-18" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">height_shade</span>(</span>
+<span id="cb11-19"><a href="data_prep.html#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># white/gray palette to overlay sat imagery on. Adds some texture without</span></span>
+<span id="cb11-20"><a href="data_prep.html#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># tinting the color of the output image</span></span>
+<span id="cb11-21"><a href="data_prep.html#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">texture =</span> (grDevices<span class="sc">::</span><span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">&quot;gray60&quot;</span>, <span class="st">&quot;#FFFFFF&quot;</span>)))(<span class="dv">256</span>)</span>
+<span id="cb11-22"><a href="data_prep.html#cb11-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-23"><a href="data_prep.html#cb11-23" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">add_overlay</span>(</span>
+<span id="cb11-24"><a href="data_prep.html#cb11-24" aria-hidden="true" tabindex="-1"></a>    rayshader<span class="sc">::</span><span class="fu">sphere_shade</span>(</span>
+<span id="cb11-25"><a href="data_prep.html#cb11-25" aria-hidden="true" tabindex="-1"></a>      elev_mat</span>
+<span id="cb11-26"><a href="data_prep.html#cb11-26" aria-hidden="true" tabindex="-1"></a>      , <span class="at">texture =</span> <span class="st">&quot;bw&quot;</span></span>
+<span id="cb11-27"><a href="data_prep.html#cb11-27" aria-hidden="true" tabindex="-1"></a>      , <span class="at">zscale =</span> <span class="dv">10</span></span>
+<span id="cb11-28"><a href="data_prep.html#cb11-28" aria-hidden="true" tabindex="-1"></a>      , <span class="at">colorintensity =</span> <span class="dv">5</span></span>
+<span id="cb11-29"><a href="data_prep.html#cb11-29" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-30"><a href="data_prep.html#cb11-30" aria-hidden="true" tabindex="-1"></a>    , <span class="at">alphalayer =</span> <span class="fl">0.6</span></span>
+<span id="cb11-31"><a href="data_prep.html#cb11-31" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
+<p>Plot topography map.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="data_prep.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb12-2"><a href="data_prep.html#cb12-2" aria-hidden="true" tabindex="-1"></a>topo_plot <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="data_prep.html#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rayshader::plot_map()</span></span>
+<span id="cb12-4"><a href="data_prep.html#cb12-4" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">plot_3d</span>(</span>
+<span id="cb12-5"><a href="data_prep.html#cb12-5" aria-hidden="true" tabindex="-1"></a>    elev_mat</span>
+<span id="cb12-6"><a href="data_prep.html#cb12-6" aria-hidden="true" tabindex="-1"></a>    , <span class="at">zscale =</span> <span class="dv">10</span></span>
+<span id="cb12-7"><a href="data_prep.html#cb12-7" aria-hidden="true" tabindex="-1"></a>    , <span class="at">theta =</span> <span class="dv">30</span></span>
+<span id="cb12-8"><a href="data_prep.html#cb12-8" aria-hidden="true" tabindex="-1"></a>    , <span class="at">phi =</span> <span class="dv">45</span></span>
+<span id="cb12-9"><a href="data_prep.html#cb12-9" aria-hidden="true" tabindex="-1"></a>    , <span class="at">fov =</span> <span class="dv">0</span></span>
+<span id="cb12-10"><a href="data_prep.html#cb12-10" aria-hidden="true" tabindex="-1"></a>    , <span class="at">zoom =</span> <span class="dv">2</span></span>
+<span id="cb12-11"><a href="data_prep.html#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , windowsize = c(1000, 800)</span></span>
+<span id="cb12-12"><a href="data_prep.html#cb12-12" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/topo_snapshot-1.png" width="960" /></p>
+</div>
+<div id="aerial-view---rgb" class="section level3 hasAnchor" number="2.5.2">
+<h3><span class="header-section-number">2.5.2</span> Aerial View - RGB<a href="data_prep.html#aerial-view---rgb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Define feature map.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="data_prep.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># overlay rgb</span></span>
+<span id="cb13-2"><a href="data_prep.html#cb13-2" aria-hidden="true" tabindex="-1"></a>feature_map <span class="ot">&lt;-</span> basemap <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="data_prep.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">add_overlay</span>(</span>
+<span id="cb13-4"><a href="data_prep.html#cb13-4" aria-hidden="true" tabindex="-1"></a>    rgb_img</span>
+<span id="cb13-5"><a href="data_prep.html#cb13-5" aria-hidden="true" tabindex="-1"></a>    , <span class="at">alphalayer =</span> .<span class="dv">98</span></span>
+<span id="cb13-6"><a href="data_prep.html#cb13-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-7"><a href="data_prep.html#cb13-7" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">add_overlay</span>(</span>
+<span id="cb13-8"><a href="data_prep.html#cb13-8" aria-hidden="true" tabindex="-1"></a>    rayshader<span class="sc">::</span><span class="fu">generate_polygon_overlay</span>(</span>
+<span id="cb13-9"><a href="data_prep.html#cb13-9" aria-hidden="true" tabindex="-1"></a>      units</span>
+<span id="cb13-10"><a href="data_prep.html#cb13-10" aria-hidden="true" tabindex="-1"></a>      , <span class="at">extent =</span> methods<span class="sc">::</span><span class="fu">as</span>(elev_small, <span class="st">&quot;Raster&quot;</span>) <span class="sc">%&gt;%</span> raster<span class="sc">::</span><span class="fu">extent</span>()</span>
+<span id="cb13-11"><a href="data_prep.html#cb13-11" aria-hidden="true" tabindex="-1"></a>      , <span class="at">heightmap =</span> elev_mat</span>
+<span id="cb13-12"><a href="data_prep.html#cb13-12" aria-hidden="true" tabindex="-1"></a>      , <span class="at">data_column_fill =</span> <span class="cn">NULL</span></span>
+<span id="cb13-13"><a href="data_prep.html#cb13-13" aria-hidden="true" tabindex="-1"></a>      , <span class="at">palette =</span> <span class="st">&quot;transparent&quot;</span></span>
+<span id="cb13-14"><a href="data_prep.html#cb13-14" aria-hidden="true" tabindex="-1"></a>      , <span class="at">linecolor =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb13-15"><a href="data_prep.html#cb13-15" aria-hidden="true" tabindex="-1"></a>      , <span class="at">linewidth =</span> <span class="dv">3</span></span>
+<span id="cb13-16"><a href="data_prep.html#cb13-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-17"><a href="data_prep.html#cb13-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Plot feature map.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="data_prep.html#cb14-1" aria-hidden="true" tabindex="-1"></a>feature_map <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="data_prep.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rayshader::plot_map()</span></span>
+<span id="cb14-3"><a href="data_prep.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  rayshader<span class="sc">::</span><span class="fu">plot_3d</span>(</span>
+<span id="cb14-4"><a href="data_prep.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    elev_mat</span>
+<span id="cb14-5"><a href="data_prep.html#cb14-5" aria-hidden="true" tabindex="-1"></a>    , <span class="at">zscale =</span> <span class="dv">10</span></span>
+<span id="cb14-6"><a href="data_prep.html#cb14-6" aria-hidden="true" tabindex="-1"></a>    , <span class="at">theta =</span> <span class="dv">30</span></span>
+<span id="cb14-7"><a href="data_prep.html#cb14-7" aria-hidden="true" tabindex="-1"></a>    , <span class="at">phi =</span> <span class="dv">45</span></span>
+<span id="cb14-8"><a href="data_prep.html#cb14-8" aria-hidden="true" tabindex="-1"></a>    , <span class="at">fov =</span> <span class="dv">0</span></span>
+<span id="cb14-9"><a href="data_prep.html#cb14-9" aria-hidden="true" tabindex="-1"></a>    , <span class="at">zoom =</span> <span class="dv">2</span></span>
+<span id="cb14-10"><a href="data_prep.html#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , windowsize = c(1000, 800)</span></span>
+<span id="cb14-11"><a href="data_prep.html#cb14-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="_main_files/figure-html/feature_map_snapshot-1.png" width="960" /></p>
 </div>
 </div>
-<div id="aspect-and-hli" class="section level2 hasAnchor" number="2.5">
-<h2><span class="header-section-number">2.5</span> Aspect and HLI<a href="data_prep.html#aspect-and-hli" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="aspect-and-hli" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Aspect and HLI<a href="data_prep.html#aspect-and-hli" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Aspect of a slope (the direction or azimuth that a slope faces) strongly influences potential direct incident radiation and temperature. Untransformed, aspect is a poor variable for quantitative analysis, since 1° is adjacent to 360° – the numbers are very different even though the aspect is about the same. The following equation for Heat Load Index (HLI) rescales aspect to a scale of zero to one, with zero being the coolest slope (northeast) and one being the warmest slope (southwest). HLI is a proxy for aspect-driven solar heating.</p>
 <p><span class="math display">\[
 \textrm{Heat load index} = \frac{1 - \cos(\theta - 45)}{2}
@@ -549,208 +663,208 @@ where <span class="math inline">\(\theta\)</span> = aspect in degrees east of no
 <p><span class="math display">\[
 \textrm{Folded aspect°} = 180° \, - \, | Aspect° – 180° |
 \]</span></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data_prep.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract latitude degrees from stars object</span></span>
-<span id="cb11-2"><a href="data_prep.html#cb11-2" aria-hidden="true" tabindex="-1"></a>lats <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(elev_small) <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="data_prep.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="at">crs =</span> my_crs) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="data_prep.html#cb11-4" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="data_prep.html#cb11-5" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-6"><a href="data_prep.html#cb11-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-7"><a href="data_prep.html#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-8"><a href="data_prep.html#cb11-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(latitude)</span>
-<span id="cb11-9"><a href="data_prep.html#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># hli function</span></span>
-<span id="cb11-10"><a href="data_prep.html#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This equation returns ln(Rad, MJ · cm–2 · yr–1). It can</span></span>
-<span id="cb11-11"><a href="data_prep.html#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># be returned to an arithmetic scale with the EXP(x)</span></span>
-<span id="cb11-12"><a href="data_prep.html#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># function.</span></span>
-<span id="cb11-13"><a href="data_prep.html#cb11-13" aria-hidden="true" tabindex="-1"></a>hli_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(slope_rad, folded_aspect_rad, latitude_rad){</span>
-<span id="cb11-14"><a href="data_prep.html#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(</span>
-<span id="cb11-15"><a href="data_prep.html#cb11-15" aria-hidden="true" tabindex="-1"></a>    (<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span><span class="fl">1.236</span>) <span class="sc">+</span></span>
-<span id="cb11-16"><a href="data_prep.html#cb11-16" aria-hidden="true" tabindex="-1"></a>      <span class="fl">1.350</span><span class="sc">*</span><span class="fu">cos</span>(latitude_rad)<span class="sc">*</span><span class="fu">cos</span>(slope_rad) <span class="sc">+</span></span>
-<span id="cb11-17"><a href="data_prep.html#cb11-17" aria-hidden="true" tabindex="-1"></a>      (<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span><span class="fl">1.376</span>)<span class="sc">*</span><span class="fu">cos</span>(folded_aspect_rad)<span class="sc">*</span><span class="fu">sin</span>(slope_rad)<span class="sc">*</span><span class="fu">sin</span>(latitude_rad) <span class="sc">+</span></span>
-<span id="cb11-18"><a href="data_prep.html#cb11-18" aria-hidden="true" tabindex="-1"></a>      (<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span><span class="fl">0.331</span>)<span class="sc">*</span><span class="fu">sin</span>(latitude_rad)<span class="sc">*</span><span class="fu">sin</span>(slope_rad) <span class="sc">+</span></span>
-<span id="cb11-19"><a href="data_prep.html#cb11-19" aria-hidden="true" tabindex="-1"></a>      <span class="fl">0.375</span><span class="sc">*</span><span class="fu">sin</span>(folded_aspect_rad)<span class="sc">*</span><span class="fu">sin</span>(slope_rad)</span>
-<span id="cb11-20"><a href="data_prep.html#cb11-20" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb11-21"><a href="data_prep.html#cb11-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-22"><a href="data_prep.html#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-23"><a href="data_prep.html#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate slope and aspect from DEM</span></span>
-<span id="cb11-24"><a href="data_prep.html#cb11-24" aria-hidden="true" tabindex="-1"></a>topo <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb11-25"><a href="data_prep.html#cb11-25" aria-hidden="true" tabindex="-1"></a>    elev_small</span>
-<span id="cb11-26"><a href="data_prep.html#cb11-26" aria-hidden="true" tabindex="-1"></a>    , starsExtra<span class="sc">::</span><span class="fu">slope</span>(elev_small)</span>
-<span id="cb11-27"><a href="data_prep.html#cb11-27" aria-hidden="true" tabindex="-1"></a>    , starsExtra<span class="sc">::</span><span class="fu">aspect</span>(elev_small)</span>
-<span id="cb11-28"><a href="data_prep.html#cb11-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-29"><a href="data_prep.html#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(</span>
-<span id="cb11-30"><a href="data_prep.html#cb11-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope_deg&quot;</span>, <span class="st">&quot;aspect_deg&quot;</span>)</span>
-<span id="cb11-31"><a href="data_prep.html#cb11-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-32"><a href="data_prep.html#cb11-32" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb11-33"><a href="data_prep.html#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(slope_deg))</span>
-<span id="cb11-34"><a href="data_prep.html#cb11-34" aria-hidden="true" tabindex="-1"></a>    , <span class="at">aspect_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(aspect_deg))</span>
-<span id="cb11-35"><a href="data_prep.html#cb11-35" aria-hidden="true" tabindex="-1"></a>    , <span class="at">folded_aspect_deg =</span> <span class="dv">180</span> <span class="sc">-</span> <span class="fu">abs</span>(<span class="fu">as.numeric</span>(aspect_deg)<span class="sc">-</span><span class="dv">180</span>)</span>
-<span id="cb11-36"><a href="data_prep.html#cb11-36" aria-hidden="true" tabindex="-1"></a>    , <span class="at">folded_aspect_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(folded_aspect_deg)</span>
-<span id="cb11-37"><a href="data_prep.html#cb11-37" aria-hidden="true" tabindex="-1"></a>    , <span class="at">latitude_deg =</span> lats<span class="sc">$</span>latitude</span>
-<span id="cb11-38"><a href="data_prep.html#cb11-38" aria-hidden="true" tabindex="-1"></a>    , <span class="at">latitude_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(latitude_deg))</span>
-<span id="cb11-39"><a href="data_prep.html#cb11-39" aria-hidden="true" tabindex="-1"></a>    , <span class="at">hli =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb11-40"><a href="data_prep.html#cb11-40" aria-hidden="true" tabindex="-1"></a>        <span class="fu">hli_fn</span>(slope_rad, folded_aspect_rad, latitude_rad) <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span></span>
-<span id="cb11-41"><a href="data_prep.html#cb11-41" aria-hidden="true" tabindex="-1"></a>        , <span class="fu">hli_fn</span>(slope_rad, folded_aspect_rad, latitude_rad) <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">0</span></span>
-<span id="cb11-42"><a href="data_prep.html#cb11-42" aria-hidden="true" tabindex="-1"></a>        , <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">hli_fn</span>(slope_rad, folded_aspect_rad, latitude_rad)</span>
-<span id="cb11-43"><a href="data_prep.html#cb11-43" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb11-44"><a href="data_prep.html#cb11-44" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<div id="topography-maps" class="section level3 hasAnchor" number="2.5.1">
-<h3><span class="header-section-number">2.5.1</span> Topography maps<a href="data_prep.html#topography-maps" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="data_prep.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># map</span></span>
-<span id="cb12-2"><a href="data_prep.html#cb12-2" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb12-3"><a href="data_prep.html#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;elev&quot;</span></span>
-<span id="cb12-4"><a href="data_prep.html#cb12-4" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;slope_deg&quot;</span></span>
-<span id="cb12-5"><a href="data_prep.html#cb12-5" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;aspect_deg&quot;</span></span>
-<span id="cb12-6"><a href="data_prep.html#cb12-6" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;folded_aspect_deg&quot;</span></span>
-<span id="cb12-7"><a href="data_prep.html#cb12-7" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;hli&quot;</span></span>
-<span id="cb12-8"><a href="data_prep.html#cb12-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-9"><a href="data_prep.html#cb12-9" aria-hidden="true" tabindex="-1"></a>vars_title <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb12-10"><a href="data_prep.html#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Elevation (m)&quot;</span></span>
-<span id="cb12-11"><a href="data_prep.html#cb12-11" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Slope (\u00B0)&quot;</span></span>
-<span id="cb12-12"><a href="data_prep.html#cb12-12" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Aspect (\u00B0)&quot;</span></span>
-<span id="cb12-13"><a href="data_prep.html#cb12-13" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Folded Aspect (\u00B0)&quot;</span></span>
-<span id="cb12-14"><a href="data_prep.html#cb12-14" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Heat Load Index (HLI)&quot;</span></span>
-<span id="cb12-15"><a href="data_prep.html#cb12-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-16"><a href="data_prep.html#cb12-16" aria-hidden="true" tabindex="-1"></a>vars_color <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb12-17"><a href="data_prep.html#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;viridis&quot;</span></span>
-<span id="cb12-18"><a href="data_prep.html#cb12-18" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;cividis&quot;</span></span>
-<span id="cb12-19"><a href="data_prep.html#cb12-19" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;inferno&quot;</span></span>
-<span id="cb12-20"><a href="data_prep.html#cb12-20" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;plasma&quot;</span></span>
-<span id="cb12-21"><a href="data_prep.html#cb12-21" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;turbo&quot;</span></span>
-<span id="cb12-22"><a href="data_prep.html#cb12-22" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-23"><a href="data_prep.html#cb12-23" aria-hidden="true" tabindex="-1"></a>vars_llim <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb12-24"><a href="data_prep.html#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(topo<span class="sc">$</span>elev, <span class="at">na.rm=</span>T)<span class="sc">*</span>.<span class="dv">95</span></span>
-<span id="cb12-25"><a href="data_prep.html#cb12-25" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
-<span id="cb12-26"><a href="data_prep.html#cb12-26" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
-<span id="cb12-27"><a href="data_prep.html#cb12-27" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
-<span id="cb12-28"><a href="data_prep.html#cb12-28" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
-<span id="cb12-29"><a href="data_prep.html#cb12-29" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-30"><a href="data_prep.html#cb12-30" aria-hidden="true" tabindex="-1"></a>vars_ulim <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb12-31"><a href="data_prep.html#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(topo<span class="sc">$</span>elev, <span class="at">na.rm=</span>T)<span class="sc">*</span><span class="fl">1.05</span></span>
-<span id="cb12-32"><a href="data_prep.html#cb12-32" aria-hidden="true" tabindex="-1"></a>  , <span class="fu">max</span>(<span class="fu">as.numeric</span>(topo<span class="sc">$</span>slope_deg), <span class="at">na.rm=</span>T)<span class="sc">*</span><span class="fl">1.05</span></span>
-<span id="cb12-33"><a href="data_prep.html#cb12-33" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">360</span></span>
-<span id="cb12-34"><a href="data_prep.html#cb12-34" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">180</span></span>
-<span id="cb12-35"><a href="data_prep.html#cb12-35" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">1</span></span>
-<span id="cb12-36"><a href="data_prep.html#cb12-36" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-37"><a href="data_prep.html#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="co"># plts &lt;- list()</span></span>
-<span id="cb12-38"><a href="data_prep.html#cb12-38" aria-hidden="true" tabindex="-1"></a>plt_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb12-39"><a href="data_prep.html#cb12-39" aria-hidden="true" tabindex="-1"></a>  (</span>
-<span id="cb12-40"><a href="data_prep.html#cb12-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb12-41"><a href="data_prep.html#cb12-41" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> (topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(vars[x]))[]) <span class="sc">+</span></span>
-<span id="cb12-42"><a href="data_prep.html#cb12-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span></span>
-<span id="cb12-43"><a href="data_prep.html#cb12-43" aria-hidden="true" tabindex="-1"></a>          , <span class="at">limits =</span> <span class="fu">c</span>(vars_llim[x], vars_ulim[x])</span>
-<span id="cb12-44"><a href="data_prep.html#cb12-44" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb12-45"><a href="data_prep.html#cb12-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> units, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-46"><a href="data_prep.html#cb12-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
-<span id="cb12-47"><a href="data_prep.html#cb12-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> vars_title[x]</span>
-<span id="cb12-48"><a href="data_prep.html#cb12-48" aria-hidden="true" tabindex="-1"></a>          , <span class="at">fill =</span> vars_title[x]</span>
-<span id="cb12-49"><a href="data_prep.html#cb12-49" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
-<span id="cb12-50"><a href="data_prep.html#cb12-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-51"><a href="data_prep.html#cb12-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb12-52"><a href="data_prep.html#cb12-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb12-53"><a href="data_prep.html#cb12-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb12-54"><a href="data_prep.html#cb12-54" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb12-55"><a href="data_prep.html#cb12-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
-<span id="cb12-56"><a href="data_prep.html#cb12-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
-<span id="cb12-57"><a href="data_prep.html#cb12-57" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
-<span id="cb12-58"><a href="data_prep.html#cb12-58" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb12-59"><a href="data_prep.html#cb12-59" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-60"><a href="data_prep.html#cb12-60" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-61"><a href="data_prep.html#cb12-61" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb12-62"><a href="data_prep.html#cb12-62" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb12-63"><a href="data_prep.html#cb12-63" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb12-64"><a href="data_prep.html#cb12-64" aria-hidden="true" tabindex="-1"></a>      ) </span>
-<span id="cb12-65"><a href="data_prep.html#cb12-65" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-66"><a href="data_prep.html#cb12-66" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-67"><a href="data_prep.html#cb12-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-68"><a href="data_prep.html#cb12-68" aria-hidden="true" tabindex="-1"></a><span class="co"># combine plots</span></span>
-<span id="cb12-69"><a href="data_prep.html#cb12-69" aria-hidden="true" tabindex="-1"></a><span class="co"># cowplot::plot_grid(plotlist =  plts, ncol = 2)</span></span>
-<span id="cb12-70"><a href="data_prep.html#cb12-70" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-71"><a href="data_prep.html#cb12-71" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_fn)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-19-1.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-19-2.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-19-3.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-19-4.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-19-5.png" width="960" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="data_prep.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract latitude degrees from stars object</span></span>
+<span id="cb15-2"><a href="data_prep.html#cb15-2" aria-hidden="true" tabindex="-1"></a>lats <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(elev_small) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="data_prep.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="at">crs =</span> my_crs) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="data_prep.html#cb15-4" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="data_prep.html#cb15-5" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="data_prep.html#cb15-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-7"><a href="data_prep.html#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-8"><a href="data_prep.html#cb15-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(latitude)</span>
+<span id="cb15-9"><a href="data_prep.html#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co"># hli function</span></span>
+<span id="cb15-10"><a href="data_prep.html#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This equation returns ln(Rad, MJ · cm–2 · yr–1). It can</span></span>
+<span id="cb15-11"><a href="data_prep.html#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># be returned to an arithmetic scale with the EXP(x)</span></span>
+<span id="cb15-12"><a href="data_prep.html#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># function.</span></span>
+<span id="cb15-13"><a href="data_prep.html#cb15-13" aria-hidden="true" tabindex="-1"></a>hli_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(slope_rad, folded_aspect_rad, latitude_rad){</span>
+<span id="cb15-14"><a href="data_prep.html#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(</span>
+<span id="cb15-15"><a href="data_prep.html#cb15-15" aria-hidden="true" tabindex="-1"></a>    (<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span><span class="fl">1.236</span>) <span class="sc">+</span></span>
+<span id="cb15-16"><a href="data_prep.html#cb15-16" aria-hidden="true" tabindex="-1"></a>      <span class="fl">1.350</span><span class="sc">*</span><span class="fu">cos</span>(latitude_rad)<span class="sc">*</span><span class="fu">cos</span>(slope_rad) <span class="sc">+</span></span>
+<span id="cb15-17"><a href="data_prep.html#cb15-17" aria-hidden="true" tabindex="-1"></a>      (<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span><span class="fl">1.376</span>)<span class="sc">*</span><span class="fu">cos</span>(folded_aspect_rad)<span class="sc">*</span><span class="fu">sin</span>(slope_rad)<span class="sc">*</span><span class="fu">sin</span>(latitude_rad) <span class="sc">+</span></span>
+<span id="cb15-18"><a href="data_prep.html#cb15-18" aria-hidden="true" tabindex="-1"></a>      (<span class="sc">-</span><span class="dv">1</span><span class="sc">*</span><span class="fl">0.331</span>)<span class="sc">*</span><span class="fu">sin</span>(latitude_rad)<span class="sc">*</span><span class="fu">sin</span>(slope_rad) <span class="sc">+</span></span>
+<span id="cb15-19"><a href="data_prep.html#cb15-19" aria-hidden="true" tabindex="-1"></a>      <span class="fl">0.375</span><span class="sc">*</span><span class="fu">sin</span>(folded_aspect_rad)<span class="sc">*</span><span class="fu">sin</span>(slope_rad)</span>
+<span id="cb15-20"><a href="data_prep.html#cb15-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-21"><a href="data_prep.html#cb15-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-22"><a href="data_prep.html#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="data_prep.html#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate slope and aspect from DEM</span></span>
+<span id="cb15-24"><a href="data_prep.html#cb15-24" aria-hidden="true" tabindex="-1"></a>topo <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-25"><a href="data_prep.html#cb15-25" aria-hidden="true" tabindex="-1"></a>    elev_small</span>
+<span id="cb15-26"><a href="data_prep.html#cb15-26" aria-hidden="true" tabindex="-1"></a>    , starsExtra<span class="sc">::</span><span class="fu">slope</span>(elev_small)</span>
+<span id="cb15-27"><a href="data_prep.html#cb15-27" aria-hidden="true" tabindex="-1"></a>    , starsExtra<span class="sc">::</span><span class="fu">aspect</span>(elev_small)</span>
+<span id="cb15-28"><a href="data_prep.html#cb15-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-29"><a href="data_prep.html#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(</span>
+<span id="cb15-30"><a href="data_prep.html#cb15-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;elev&quot;</span>, <span class="st">&quot;slope_deg&quot;</span>, <span class="st">&quot;aspect_deg&quot;</span>)</span>
+<span id="cb15-31"><a href="data_prep.html#cb15-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-32"><a href="data_prep.html#cb15-32" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb15-33"><a href="data_prep.html#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">slope_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(slope_deg))</span>
+<span id="cb15-34"><a href="data_prep.html#cb15-34" aria-hidden="true" tabindex="-1"></a>    , <span class="at">aspect_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(aspect_deg))</span>
+<span id="cb15-35"><a href="data_prep.html#cb15-35" aria-hidden="true" tabindex="-1"></a>    , <span class="at">folded_aspect_deg =</span> <span class="dv">180</span> <span class="sc">-</span> <span class="fu">abs</span>(<span class="fu">as.numeric</span>(aspect_deg)<span class="sc">-</span><span class="dv">180</span>)</span>
+<span id="cb15-36"><a href="data_prep.html#cb15-36" aria-hidden="true" tabindex="-1"></a>    , <span class="at">folded_aspect_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(folded_aspect_deg)</span>
+<span id="cb15-37"><a href="data_prep.html#cb15-37" aria-hidden="true" tabindex="-1"></a>    , <span class="at">latitude_deg =</span> lats<span class="sc">$</span>latitude</span>
+<span id="cb15-38"><a href="data_prep.html#cb15-38" aria-hidden="true" tabindex="-1"></a>    , <span class="at">latitude_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(latitude_deg))</span>
+<span id="cb15-39"><a href="data_prep.html#cb15-39" aria-hidden="true" tabindex="-1"></a>    , <span class="at">hli =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb15-40"><a href="data_prep.html#cb15-40" aria-hidden="true" tabindex="-1"></a>        <span class="fu">hli_fn</span>(slope_rad, folded_aspect_rad, latitude_rad) <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="dv">1</span></span>
+<span id="cb15-41"><a href="data_prep.html#cb15-41" aria-hidden="true" tabindex="-1"></a>        , <span class="fu">hli_fn</span>(slope_rad, folded_aspect_rad, latitude_rad) <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">0</span></span>
+<span id="cb15-42"><a href="data_prep.html#cb15-42" aria-hidden="true" tabindex="-1"></a>        , <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">hli_fn</span>(slope_rad, folded_aspect_rad, latitude_rad)</span>
+<span id="cb15-43"><a href="data_prep.html#cb15-43" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb15-44"><a href="data_prep.html#cb15-44" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div id="topography-maps" class="section level3 hasAnchor" number="2.6.1">
+<h3><span class="header-section-number">2.6.1</span> Topography maps<a href="data_prep.html#topography-maps" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="data_prep.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># map</span></span>
+<span id="cb16-2"><a href="data_prep.html#cb16-2" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-3"><a href="data_prep.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;elev&quot;</span></span>
+<span id="cb16-4"><a href="data_prep.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;slope_deg&quot;</span></span>
+<span id="cb16-5"><a href="data_prep.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;aspect_deg&quot;</span></span>
+<span id="cb16-6"><a href="data_prep.html#cb16-6" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;folded_aspect_deg&quot;</span></span>
+<span id="cb16-7"><a href="data_prep.html#cb16-7" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;hli&quot;</span></span>
+<span id="cb16-8"><a href="data_prep.html#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-9"><a href="data_prep.html#cb16-9" aria-hidden="true" tabindex="-1"></a>vars_title <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-10"><a href="data_prep.html#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Elevation (m)&quot;</span></span>
+<span id="cb16-11"><a href="data_prep.html#cb16-11" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Slope (\u00B0)&quot;</span></span>
+<span id="cb16-12"><a href="data_prep.html#cb16-12" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Aspect (\u00B0)&quot;</span></span>
+<span id="cb16-13"><a href="data_prep.html#cb16-13" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Folded Aspect (\u00B0)&quot;</span></span>
+<span id="cb16-14"><a href="data_prep.html#cb16-14" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;Heat Load Index (HLI)&quot;</span></span>
+<span id="cb16-15"><a href="data_prep.html#cb16-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-16"><a href="data_prep.html#cb16-16" aria-hidden="true" tabindex="-1"></a>vars_color <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-17"><a href="data_prep.html#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;viridis&quot;</span></span>
+<span id="cb16-18"><a href="data_prep.html#cb16-18" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;cividis&quot;</span></span>
+<span id="cb16-19"><a href="data_prep.html#cb16-19" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;inferno&quot;</span></span>
+<span id="cb16-20"><a href="data_prep.html#cb16-20" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;plasma&quot;</span></span>
+<span id="cb16-21"><a href="data_prep.html#cb16-21" aria-hidden="true" tabindex="-1"></a>  , <span class="st">&quot;turbo&quot;</span></span>
+<span id="cb16-22"><a href="data_prep.html#cb16-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-23"><a href="data_prep.html#cb16-23" aria-hidden="true" tabindex="-1"></a>vars_llim <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-24"><a href="data_prep.html#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(topo<span class="sc">$</span>elev, <span class="at">na.rm=</span>T)<span class="sc">*</span>.<span class="dv">95</span></span>
+<span id="cb16-25"><a href="data_prep.html#cb16-25" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb16-26"><a href="data_prep.html#cb16-26" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb16-27"><a href="data_prep.html#cb16-27" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb16-28"><a href="data_prep.html#cb16-28" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">0</span></span>
+<span id="cb16-29"><a href="data_prep.html#cb16-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-30"><a href="data_prep.html#cb16-30" aria-hidden="true" tabindex="-1"></a>vars_ulim <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-31"><a href="data_prep.html#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">max</span>(topo<span class="sc">$</span>elev, <span class="at">na.rm=</span>T)<span class="sc">*</span><span class="fl">1.05</span></span>
+<span id="cb16-32"><a href="data_prep.html#cb16-32" aria-hidden="true" tabindex="-1"></a>  , <span class="fu">max</span>(<span class="fu">as.numeric</span>(topo<span class="sc">$</span>slope_deg), <span class="at">na.rm=</span>T)<span class="sc">*</span><span class="fl">1.05</span></span>
+<span id="cb16-33"><a href="data_prep.html#cb16-33" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">360</span></span>
+<span id="cb16-34"><a href="data_prep.html#cb16-34" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">180</span></span>
+<span id="cb16-35"><a href="data_prep.html#cb16-35" aria-hidden="true" tabindex="-1"></a>  , <span class="dv">1</span></span>
+<span id="cb16-36"><a href="data_prep.html#cb16-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-37"><a href="data_prep.html#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="co"># plts &lt;- list()</span></span>
+<span id="cb16-38"><a href="data_prep.html#cb16-38" aria-hidden="true" tabindex="-1"></a>plt_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb16-39"><a href="data_prep.html#cb16-39" aria-hidden="true" tabindex="-1"></a>  (</span>
+<span id="cb16-40"><a href="data_prep.html#cb16-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb16-41"><a href="data_prep.html#cb16-41" aria-hidden="true" tabindex="-1"></a>      stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> (topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(vars[x]))[]) <span class="sc">+</span></span>
+<span id="cb16-42"><a href="data_prep.html#cb16-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span></span>
+<span id="cb16-43"><a href="data_prep.html#cb16-43" aria-hidden="true" tabindex="-1"></a>          , <span class="at">limits =</span> <span class="fu">c</span>(vars_llim[x], vars_ulim[x])</span>
+<span id="cb16-44"><a href="data_prep.html#cb16-44" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb16-45"><a href="data_prep.html#cb16-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> units, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-46"><a href="data_prep.html#cb16-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
+<span id="cb16-47"><a href="data_prep.html#cb16-47" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> vars_title[x]</span>
+<span id="cb16-48"><a href="data_prep.html#cb16-48" aria-hidden="true" tabindex="-1"></a>          , <span class="at">fill =</span> vars_title[x]</span>
+<span id="cb16-49"><a href="data_prep.html#cb16-49" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
+<span id="cb16-50"><a href="data_prep.html#cb16-50" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-51"><a href="data_prep.html#cb16-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-52"><a href="data_prep.html#cb16-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb16-53"><a href="data_prep.html#cb16-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb16-54"><a href="data_prep.html#cb16-54" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb16-55"><a href="data_prep.html#cb16-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
+<span id="cb16-56"><a href="data_prep.html#cb16-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
+<span id="cb16-57"><a href="data_prep.html#cb16-57" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
+<span id="cb16-58"><a href="data_prep.html#cb16-58" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb16-59"><a href="data_prep.html#cb16-59" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb16-60"><a href="data_prep.html#cb16-60" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb16-61"><a href="data_prep.html#cb16-61" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb16-62"><a href="data_prep.html#cb16-62" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb16-63"><a href="data_prep.html#cb16-63" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb16-64"><a href="data_prep.html#cb16-64" aria-hidden="true" tabindex="-1"></a>      ) </span>
+<span id="cb16-65"><a href="data_prep.html#cb16-65" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-66"><a href="data_prep.html#cb16-66" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-67"><a href="data_prep.html#cb16-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-68"><a href="data_prep.html#cb16-68" aria-hidden="true" tabindex="-1"></a><span class="co"># combine plots</span></span>
+<span id="cb16-69"><a href="data_prep.html#cb16-69" aria-hidden="true" tabindex="-1"></a><span class="co"># cowplot::plot_grid(plotlist =  plts, ncol = 2)</span></span>
+<span id="cb16-70"><a href="data_prep.html#cb16-70" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-71"><a href="data_prep.html#cb16-71" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_fn)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-16-2.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-16-3.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-16-4.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-16-5.png" width="960" /></p>
 </div>
 </div>
-<div id="attach-topography-and-hli-to-groups" class="section level2 hasAnchor" number="2.6">
-<h2><span class="header-section-number">2.6</span> Attach topography and HLI to groups<a href="data_prep.html#attach-topography-and-hli-to-groups" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="data_prep.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># functions to aggregate raster data to vector data</span></span>
-<span id="cb13-2"><a href="data_prep.html#cb13-2" aria-hidden="true" tabindex="-1"></a>topo_calc_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(dta){</span>
-<span id="cb13-3"><a href="data_prep.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate median aspect and slope by vector</span></span>
-<span id="cb13-4"><a href="data_prep.html#cb13-4" aria-hidden="true" tabindex="-1"></a>  temp_slope <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(slope_rad), dta, median) </span>
-<span id="cb13-5"><a href="data_prep.html#cb13-5" aria-hidden="true" tabindex="-1"></a>  temp_aspect <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(aspect_rad), dta, median) </span>
-<span id="cb13-6"><a href="data_prep.html#cb13-6" aria-hidden="true" tabindex="-1"></a>  temp_folded_aspect <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(folded_aspect_rad), dta, median)</span>
-<span id="cb13-7"><a href="data_prep.html#cb13-7" aria-hidden="true" tabindex="-1"></a>  temp_hli <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(hli), dta, median)</span>
-<span id="cb13-8"><a href="data_prep.html#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># vector center</span></span>
-<span id="cb13-9"><a href="data_prep.html#cb13-9" aria-hidden="true" tabindex="-1"></a>  temp_center <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_centroid</span>(dta)<span class="sc">$</span>geometry <span class="sc">%&gt;%</span> </span>
-<span id="cb13-10"><a href="data_prep.html#cb13-10" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-11"><a href="data_prep.html#cb13-11" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb13-12"><a href="data_prep.html#cb13-12" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb13-13"><a href="data_prep.html#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb13-14"><a href="data_prep.html#cb13-14" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(latitude)</span>
-<span id="cb13-15"><a href="data_prep.html#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># attach to input data</span></span>
-<span id="cb13-16"><a href="data_prep.html#cb13-16" aria-hidden="true" tabindex="-1"></a>  new_dta <span class="ot">&lt;-</span> dta <span class="sc">%&gt;%</span> </span>
-<span id="cb13-17"><a href="data_prep.html#cb13-17" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb13-18"><a href="data_prep.html#cb13-18" aria-hidden="true" tabindex="-1"></a>      <span class="co"># radians</span></span>
-<span id="cb13-19"><a href="data_prep.html#cb13-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">slope_rad =</span> temp_slope<span class="sc">$</span>slope_rad</span>
-<span id="cb13-20"><a href="data_prep.html#cb13-20" aria-hidden="true" tabindex="-1"></a>      , <span class="at">aspect_rad =</span> temp_aspect<span class="sc">$</span>aspect_rad</span>
-<span id="cb13-21"><a href="data_prep.html#cb13-21" aria-hidden="true" tabindex="-1"></a>      , <span class="at">folded_aspect_rad =</span> temp_folded_aspect<span class="sc">$</span>folded_aspect_rad</span>
-<span id="cb13-22"><a href="data_prep.html#cb13-22" aria-hidden="true" tabindex="-1"></a>      , <span class="at">latitude_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(temp_center<span class="sc">$</span>latitude))</span>
-<span id="cb13-23"><a href="data_prep.html#cb13-23" aria-hidden="true" tabindex="-1"></a>      <span class="co"># degrees</span></span>
-<span id="cb13-24"><a href="data_prep.html#cb13-24" aria-hidden="true" tabindex="-1"></a>      , <span class="at">slope_deg =</span> pracma<span class="sc">::</span><span class="fu">rad2deg</span>(temp_slope<span class="sc">$</span>slope_rad)</span>
-<span id="cb13-25"><a href="data_prep.html#cb13-25" aria-hidden="true" tabindex="-1"></a>      , <span class="at">aspect_deg =</span> pracma<span class="sc">::</span><span class="fu">rad2deg</span>(temp_aspect<span class="sc">$</span>aspect_rad)</span>
-<span id="cb13-26"><a href="data_prep.html#cb13-26" aria-hidden="true" tabindex="-1"></a>      , <span class="at">folded_aspect_deg =</span> pracma<span class="sc">::</span><span class="fu">rad2deg</span>(temp_folded_aspect<span class="sc">$</span>folded_aspect_rad)</span>
-<span id="cb13-27"><a href="data_prep.html#cb13-27" aria-hidden="true" tabindex="-1"></a>      , <span class="at">latitude_deg =</span> <span class="fu">as.numeric</span>(temp_center<span class="sc">$</span>latitude)</span>
-<span id="cb13-28"><a href="data_prep.html#cb13-28" aria-hidden="true" tabindex="-1"></a>      <span class="co"># hli</span></span>
-<span id="cb13-29"><a href="data_prep.html#cb13-29" aria-hidden="true" tabindex="-1"></a>      , <span class="at">hli =</span> temp_hli<span class="sc">$</span>hli</span>
-<span id="cb13-30"><a href="data_prep.html#cb13-30" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-31"><a href="data_prep.html#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(new_dta)</span>
-<span id="cb13-32"><a href="data_prep.html#cb13-32" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-33"><a href="data_prep.html#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to data</span></span>
-<span id="cb13-34"><a href="data_prep.html#cb13-34" aria-hidden="true" tabindex="-1"></a>all_groups <span class="ot">&lt;-</span> all_groups <span class="sc">%&gt;%</span> <span class="fu">topo_calc_fn</span>()</span></code></pre></div>
-<div id="example-group-and-topography" class="section level3 hasAnchor" number="2.6.1">
-<h3><span class="header-section-number">2.6.1</span> Example group and topography<a href="data_prep.html#example-group-and-topography" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="data_prep.html#cb14-1" aria-hidden="true" tabindex="-1"></a>plt_grp_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb14-2"><a href="data_prep.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  temp_dta <span class="ot">&lt;-</span> all_groups <span class="sc">%&gt;%</span> </span>
-<span id="cb14-3"><a href="data_prep.html#cb14-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(group <span class="sc">==</span> <span class="st">&quot;Openings&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-4"><a href="data_prep.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">1</span>)</span>
-<span id="cb14-5"><a href="data_prep.html#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
-<span id="cb14-6"><a href="data_prep.html#cb14-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> (topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(vars[x]))[</span>
-<span id="cb14-7"><a href="data_prep.html#cb14-7" aria-hidden="true" tabindex="-1"></a>        temp_dta <span class="sc">%&gt;%</span> </span>
-<span id="cb14-8"><a href="data_prep.html#cb14-8" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">30</span>)</span>
-<span id="cb14-9"><a href="data_prep.html#cb14-9" aria-hidden="true" tabindex="-1"></a>      ]) <span class="sc">+</span></span>
-<span id="cb14-10"><a href="data_prep.html#cb14-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span></span>
-<span id="cb14-11"><a href="data_prep.html#cb14-11" aria-hidden="true" tabindex="-1"></a>          , <span class="at">limits =</span> <span class="fu">c</span>(vars_llim[x], vars_ulim[x])</span>
-<span id="cb14-12"><a href="data_prep.html#cb14-12" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb14-13"><a href="data_prep.html#cb14-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> temp_dta</span>
-<span id="cb14-14"><a href="data_prep.html#cb14-14" aria-hidden="true" tabindex="-1"></a>        , <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="fl">1.1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
-<span id="cb14-15"><a href="data_prep.html#cb14-15" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
-<span id="cb14-16"><a href="data_prep.html#cb14-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
-<span id="cb14-17"><a href="data_prep.html#cb14-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&quot;Example group (area = &quot;</span></span>
-<span id="cb14-18"><a href="data_prep.html#cb14-18" aria-hidden="true" tabindex="-1"></a>                         , scales<span class="sc">::</span><span class="fu">comma</span>(temp_dta<span class="sc">$</span>area_m2, <span class="at">accuracy =</span> <span class="dv">1</span>)</span>
-<span id="cb14-19"><a href="data_prep.html#cb14-19" aria-hidden="true" tabindex="-1"></a>                         , <span class="st">&quot; m sq.)&quot;</span></span>
-<span id="cb14-20"><a href="data_prep.html#cb14-20" aria-hidden="true" tabindex="-1"></a>              )</span>
-<span id="cb14-21"><a href="data_prep.html#cb14-21" aria-hidden="true" tabindex="-1"></a>          , <span class="at">subtitle =</span> vars_title[x]</span>
-<span id="cb14-22"><a href="data_prep.html#cb14-22" aria-hidden="true" tabindex="-1"></a>          , <span class="at">fill =</span> vars_title[x]</span>
-<span id="cb14-23"><a href="data_prep.html#cb14-23" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
-<span id="cb14-24"><a href="data_prep.html#cb14-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-25"><a href="data_prep.html#cb14-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-26"><a href="data_prep.html#cb14-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb14-27"><a href="data_prep.html#cb14-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb14-28"><a href="data_prep.html#cb14-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb14-29"><a href="data_prep.html#cb14-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
-<span id="cb14-30"><a href="data_prep.html#cb14-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
-<span id="cb14-31"><a href="data_prep.html#cb14-31" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
-<span id="cb14-32"><a href="data_prep.html#cb14-32" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
-<span id="cb14-33"><a href="data_prep.html#cb14-33" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-34"><a href="data_prep.html#cb14-34" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-35"><a href="data_prep.html#cb14-35" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb14-36"><a href="data_prep.html#cb14-36" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb14-37"><a href="data_prep.html#cb14-37" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb14-38"><a href="data_prep.html#cb14-38" aria-hidden="true" tabindex="-1"></a>      ) </span>
-<span id="cb14-39"><a href="data_prep.html#cb14-39" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-40"><a href="data_prep.html#cb14-40" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-41"><a href="data_prep.html#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-42"><a href="data_prep.html#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-43"><a href="data_prep.html#cb14-43" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_grp_fn)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-21-1.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-21-2.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-21-3.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-21-4.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-21-5.png" width="960" /></p>
+<div id="attach-topography-and-hli-to-groups" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> Attach topography and HLI to groups<a href="data_prep.html#attach-topography-and-hli-to-groups" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="data_prep.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># functions to aggregate raster data to vector data</span></span>
+<span id="cb17-2"><a href="data_prep.html#cb17-2" aria-hidden="true" tabindex="-1"></a>topo_calc_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(dta){</span>
+<span id="cb17-3"><a href="data_prep.html#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate median aspect and slope by vector</span></span>
+<span id="cb17-4"><a href="data_prep.html#cb17-4" aria-hidden="true" tabindex="-1"></a>  temp_slope <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(slope_rad), dta, median) </span>
+<span id="cb17-5"><a href="data_prep.html#cb17-5" aria-hidden="true" tabindex="-1"></a>  temp_aspect <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(aspect_rad), dta, median) </span>
+<span id="cb17-6"><a href="data_prep.html#cb17-6" aria-hidden="true" tabindex="-1"></a>  temp_folded_aspect <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(folded_aspect_rad), dta, median)</span>
+<span id="cb17-7"><a href="data_prep.html#cb17-7" aria-hidden="true" tabindex="-1"></a>  temp_hli <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(hli), dta, median)</span>
+<span id="cb17-8"><a href="data_prep.html#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># vector center</span></span>
+<span id="cb17-9"><a href="data_prep.html#cb17-9" aria-hidden="true" tabindex="-1"></a>  temp_center <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_centroid</span>(dta)<span class="sc">$</span>geometry <span class="sc">%&gt;%</span> </span>
+<span id="cb17-10"><a href="data_prep.html#cb17-10" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-11"><a href="data_prep.html#cb17-11" aria-hidden="true" tabindex="-1"></a>    sf<span class="sc">::</span><span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb17-12"><a href="data_prep.html#cb17-12" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb17-13"><a href="data_prep.html#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>,<span class="st">&quot;latitude&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-14"><a href="data_prep.html#cb17-14" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(latitude)</span>
+<span id="cb17-15"><a href="data_prep.html#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># attach to input data</span></span>
+<span id="cb17-16"><a href="data_prep.html#cb17-16" aria-hidden="true" tabindex="-1"></a>  new_dta <span class="ot">&lt;-</span> dta <span class="sc">%&gt;%</span> </span>
+<span id="cb17-17"><a href="data_prep.html#cb17-17" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb17-18"><a href="data_prep.html#cb17-18" aria-hidden="true" tabindex="-1"></a>      <span class="co"># radians</span></span>
+<span id="cb17-19"><a href="data_prep.html#cb17-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">slope_rad =</span> temp_slope<span class="sc">$</span>slope_rad</span>
+<span id="cb17-20"><a href="data_prep.html#cb17-20" aria-hidden="true" tabindex="-1"></a>      , <span class="at">aspect_rad =</span> temp_aspect<span class="sc">$</span>aspect_rad</span>
+<span id="cb17-21"><a href="data_prep.html#cb17-21" aria-hidden="true" tabindex="-1"></a>      , <span class="at">folded_aspect_rad =</span> temp_folded_aspect<span class="sc">$</span>folded_aspect_rad</span>
+<span id="cb17-22"><a href="data_prep.html#cb17-22" aria-hidden="true" tabindex="-1"></a>      , <span class="at">latitude_rad =</span> pracma<span class="sc">::</span><span class="fu">deg2rad</span>(<span class="fu">as.numeric</span>(temp_center<span class="sc">$</span>latitude))</span>
+<span id="cb17-23"><a href="data_prep.html#cb17-23" aria-hidden="true" tabindex="-1"></a>      <span class="co"># degrees</span></span>
+<span id="cb17-24"><a href="data_prep.html#cb17-24" aria-hidden="true" tabindex="-1"></a>      , <span class="at">slope_deg =</span> pracma<span class="sc">::</span><span class="fu">rad2deg</span>(temp_slope<span class="sc">$</span>slope_rad)</span>
+<span id="cb17-25"><a href="data_prep.html#cb17-25" aria-hidden="true" tabindex="-1"></a>      , <span class="at">aspect_deg =</span> pracma<span class="sc">::</span><span class="fu">rad2deg</span>(temp_aspect<span class="sc">$</span>aspect_rad)</span>
+<span id="cb17-26"><a href="data_prep.html#cb17-26" aria-hidden="true" tabindex="-1"></a>      , <span class="at">folded_aspect_deg =</span> pracma<span class="sc">::</span><span class="fu">rad2deg</span>(temp_folded_aspect<span class="sc">$</span>folded_aspect_rad)</span>
+<span id="cb17-27"><a href="data_prep.html#cb17-27" aria-hidden="true" tabindex="-1"></a>      , <span class="at">latitude_deg =</span> <span class="fu">as.numeric</span>(temp_center<span class="sc">$</span>latitude)</span>
+<span id="cb17-28"><a href="data_prep.html#cb17-28" aria-hidden="true" tabindex="-1"></a>      <span class="co"># hli</span></span>
+<span id="cb17-29"><a href="data_prep.html#cb17-29" aria-hidden="true" tabindex="-1"></a>      , <span class="at">hli =</span> temp_hli<span class="sc">$</span>hli</span>
+<span id="cb17-30"><a href="data_prep.html#cb17-30" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-31"><a href="data_prep.html#cb17-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(new_dta)</span>
+<span id="cb17-32"><a href="data_prep.html#cb17-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-33"><a href="data_prep.html#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="co"># apply to data</span></span>
+<span id="cb17-34"><a href="data_prep.html#cb17-34" aria-hidden="true" tabindex="-1"></a>all_groups <span class="ot">&lt;-</span> all_groups <span class="sc">%&gt;%</span> <span class="fu">topo_calc_fn</span>()</span></code></pre></div>
+<div id="example-group-and-topography" class="section level3 hasAnchor" number="2.7.1">
+<h3><span class="header-section-number">2.7.1</span> Example group and topography<a href="data_prep.html#example-group-and-topography" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="data_prep.html#cb18-1" aria-hidden="true" tabindex="-1"></a>plt_grp_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb18-2"><a href="data_prep.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  temp_dta <span class="ot">&lt;-</span> all_groups <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href="data_prep.html#cb18-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(group <span class="sc">==</span> <span class="st">&quot;Openings&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-4"><a href="data_prep.html#cb18-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb18-5"><a href="data_prep.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
+<span id="cb18-6"><a href="data_prep.html#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span> stars<span class="sc">::</span><span class="fu">geom_stars</span>(<span class="at">data =</span> (topo <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(vars[x]))[</span>
+<span id="cb18-7"><a href="data_prep.html#cb18-7" aria-hidden="true" tabindex="-1"></a>        temp_dta <span class="sc">%&gt;%</span> </span>
+<span id="cb18-8"><a href="data_prep.html#cb18-8" aria-hidden="true" tabindex="-1"></a>          sf<span class="sc">::</span><span class="fu">st_buffer</span>(<span class="at">dist =</span> <span class="dv">30</span>)</span>
+<span id="cb18-9"><a href="data_prep.html#cb18-9" aria-hidden="true" tabindex="-1"></a>      ]) <span class="sc">+</span></span>
+<span id="cb18-10"><a href="data_prep.html#cb18-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> vars_color[x], <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span></span>
+<span id="cb18-11"><a href="data_prep.html#cb18-11" aria-hidden="true" tabindex="-1"></a>          , <span class="at">limits =</span> <span class="fu">c</span>(vars_llim[x], vars_ulim[x])</span>
+<span id="cb18-12"><a href="data_prep.html#cb18-12" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="data_prep.html#cb18-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> temp_dta</span>
+<span id="cb18-14"><a href="data_prep.html#cb18-14" aria-hidden="true" tabindex="-1"></a>        , <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">lwd =</span> <span class="fl">1.1</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb18-15"><a href="data_prep.html#cb18-15" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="data_prep.html#cb18-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(</span>
+<span id="cb18-17"><a href="data_prep.html#cb18-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">&quot;Example group (area = &quot;</span></span>
+<span id="cb18-18"><a href="data_prep.html#cb18-18" aria-hidden="true" tabindex="-1"></a>                         , scales<span class="sc">::</span><span class="fu">comma</span>(temp_dta<span class="sc">$</span>area_m2, <span class="at">accuracy =</span> <span class="dv">1</span>)</span>
+<span id="cb18-19"><a href="data_prep.html#cb18-19" aria-hidden="true" tabindex="-1"></a>                         , <span class="st">&quot; m sq.)&quot;</span></span>
+<span id="cb18-20"><a href="data_prep.html#cb18-20" aria-hidden="true" tabindex="-1"></a>              )</span>
+<span id="cb18-21"><a href="data_prep.html#cb18-21" aria-hidden="true" tabindex="-1"></a>          , <span class="at">subtitle =</span> vars_title[x]</span>
+<span id="cb18-22"><a href="data_prep.html#cb18-22" aria-hidden="true" tabindex="-1"></a>          , <span class="at">fill =</span> vars_title[x]</span>
+<span id="cb18-23"><a href="data_prep.html#cb18-23" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">+</span></span>
+<span id="cb18-24"><a href="data_prep.html#cb18-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-25"><a href="data_prep.html#cb18-25" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-26"><a href="data_prep.html#cb18-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb18-27"><a href="data_prep.html#cb18-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb18-28"><a href="data_prep.html#cb18-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb18-29"><a href="data_prep.html#cb18-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
+<span id="cb18-30"><a href="data_prep.html#cb18-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
+<span id="cb18-31"><a href="data_prep.html#cb18-31" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span></span>
+<span id="cb18-32"><a href="data_prep.html#cb18-32" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb18-33"><a href="data_prep.html#cb18-33" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb18-34"><a href="data_prep.html#cb18-34" aria-hidden="true" tabindex="-1"></a>        , <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb18-35"><a href="data_prep.html#cb18-35" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb18-36"><a href="data_prep.html#cb18-36" aria-hidden="true" tabindex="-1"></a>        , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb18-37"><a href="data_prep.html#cb18-37" aria-hidden="true" tabindex="-1"></a>        , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb18-38"><a href="data_prep.html#cb18-38" aria-hidden="true" tabindex="-1"></a>      ) </span>
+<span id="cb18-39"><a href="data_prep.html#cb18-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-40"><a href="data_prep.html#cb18-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-41"><a href="data_prep.html#cb18-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-42"><a href="data_prep.html#cb18-42" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-43"><a href="data_prep.html#cb18-43" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_grp_fn)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-18-1.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-18-2.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-18-3.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-18-4.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-18-5.png" width="960" /></p>
 
 </div>
 </div>

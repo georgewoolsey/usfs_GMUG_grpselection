@@ -88,7 +88,6 @@ mapview::mapview(
 )
 ```
 
-
 ## Load Treatment data
 
 ```{r}
@@ -266,41 +265,12 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
   }
 elev_small <- elev[
     units %>%
+      dplyr::slice_head(n=1) %>% ## testing
       sf::st_union() %>%
-      sf::st_buffer(dist = 1000) %>%
+      # sf::st_buffer(dist = 1000) %>%
+      sf::st_buffer(dist = 1) %>% ## testing
       sf::st_bbox()
   ]
-```
-
-### Elevation plot
-
-```{r, warning=F, message=F, fig.width = 10, fig.height = 6}
-# plot
-ggplot() + stars::geom_stars(data = elev_small) +
-  scale_fill_viridis_c(option = "viridis", alpha = 0.9, na.value = "transparent") +
-  geom_sf(data = units, alpha = 0, lwd = 1, color = "black") +
-  labs(
-      title = "GMUG Treatment Units Elevation Map"
-      , subtitle = sf::st_crs(elev)$input
-      , fill = "Elev. (m)"
-    ) +
-  xlab("") +
-  ylab("") +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) +
-  theme_bw() +
-  theme(
-    legend.position = "bottom"
-    , legend.direction = "horizontal"
-    , legend.margin = margin(0,0,0,0)
-    , legend.box.margin = margin(-21,0,2,0)
-    , legend.text = element_text(size = 7)
-    , legend.title = element_text(size = 7)
-    , axis.text.y = element_text(size = 7)
-    , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
-    , panel.border = element_blank()
-  )
-
 ```
 
 ```{r, echo=FALSE, include=FALSE}
@@ -311,67 +281,71 @@ gc()
 
 Download NAIP Imagery from [this respository](https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx)
 
-```{r, include = FALSE, eval=FALSE}
+```{r}
 tifs <- list.files("../data/naip/", pattern = "\\.tif$", full.names = TRUE)
 naip_st <- stars::read_stars(tifs[1]) 
 # plot(naip_st)
 # crop
 naip_st <- naip_st %>% 
   sf::st_crop(
-    units %>%
-      sf::st_union() %>%
-      sf::st_buffer(dist = 500) %>%
+    elev_small %>%
       sf::st_bbox()
   ) %>% 
   setNames("value") %>% 
   dplyr::mutate(value = ifelse(is.na(value), 0, value))
+###################
+# ggplot prep
+###################
+  # set rgb image for ggplot
+  # band 3 = red, band 2 = green, band 1 = blue
+  naip_rgb <- stars::st_rgb(
+    # naip_st[,,,1:3] # CIR
+    naip_st[,,,3:1] # RGB
+    , dimension = 3
+    , use_alpha = FALSE
+    # , stretch = "histogram"
+    , probs = c(0.005, 0.995)
+    , stretch = "percent"
+  )
+###################
+# rayshader prep
+###################
+  # FUNCTION to wrangle RGB data to work with rayshader
+  wrangle_rgb <- function(x){
+    # Load color imagery from Sentinel 2
+    temp_rgb <- 
+      raster::stack(x) %>% 
+      raster::crop(
+        elev_small %>%
+          sf::st_bbox()
+      )
+    # The array must be transposed since rasters and arrays are oriented 
+    # differently in R. aperm() is used to perform a multi-dimensional transpose.
+    r_mat = rayshader::raster_to_matrix(temp_rgb[[3]])
+    g_mat = rayshader::raster_to_matrix(temp_rgb[[2]])
+    b_mat = rayshader::raster_to_matrix(temp_rgb[[1]])
+    
+    # create array
+    rgb_array = array(0, dim = c(nrow(r_mat),ncol(r_mat),3))
+    
+    rgb_array[,,1] = r_mat/255 #Red layer
+    rgb_array[,,2] = g_mat/255 #Blue layer
+    rgb_array[,,3] = b_mat/255 #Green layer
+    
+    # Array Transposition
+    rgb_array = aperm(rgb_array, c(2,1,3))
+    
+    # enhance contrast
+    scales::rescale(rgb_array, to=c(0.005, 0.995))
+    
+    return(rgb_array)
+  }
+  
+  # Prepare rgb image overlay
+  rgb_img <- wrangle_rgb(tifs[1])
 
-# set rgb image
-# band 3 = red, band 2 = green, band 1 = blue
-naip_rgb <- stars::st_rgb(
-  # naip_st[,,,1:3] # CIR
-  naip_st[,,,3:1] # RGB
-  , dimension = 3
-  , use_alpha = FALSE
-  # , stretch = "histogram"
-  , probs = c(0.005, 0.995)
-  , stretch = "percent"
-)
-
-# FUNCTION to wrangle RGB data to work with rayshader
-wrangle_rgb <- function(x){
-  # Load color imagery from Sentinel 2
-  temp_rgb <- 
-    raster::stack(x) %>% 
-    raster::crop(units %>%
-      sf::st_union() %>%
-      sf::st_buffer(dist = 500) %>%
-      sf::st_bbox()
-    )
-  # The array must be transposed since rasters and arrays are oriented 
-  # differently in R. aperm() is sued to perform a multi-dimensional transpose.
-  r_mat = rayshader::raster_to_matrix(temp_rgb[[3]])
-  g_mat = rayshader::raster_to_matrix(temp_rgb[[2]])
-  b_mat = rayshader::raster_to_matrix(temp_rgb[[1]])
-  
-  # create array
-  rgb_array = array(0, dim = c(nrow(r_mat),ncol(r_mat),3))
-  
-  rgb_array[,,1] = r_mat/255 #Red layer
-  rgb_array[,,2] = g_mat/255 #Blue layer
-  rgb_array[,,3] = b_mat/255 #Green layer
-  
-  rgb_array = aperm(rgb_array, c(2,1,3))
-  
-  # enhance contrast
-  scales::rescale(rgb_array,to=c(0, 1))
-  
-  return(rgb_array)
-}
-
-# Prepare rgb image overlay
-rgb_img <- wrangle_rgb(tifs[1])
-
+# stars to matrix for passing to rayshader
+elev_mat <- starsExtra::layer_to_matrix(elev_small)
 ```
 
 
@@ -401,16 +375,15 @@ ggplot() +
 
 ```
 
+## Treatment Area Aerial View
 
-### Topo Map
+### Aerial View - Topography
 
-https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx
+Define topography map and basemap.
 
-```{r, include=FALSE, eval=FALSE}
-# stars to matrix
-elev_mat <- starsExtra::layer_to_matrix(elev_small)
-# check out plot locations
-elev_mat %>%
+```{r basemap_def}
+# on the fly view without setting up basemap
+topo_plot <- elev_mat %>%
   rayshader::sphere_shade(sunangle = 78, texture = "desert") %>%
   rayshader::add_overlay(
     rayshader::generate_polygon_overlay(
@@ -422,14 +395,7 @@ elev_mat %>%
       , linecolor = "black"
       , linewidth = 3
     )
-  ) %>% 
-  # rayshader::plot_3d(elev_mat, zscale = 10)
-  rayshader::plot_map()
-  # rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
-  # Sys.sleep(0.2)
-  # rayshader::render_snapshot(clear = TRUE)
-
-
+  ) 
 # define basemap for going with rgb
 basemap <- elev_mat %>%
   # rayshader::sphere_shade(sunangle = 78, texture = "desert") %>%
@@ -447,21 +413,43 @@ basemap <- elev_mat %>%
     )
     , alphalayer = 0.6
   ) 
-
 ```
 
-### Add NAIP
+Plot topography map.
 
-```{r, include = FALSE, eval=FALSE}
+```{r topo_plot}
+# plot
+topo_plot %>% 
+  # rayshader::plot_map()
+  rayshader::plot_3d(
+    elev_mat
+    , zscale = 10
+    , theta = 30
+    , phi = 45
+    , fov = 0
+    , zoom = 1
+    # , windowsize = c(1000, 800)
+  )
+```
+
+```{r topo_snapshot, echo = FALSE, warning = FALSE}
+Sys.sleep(0.2)
+rayshader::render_compass(position = "W", compass_radius = 50)
+rayshader::render_snapshot()
+rayshader::render_snapshot(clear = TRUE)
+```
+
+### Aerial View - RGB
+
+Define feature map.
+
+```{r feature_map_def}
 # overlay rgb
-basemap_rgb <-
-  basemap %>% 
+feature_map <- basemap %>% 
   rayshader::add_overlay(
     rgb_img
-    , alphalayer = .8
-  )
-
-basemap_rgb %>% 
+    , alphalayer = .98
+  ) %>% 
   rayshader::add_overlay(
     rayshader::generate_polygon_overlay(
       units
@@ -472,9 +460,32 @@ basemap_rgb %>%
       , linecolor = "black"
       , linewidth = 3
     )
-  ) %>% 
-  rayshader::plot_map()
-  # rayshader::plot_3d(elev_mat, zscale = 10, fov = 0, theta = 135, zoom = 0.75, phi = 45, windowsize = c(1000, 800))
+  )
+```
+
+Plot feature map.
+
+```{r feature_map_plot}
+feature_map %>% 
+  # rayshader::plot_map()
+  rayshader::plot_3d(
+    elev_mat
+    , zscale = 10
+    , theta = 30
+    , phi = 45
+    , fov = 0
+    , zoom = 1
+    # , windowsize = c(1000, 800)
+  )
+```
+
+
+```{r feature_map_snapshot, echo = FALSE, warning = FALSE}
+Sys.sleep(0.2)
+# add compass
+rayshader::render_compass(position = "W", compass_radius = 50)
+rayshader::render_snapshot()
+rayshader::render_snapshot(clear = TRUE)
 ```
 
 
