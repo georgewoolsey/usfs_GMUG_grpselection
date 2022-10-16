@@ -1,4 +1,4 @@
-# Data Preparation {#data_prep}
+# Analysis of HLI {#analysis}
 
 ```{r, include=FALSE, warning=F, message=F}
 # data mgmt
@@ -252,7 +252,7 @@ ggplot(.) +
   )
 ```
 
-There is a difference in the cool and medium cool sites between the opening and reserve treatments.
+There is a difference in the HIL of cool and medium cool groups across the opening and reserve treatments.
 
 ## Map Cool and Warm Sites
 
