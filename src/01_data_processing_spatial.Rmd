@@ -21,8 +21,7 @@ library(elevatr) # elevation data (DEMs)
 library(pracma) # Practical Numerical Math Functions
 library(rayshader) # mapping
 library(magick)
-library(terra)
-library(raster)
+library(raster) # need to transition to stars
 
 # knit options
 knitr::opts_chunk$set(
@@ -45,6 +44,21 @@ sf::sf_use_s2(FALSE)
 # set crs
 my_crs <- 5070 # EPSG:5070 = NAD83/Conus Albers (units = meters); EPSG:4326 = WGS 84 (units = dd); EPSG:4269 = NAD83 (units = dd)
 ```
+
+
+## Overwrite Data Switch
+
+```{r, warning=F, message=F, results='hide', fig.width = 10, fig.height = 6}
+#######################################################
+#######################################################
+# TURN ON/OFF DATA OVERWRITE
+# TURNING THIS ON WILL RE-RUN ALL LIDAR PROCESSING
+# WHICH TAKES A LONG TIME
+#######################################################
+#######################################################
+overwrite_it <- FALSE
+```
+
 
 ## National Forest Management data download
 
@@ -123,13 +137,44 @@ reserves <- shp_import_fn("../data/Bald_all_Reserve_grps.shp") %>%
   dplyr::mutate(group = "Reserves")
 
 # harvest units
-units <- shp_import_fn("../data/UnitEstimate.shp")
+units <- shp_import_fn("../data/UnitEstimate.shp") %>% 
+  dplyr::rename(unit_number = unit_numbe)
 
 # combine
 all_groups <- dplyr::bind_rows(
   openings %>% dplyr::select(shape_id, group, area_m2)
   , reserves %>% dplyr::select(shape_id, group, area_m2)
 )
+```
+
+Attach treatment unit number to group and keep the unit with the largest area when a group is located in more than one unit.
+
+```{r}
+# attach harvest data to research plots
+temp_grp_unit <- sf::st_intersection(
+    all_groups %>% dplyr::select(group, shape_id)
+    , units %>% dplyr::select(unit_number)
+  ) %>%
+  dplyr::mutate(area_m2 = as.numeric(sf::st_area(.))) %>% 
+  st_set_geometry(NULL) %>%
+  dplyr::arrange(group, shape_id, desc(area_m2)) %>% 
+  group_by(group, shape_id) %>% 
+  dplyr::mutate(row_number = dplyr::row_number()) %>%
+  dplyr::filter(row_number == 1) %>% 
+  dplyr::select(
+    group
+    , shape_id
+    , unit_number
+  ) %>% 
+  dplyr::ungroup()
+# join to spatial data
+all_groups <- all_groups %>% 
+  left_join(temp_grp_unit, by = c("group"="group", "shape_id"="shape_id"))
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("temp_",ls())])
+gc()
 ```
 
 ### Group summary statistics
@@ -212,13 +257,39 @@ ggplot() +
   ) 
 ```
 
+### Treatment units map
+
+```{r}
+ggplot(data = units) + 
+  geom_sf(
+    mapping = aes(fill = unit_number)
+    , lwd = 0.8, color = "black" 
+  ) +
+  geom_sf_label(
+    mapping = aes(label = unit_number)
+    , label.padding = unit(0.1, "lines")
+    , label.size = 0.1
+  ) +
+  scale_fill_viridis_d(option = "turbo", alpha = 0.4) +
+  labs(
+    title = "Harvest treatment units"
+  ) +
+  theme_bw() + 
+  theme(
+    legend.position = "none"
+    , axis.text.y = element_text(size = 7)
+    , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+    , panel.border = element_blank()
+  ) 
+```
+
 ### Treatment units and group map
 
 ```{r}
 ggplot() + 
   geom_sf(
     data = units
-    , mapping = aes(fill = unit_numbe)
+    , mapping = aes(fill = unit_number)
     , lwd = 0.8, color = "black" 
   ) +
   geom_sf(data = openings, fill = "white", color = "firebrick", lwd = 1) +
@@ -235,6 +306,42 @@ ggplot() +
     , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
     , panel.border = element_blank()
   ) 
+```
+
+### Treatment Units Summary of Groups
+
+```{r}
+all_groups %>% sf::st_set_geometry(NULL) %>% 
+  dplyr::group_by(unit_number, group) %>% 
+  dplyr::summarise(
+    count_groups = n()
+    , total_group_area_m2 = sum(area_m2, na.rm = TRUE)
+    , mean_group_area_m2 = mean(area_m2, na.rm = TRUE)
+  ) %>% 
+  dplyr::group_by(unit_number) %>% 
+  dplyr::mutate(n = sum(count_groups)) %>% 
+  dplyr::arrange(desc(n)) %>% 
+  ggplot(.) +
+  geom_col(aes(y = reorder(unit_number, n), x = count_groups, fill = group), width = 0.7) +
+  geom_text(
+    aes(y = reorder(unit_number, n), x =n, label = scales::comma(n, accuracy = 1))
+    , color = "black", size = 4
+    , position = position_dodge(0.9)
+    , hjust = -0.1
+  ) +
+  labs(
+      title = "Number of Groups in each Treatment Unit by type"
+    ) +
+  xlab("# Groups") +
+  ylab("Treatment Unit Number") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_fill_viridis_d(option = "inferno", direction = -1) +
+  theme_bw() +
+  theme(
+    legend.position = "top"
+    , legend.title = element_blank()
+    , axis.text.y = element_text(size = 13)
+  )
 ```
 
 
@@ -265,10 +372,10 @@ The function `elevatr::get_elev_raster` was used to obtain a digital elevation m
   }
 elev_small <- elev[
     units %>%
-      dplyr::slice_head(n=1) %>% ## testing
+      # dplyr::slice_head(n=1) %>% ## testing
       sf::st_union() %>%
-      # sf::st_buffer(dist = 1000) %>%
-      sf::st_buffer(dist = 1) %>% ## testing
+      sf::st_buffer(dist = 1000) %>%
+      # sf::st_buffer(dist = 1) %>% ## testing
       sf::st_bbox()
   ]
 ```
@@ -348,6 +455,11 @@ naip_st <- naip_st %>%
 elev_mat <- starsExtra::layer_to_matrix(elev_small)
 ```
 
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("temp_",ls())])
+gc()
+```
 
 ```{r, include = FALSE, eval=FALSE}
 ggplot() +
@@ -439,6 +551,13 @@ rayshader::render_snapshot()
 rayshader::render_snapshot(clear = TRUE)
 ```
 
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("temp_",ls())])
+gc()
+```
+
+
 ### Aerial View - RGB
 
 Define feature map.
@@ -489,6 +608,11 @@ rayshader::render_snapshot(clear = TRUE)
 ```
 
 
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("temp_",ls())])
+gc()
+```
+
 ## Aspect and HLI
 
 Aspect of a slope (the direction or azimuth that a slope faces) strongly influences potential direct incident radiation and temperature. Untransformed, aspect is a poor variable for quantitative analysis, since 1° is adjacent to 360° – the numbers are very different even though the aspect is about the same. The following equation for Heat Load Index (HLI) rescales aspect to a scale of zero to one, with zero being the coolest slope (northeast) and one being the warmest slope (southwest). HLI is a proxy for aspect-driven solar heating.
@@ -505,7 +629,11 @@ Aspect must first be "folded" about the north-south line, rescaling 0-360° to 0
 $$
 \textrm{Folded aspect°} = 180° \, - \, | Aspect° – 180° |
 $$
+
 ```{r}
+if(file.exists("../data/topo.tif") == TRUE & overwrite_it == FALSE){
+  topo <- stars::read_stars("../data/topo.tif")
+}else{
 # extract latitude degrees from stars object
 lats <- sf::st_coordinates(elev_small) %>%
   sf::st_as_sf(coords = c("x", "y"), crs = my_crs) %>%
@@ -550,7 +678,15 @@ topo <- c(
         , TRUE ~ hli_fn(slope_rad, folded_aspect_rad, latitude_rad)
       )
   )
+}
 ```
+
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("temp_",ls())])
+gc()
+```
+
 
 ### Topography maps
 
@@ -631,48 +767,58 @@ c(1:length(vars)) %>%
 ## Attach topography and HLI to groups
 
 ```{r}
-# functions to aggregate raster data to vector data
-topo_calc_fn <- function(dta){
-  # calculate median aspect and slope by vector
-  temp_slope <- aggregate(topo %>% dplyr::select(slope_rad), dta, median) 
-  temp_aspect <- aggregate(topo %>% dplyr::select(aspect_rad), dta, median) 
-  temp_folded_aspect <- aggregate(topo %>% dplyr::select(folded_aspect_rad), dta, median)
-  temp_hli <- aggregate(topo %>% dplyr::select(hli), dta, median)
-  # vector center
-  temp_center <- sf::st_centroid(dta)$geometry %>% 
-    sf::st_transform(crs = 4326) %>% 
-    sf::st_coordinates() %>% 
-    dplyr::as_tibble() %>% 
-    setNames(c("longitude","latitude")) %>%
-    dplyr::select(latitude)
-  # attach to input data
-  new_dta <- dta %>% 
-    dplyr::mutate(
-      # radians
-      slope_rad = temp_slope$slope_rad
-      , aspect_rad = temp_aspect$aspect_rad
-      , folded_aspect_rad = temp_folded_aspect$folded_aspect_rad
-      , latitude_rad = pracma::deg2rad(as.numeric(temp_center$latitude))
-      # degrees
-      , slope_deg = pracma::rad2deg(temp_slope$slope_rad)
-      , aspect_deg = pracma::rad2deg(temp_aspect$aspect_rad)
-      , folded_aspect_deg = pracma::rad2deg(temp_folded_aspect$folded_aspect_rad)
-      , latitude_deg = as.numeric(temp_center$latitude)
-      # hli
-      , hli = temp_hli$hli
-    )
-  return(new_dta)
+if(file.exists("../data/all_groups_topo.gpkg") == TRUE & overwrite_it == FALSE){
+  all_groups_topo <- sf::st_read("../data/all_groups_topo.gpkg")
+}else{
+  # functions to aggregate raster data to vector data
+  topo_calc_fn <- function(dta){
+    # calculate median aspect and slope by vector
+    temp_slope <- aggregate(topo %>% dplyr::select(slope_rad), dta, median) 
+    temp_aspect <- aggregate(topo %>% dplyr::select(aspect_rad), dta, median) 
+    temp_folded_aspect <- aggregate(topo %>% dplyr::select(folded_aspect_rad), dta, median)
+    temp_hli <- aggregate(topo %>% dplyr::select(hli), dta, median)
+    # vector center
+    temp_center <- sf::st_centroid(dta)$geometry %>% 
+      sf::st_transform(crs = 4326) %>% 
+      sf::st_coordinates() %>% 
+      dplyr::as_tibble() %>% 
+      setNames(c("longitude","latitude")) %>%
+      dplyr::select(latitude)
+    # attach to input data
+    new_dta <- dta %>% 
+      dplyr::mutate(
+        # radians
+        slope_rad = temp_slope$slope_rad
+        , aspect_rad = temp_aspect$aspect_rad
+        , folded_aspect_rad = temp_folded_aspect$folded_aspect_rad
+        , latitude_rad = pracma::deg2rad(as.numeric(temp_center$latitude))
+        # degrees
+        , slope_deg = pracma::rad2deg(temp_slope$slope_rad)
+        , aspect_deg = pracma::rad2deg(temp_aspect$aspect_rad)
+        , folded_aspect_deg = pracma::rad2deg(temp_folded_aspect$folded_aspect_rad)
+        , latitude_deg = as.numeric(temp_center$latitude)
+        # hli
+        , hli = temp_hli$hli
+      )
+    return(new_dta)
+  }
+  # apply to data
+  all_groups_topo <- all_groups %>% topo_calc_fn()
 }
-# apply to data
-all_groups <- all_groups %>% topo_calc_fn()
-
 ```
+
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("temp_",ls())])
+gc()
+```
+
 
 ### Example group and topography
 
 ```{r}
 plt_grp_fn <- function(x){
-  temp_dta <- all_groups %>% 
+  temp_dta <- all_groups_topo %>% 
     dplyr::filter(group == "Openings") %>% 
     dplyr::slice_head(n = 1)
   return(
@@ -714,5 +860,17 @@ plt_grp_fn <- function(x){
 
 c(1:length(vars)) %>%
   purrr::map(plt_grp_fn)
+```
+
+## Save Data
+
+```{r}
+if(overwrite_it == FALSE){
+  print("Proceeding to next section without processing or overwriting data...")
+}else{
+  # write data
+  sf::st_write(all_groups_topo, "../data/all_groups_topo.gpkg", append = FALSE)
+  stars::write_stars(topo, "../data/topo.tif", append = FALSE)
+}
 ```
 
