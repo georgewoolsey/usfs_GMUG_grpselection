@@ -388,7 +388,7 @@ gc()
 
 Download NAIP Imagery from [this respository](https://datagateway.nrcs.usda.gov/GDGHome_DirectDownLoad.aspx)
 
-```{r}
+```{r, eval=TRUE}
 tifs <- list.files("../data/naip/", pattern = "\\.tif$", full.names = TRUE)
 naip_st <- stars::read_stars(tifs[1]) 
 # plot(naip_st)
@@ -461,39 +461,13 @@ remove(list = ls()[grep("temp_",ls())])
 gc()
 ```
 
-```{r, include = FALSE, eval=FALSE}
-ggplot() +
-      stars::geom_stars(
-        data = naip_rgb[]
-      ) +
-      scale_fill_identity(na.value = "transparent") + # !!! don't take this out or RGB plot will kill your computer
-      # geom_sf(data = rx_fire %>%
-      #         dplyr::filter(unit == my_unit) %>%
-      #         sf::st_transform(crs = sf::st_crs(naip_st))
-      #     , alpha = 0
-      #     , lwd = 1.5
-      #     , color = "orangered"
-      # ) +
-      xlab("") +
-      ylab("") +
-      scale_x_continuous(expand = c(0, 0)) +
-      scale_y_continuous(expand = c(0, 0)) +
-      theme_bw() +
-      theme(
-        legend.position = "none"
-        , axis.text = element_text(size = 8)
-        , panel.border = element_blank()
-      )
-
-```
-
 ## Treatment Area Aerial View
 
 ### Aerial View - Topography
 
 Define topography map and basemap.
 
-```{r basemap_def}
+```{r basemap_def, eval=TRUE}
 # on the fly view without setting up basemap
 topo_plot <- elev_mat %>%
   rayshader::sphere_shade(sunangle = 78, texture = "desert") %>%
@@ -504,8 +478,8 @@ topo_plot <- elev_mat %>%
       , heightmap = elev_mat
       , data_column_fill = NULL
       , palette = "transparent"
-      , linecolor = "black"
-      , linewidth = 3
+      , linecolor = "white"
+      , linewidth = 5
     )
   ) 
 # define basemap for going with rgb
@@ -529,7 +503,7 @@ basemap <- elev_mat %>%
 
 Plot topography map.
 
-```{r topo_plot}
+```{r topo_plot, eval=TRUE}
 # plot
 topo_plot %>% 
   # rayshader::plot_map()
@@ -544,7 +518,7 @@ topo_plot %>%
   )
 ```
 
-```{r topo_snapshot, echo = FALSE, warning = FALSE}
+```{r topo_snapshot, echo = FALSE, warning = FALSE, eval=TRUE}
 Sys.sleep(0.2)
 rayshader::render_compass(position = "W", compass_radius = 50)
 rayshader::render_snapshot()
@@ -562,7 +536,7 @@ gc()
 
 Define feature map.
 
-```{r feature_map_def}
+```{r feature_map_def, eval=TRUE}
 # overlay rgb
 feature_map <- basemap %>% 
   rayshader::add_overlay(
@@ -576,15 +550,15 @@ feature_map <- basemap %>%
       , heightmap = elev_mat
       , data_column_fill = NULL
       , palette = "transparent"
-      , linecolor = "black"
-      , linewidth = 3
+      , linecolor = "white"
+      , linewidth = 5
     )
   )
 ```
 
 Plot feature map.
 
-```{r feature_map_plot}
+```{r feature_map_plot, eval=TRUE}
 feature_map %>% 
   # rayshader::plot_map()
   rayshader::plot_3d(
@@ -599,7 +573,7 @@ feature_map %>%
 ```
 
 
-```{r feature_map_snapshot, echo = FALSE, warning = FALSE}
+```{r feature_map_snapshot, echo = FALSE, warning = FALSE, eval=TRUE}
 Sys.sleep(0.2)
 # add compass
 rayshader::render_compass(position = "W", compass_radius = 50)
@@ -613,7 +587,7 @@ remove(list = ls()[grep("temp_",ls())])
 gc()
 ```
 
-## Aspect and HLI
+## Aspect and HLI{#hli}
 
 Aspect of a slope (the direction or azimuth that a slope faces) strongly influences potential direct incident radiation and temperature. Untransformed, aspect is a poor variable for quantitative analysis, since 1° is adjacent to 360° – the numbers are very different even though the aspect is about the same. The following equation for Heat Load Index (HLI) rescales aspect to a scale of zero to one, with zero being the coolest slope (northeast) and one being the warmest slope (southwest). HLI is a proxy for aspect-driven solar heating.
 
@@ -631,8 +605,8 @@ $$
 $$
 
 ```{r}
-if(file.exists("../data/topo.tif") == TRUE & overwrite_it == FALSE){
-  topo <- stars::read_stars("../data/topo.tif")
+if(file.exists("../data/topo.RDS") == TRUE & overwrite_it == FALSE){
+  topo <- readRDS("../data/topo.RDS")
 }else{
 # extract latitude degrees from stars object
 lats <- sf::st_coordinates(elev_small) %>%
@@ -690,7 +664,7 @@ gc()
 
 ### Topography maps
 
-```{r}
+```{r, eval=TRUE}
 # map
 vars <- c(
   "elev"
@@ -765,6 +739,8 @@ c(1:length(vars)) %>%
 ```
 
 ## Attach topography and HLI to groups
+
+Each group will be assigned the median value of HLI within the group boundary.
 
 ```{r}
 if(file.exists("../data/all_groups_topo.gpkg") == TRUE & overwrite_it == FALSE){
@@ -870,7 +846,9 @@ if(overwrite_it == FALSE){
 }else{
   # write data
   sf::st_write(all_groups_topo, "../data/all_groups_topo.gpkg", append = FALSE)
+  sf::st_write(units, "../data/units.gpkg", append = FALSE)
   stars::write_stars(topo, "../data/topo.tif", append = FALSE)
+  saveRDS(topo, "../data/topo.RDS", compress = TRUE)
 }
 ```
 
