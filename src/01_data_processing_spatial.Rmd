@@ -36,19 +36,8 @@ knitr::opts_chunk$set(
 my_color_pal_qual <- function(n) viridis::turbo(n = n * 4)[which(seq(1,n * 4,1) %% 4 == 0)]
 ```
 
-```{r}
-# turn off the s2 processing 
-## https://stackoverflow.com/questions/68478179/how-to-resolve-spherical-geometry-failures-when-joining-spatial-data
-sf::sf_use_s2(FALSE)
-
-# set crs
-my_crs <- 5070 # EPSG:5070 = NAD83/Conus Albers (units = meters); EPSG:4326 = WGS 84 (units = dd); EPSG:4269 = NAD83 (units = dd)
-```
-
-
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
 ## Overwrite Data Switch
-
-```{r, warning=F, message=F, results='hide', fig.width = 10, fig.height = 6}
 #######################################################
 #######################################################
 # TURN ON/OFF DATA OVERWRITE
@@ -59,6 +48,15 @@ my_crs <- 5070 # EPSG:5070 = NAD83/Conus Albers (units = meters); EPSG:4326 = WG
 overwrite_it <- FALSE
 ```
 
+
+```{r}
+# turn off the s2 processing 
+## https://stackoverflow.com/questions/68478179/how-to-resolve-spherical-geometry-failures-when-joining-spatial-data
+sf::sf_use_s2(FALSE)
+
+# set crs
+my_crs <- 5070 # EPSG:5070 = NAD83/Conus Albers (units = meters); EPSG:4326 = WGS 84 (units = dd); EPSG:4269 = NAD83 (units = dd)
+```
 
 ## National Forest Management data download
 
@@ -335,7 +333,7 @@ all_groups %>% sf::st_set_geometry(NULL) %>%
   xlab("# Groups") +
   ylab("Treatment Unit Number") +
   scale_x_continuous(labels = scales::comma) +
-  scale_fill_viridis_d(option = "inferno", direction = -1) +
+  scale_fill_manual(values = c("gray80", "black")) +
   theme_bw() +
   theme(
     legend.position = "top"
