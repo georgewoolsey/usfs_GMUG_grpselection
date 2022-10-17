@@ -224,7 +224,7 @@ all_groups_topo_fnl <- all_groups_topo %>%
 sf::st_write(all_groups_topo_fnl, "../data/all_groups_topo_fnl.gpkg", append = FALSE)
 ```
 
-## HLI Quartiles by treatment type
+### HLI Quartiles by treatment type
 
 ```{r}
 all_groups_topo_fnl %>% 
@@ -254,7 +254,83 @@ ggplot(.) +
   )
 ```
 
-There is a difference in the HIL of cool and medium cool groups across the opening and reserve treatments.
+
+There is a difference in the mean HLI for the cool and medium cool groups across the opening and reserve treatments.
+
+### HLI Quartiles overall
+
+```{r}
+temp_dta <- all_groups_topo_fnl %>% 
+  sf::st_set_geometry(NULL) %>% 
+  dplyr::group_by(hli_overall_qrtl) %>% 
+  dplyr::summarise(
+    mean_hli = mean(hli, na.rm = T)     
+    , n = n()
+  )  %>% 
+  dplyr::mutate(nlab = paste0("n=",n))
+ggplot(temp_dta) + 
+  geom_col(mapping = aes(y = mean_hli, x = hli_overall_qrtl), fill = "navy", width = 0.7) +
+  geom_text(
+    aes(x = hli_overall_qrtl, y = mean_hli, label = scales::comma(mean_hli, accuracy = .01))
+    , color = "black", size = 4
+    , position = position_dodge(0.9)
+    , vjust = -0.7
+  ) +
+  geom_text(
+    aes(x = hli_overall_qrtl, y = mean_hli, label = nlab)
+    , color = "black", size = 2.5
+    , position = position_dodge(0.9)
+    , vjust = -0.1
+  ) +
+  labs(
+      title = "Mean HLI of Groups by treatement for cool-warm sites"
+    ) +
+  xlab("Cool-Warm Site") +
+  ylab("Mean HLI") +
+  scale_fill_manual(values = c("gray80", "black")) +
+  theme_bw() +
+  theme(
+    legend.position = "none"
+  )
+```
+
+### Counts by cool-warm and treatment group
+
+```{r}
+all_groups_topo_fnl %>% 
+  sf::st_set_geometry(NULL) %>% 
+  dplyr::group_by(group, hli_overall_qrtl) %>% 
+  dplyr::summarise(n = n()) %>% 
+ggplot(.) +
+  geom_bar(aes(x = hli_overall_qrtl, y = n, fill = group, label = n)
+    , stat = "identity", width = 0.7) +
+  geom_text(aes(x = hli_overall_qrtl, y = n, fill = group, label = n)
+    , size = 4, position = position_stack(vjust = 0.5), color = "white") +
+  geom_text(data = temp_dta
+    , aes(x = hli_overall_qrtl, y = n, label = n)
+    , color = "black", size = 5
+    , position = position_dodge(0.9)
+    , vjust = -0.2
+  ) +
+  labs(
+      title = "Count of treatment groups for cool-warm sites"
+    ) +
+  xlab("Cool-Warm Site") +
+  ylab("Count Groups") +
+  scale_fill_manual(values = c("gray80", "black")) +
+  theme_bw() +
+  theme(
+    legend.position = "top"
+    , legend.title = element_blank()
+  )
+```
+
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+remove(list = ls()[grep("temp_",ls())])
+gc()
+```
+
 
 ## Map Cool and Warm Sites
 

@@ -29,4 +29,6 @@ spatial-groups-and-hli
 summary-of-groups-and-hli
 quartiles-of-hli
 hli-quartiles-by-treatment-type
+hli-quartiles-overall
+counts-by-cool-warm-and-treatment-group
 map-cool-and-warm-sites

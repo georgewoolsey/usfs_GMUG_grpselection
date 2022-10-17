@@ -23,7 +23,7 @@
 <meta name="author" content="George Woolsey" />
 
 
-<meta name="date" content="2022-10-16" />
+<meta name="date" content="2022-10-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -211,9 +211,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis.html#set-up-base-map" id="toc-set-up-base-map"><span class="toc-section-number">3.2</span> Set up base map<span></span></a></li>
 <li><a href="analysis.html#spatial-groups-and-hli" id="toc-spatial-groups-and-hli"><span class="toc-section-number">3.3</span> Spatial groups and HLI<span></span></a></li>
 <li><a href="analysis.html#summary-of-groups-and-hli" id="toc-summary-of-groups-and-hli"><span class="toc-section-number">3.4</span> Summary of groups and HLI<span></span></a></li>
-<li><a href="analysis.html#quartiles-of-hli" id="toc-quartiles-of-hli"><span class="toc-section-number">3.5</span> Quartiles of HLI<span></span></a></li>
-<li><a href="analysis.html#hli-quartiles-by-treatment-type" id="toc-hli-quartiles-by-treatment-type"><span class="toc-section-number">3.6</span> HLI Quartiles by treatment type<span></span></a></li>
-<li><a href="analysis.html#map-cool-and-warm-sites" id="toc-map-cool-and-warm-sites"><span class="toc-section-number">3.7</span> Map Cool and Warm Sites<span></span></a></li>
+<li><a href="analysis.html#quartiles-of-hli" id="toc-quartiles-of-hli"><span class="toc-section-number">3.5</span> Quartiles of HLI<span></span></a>
+<ul>
+<li><a href="analysis.html#hli-quartiles-by-treatment-type" id="toc-hli-quartiles-by-treatment-type"><span class="toc-section-number">3.5.1</span> HLI Quartiles by treatment type<span></span></a></li>
+<li><a href="analysis.html#hli-quartiles-overall" id="toc-hli-quartiles-overall"><span class="toc-section-number">3.5.2</span> HLI Quartiles overall<span></span></a></li>
+<li><a href="analysis.html#counts-by-cool-warm-and-treatment-group" id="toc-counts-by-cool-warm-and-treatment-group"><span class="toc-section-number">3.5.3</span> Counts by cool-warm and treatment group<span></span></a></li>
+</ul></li>
+<li><a href="analysis.html#map-cool-and-warm-sites" id="toc-map-cool-and-warm-sites"><span class="toc-section-number">3.6</span> Map Cool and Warm Sites<span></span></a></li>
 </ul></li>
 </ul>
 
@@ -488,9 +492,8 @@ Reserves
 <span id="cb29-38"><a href="analysis.html#cb29-38" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_make_valid</span>()</span>
 <span id="cb29-39"><a href="analysis.html#cb29-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-40"><a href="analysis.html#cb29-40" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(all_groups_topo_fnl, <span class="st">&quot;../data/all_groups_topo_fnl.gpkg&quot;</span>, <span class="at">append =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-</div>
-<div id="hli-quartiles-by-treatment-type" class="section level2 hasAnchor" number="3.6">
-<h2><span class="header-section-number">3.6</span> HLI Quartiles by treatment type<a href="analysis.html#hli-quartiles-by-treatment-type" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="hli-quartiles-by-treatment-type" class="section level3 hasAnchor" number="3.5.1">
+<h3><span class="header-section-number">3.5.1</span> HLI Quartiles by treatment type<a href="analysis.html#hli-quartiles-by-treatment-type" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="analysis.html#cb30-1" aria-hidden="true" tabindex="-1"></a>all_groups_topo_fnl <span class="sc">%&gt;%</span> </span>
 <span id="cb30-2"><a href="analysis.html#cb30-2" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb30-3"><a href="analysis.html#cb30-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(group, hli_group_qrtl) <span class="sc">%&gt;%</span> </span>
@@ -517,40 +520,107 @@ Reserves
 <span id="cb30-24"><a href="analysis.html#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
 <span id="cb30-25"><a href="analysis.html#cb30-25" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-36-1.png" width="960" /></p>
-<p>There is a difference in the HIL of cool and medium cool groups across the opening and reserve treatments.</p>
+<p>There is a difference in the mean HLI for the cool and medium cool groups across the opening and reserve treatments.</p>
 </div>
-<div id="map-cool-and-warm-sites" class="section level2 hasAnchor" number="3.7">
-<h2><span class="header-section-number">3.7</span> Map Cool and Warm Sites<a href="analysis.html#map-cool-and-warm-sites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="analysis.html#cb31-1" aria-hidden="true" tabindex="-1"></a>p_hli_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb31-2"><a href="analysis.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb31-3"><a href="analysis.html#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
-<span id="cb31-4"><a href="analysis.html#cb31-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> units</span>
-<span id="cb31-5"><a href="analysis.html#cb31-5" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="fl">0.8</span></span>
-<span id="cb31-6"><a href="analysis.html#cb31-6" aria-hidden="true" tabindex="-1"></a>      , <span class="at">alpha =</span> <span class="dv">0</span></span>
-<span id="cb31-7"><a href="analysis.html#cb31-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">color =</span> <span class="st">&quot;black&quot;</span> </span>
-<span id="cb31-8"><a href="analysis.html#cb31-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb31-9"><a href="analysis.html#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
-<span id="cb31-10"><a href="analysis.html#cb31-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> all_groups_topo_fnl <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(group <span class="sc">==</span> x)</span>
-<span id="cb31-11"><a href="analysis.html#cb31-11" aria-hidden="true" tabindex="-1"></a>      , <span class="fu">aes</span>(<span class="at">fill =</span> hli_overall_qrtl)</span>
-<span id="cb31-12"><a href="analysis.html#cb31-12" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="dv">0</span></span>
-<span id="cb31-13"><a href="analysis.html#cb31-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb31-14"><a href="analysis.html#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;turbo&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
-<span id="cb31-15"><a href="analysis.html#cb31-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
-<span id="cb31-16"><a href="analysis.html#cb31-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">paste</span>(x, <span class="st">&quot;- Heat Load Index&quot;</span>)</span>
-<span id="cb31-17"><a href="analysis.html#cb31-17" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> <span class="st">&quot;harvest treatment units in black&quot;</span></span>
-<span id="cb31-18"><a href="analysis.html#cb31-18" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb31-19"><a href="analysis.html#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb31-20"><a href="analysis.html#cb31-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
-<span id="cb31-21"><a href="analysis.html#cb31-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span></span>
-<span id="cb31-22"><a href="analysis.html#cb31-22" aria-hidden="true" tabindex="-1"></a>      , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb31-23"><a href="analysis.html#cb31-23" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb31-24"><a href="analysis.html#cb31-24" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb31-25"><a href="analysis.html#cb31-25" aria-hidden="true" tabindex="-1"></a>      , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb31-26"><a href="analysis.html#cb31-26" aria-hidden="true" tabindex="-1"></a>    ) </span>
-<span id="cb31-27"><a href="analysis.html#cb31-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb31-28"><a href="analysis.html#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">unique</span>(all_groups_topo_fnl<span class="sc">$</span>group)) <span class="sc">%&gt;%</span> </span>
-<span id="cb31-29"><a href="analysis.html#cb31-29" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(p_hli_fn)</span></code></pre></div>
-<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-37-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-37-2.png" width="960" /></p>
+<div id="hli-quartiles-overall" class="section level3 hasAnchor" number="3.5.2">
+<h3><span class="header-section-number">3.5.2</span> HLI Quartiles overall<a href="analysis.html#hli-quartiles-overall" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="analysis.html#cb31-1" aria-hidden="true" tabindex="-1"></a>temp_dta <span class="ot">&lt;-</span> all_groups_topo_fnl <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="analysis.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="analysis.html#cb31-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(hli_overall_qrtl) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-4"><a href="analysis.html#cb31-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb31-5"><a href="analysis.html#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_hli =</span> <span class="fu">mean</span>(hli, <span class="at">na.rm =</span> T)     </span>
+<span id="cb31-6"><a href="analysis.html#cb31-6" aria-hidden="true" tabindex="-1"></a>    , <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb31-7"><a href="analysis.html#cb31-7" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span> </span>
+<span id="cb31-8"><a href="analysis.html#cb31-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">nlab =</span> <span class="fu">paste0</span>(<span class="st">&quot;n=&quot;</span>,n))</span>
+<span id="cb31-9"><a href="analysis.html#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(temp_dta) <span class="sc">+</span> </span>
+<span id="cb31-10"><a href="analysis.html#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> mean_hli, <span class="at">x =</span> hli_overall_qrtl), <span class="at">fill =</span> <span class="st">&quot;navy&quot;</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="analysis.html#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb31-12"><a href="analysis.html#cb31-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> hli_overall_qrtl, <span class="at">y =</span> mean_hli, <span class="at">label =</span> scales<span class="sc">::</span><span class="fu">comma</span>(mean_hli, <span class="at">accuracy =</span> .<span class="dv">01</span>))</span>
+<span id="cb31-13"><a href="analysis.html#cb31-13" aria-hidden="true" tabindex="-1"></a>    , <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">4</span></span>
+<span id="cb31-14"><a href="analysis.html#cb31-14" aria-hidden="true" tabindex="-1"></a>    , <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.9</span>)</span>
+<span id="cb31-15"><a href="analysis.html#cb31-15" aria-hidden="true" tabindex="-1"></a>    , <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.7</span></span>
+<span id="cb31-16"><a href="analysis.html#cb31-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-17"><a href="analysis.html#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb31-18"><a href="analysis.html#cb31-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> hli_overall_qrtl, <span class="at">y =</span> mean_hli, <span class="at">label =</span> nlab)</span>
+<span id="cb31-19"><a href="analysis.html#cb31-19" aria-hidden="true" tabindex="-1"></a>    , <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="fl">2.5</span></span>
+<span id="cb31-20"><a href="analysis.html#cb31-20" aria-hidden="true" tabindex="-1"></a>    , <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.9</span>)</span>
+<span id="cb31-21"><a href="analysis.html#cb31-21" aria-hidden="true" tabindex="-1"></a>    , <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.1</span></span>
+<span id="cb31-22"><a href="analysis.html#cb31-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-23"><a href="analysis.html#cb31-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb31-24"><a href="analysis.html#cb31-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Mean HLI of Groups by treatement for cool-warm sites&quot;</span></span>
+<span id="cb31-25"><a href="analysis.html#cb31-25" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb31-26"><a href="analysis.html#cb31-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Cool-Warm Site&quot;</span>) <span class="sc">+</span></span>
+<span id="cb31-27"><a href="analysis.html#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Mean HLI&quot;</span>) <span class="sc">+</span></span>
+<span id="cb31-28"><a href="analysis.html#cb31-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb31-29"><a href="analysis.html#cb31-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb31-30"><a href="analysis.html#cb31-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb31-31"><a href="analysis.html#cb31-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
+<span id="cb31-32"><a href="analysis.html#cb31-32" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-37-1.png" width="960" /></p>
+</div>
+<div id="counts-by-cool-warm-and-treatment-group" class="section level3 hasAnchor" number="3.5.3">
+<h3><span class="header-section-number">3.5.3</span> Counts by cool-warm and treatment group<a href="analysis.html#counts-by-cool-warm-and-treatment-group" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="analysis.html#cb32-1" aria-hidden="true" tabindex="-1"></a>all_groups_topo_fnl <span class="sc">%&gt;%</span> </span>
+<span id="cb32-2"><a href="analysis.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-3"><a href="analysis.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(group, hli_overall_qrtl) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-4"><a href="analysis.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-5"><a href="analysis.html#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(.) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="analysis.html#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> hli_overall_qrtl, <span class="at">y =</span> n, <span class="at">fill =</span> group, <span class="at">label =</span> n)</span>
+<span id="cb32-7"><a href="analysis.html#cb32-7" aria-hidden="true" tabindex="-1"></a>    , <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="analysis.html#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> hli_overall_qrtl, <span class="at">y =</span> n, <span class="at">fill =</span> group, <span class="at">label =</span> n)</span>
+<span id="cb32-9"><a href="analysis.html#cb32-9" aria-hidden="true" tabindex="-1"></a>    , <span class="at">size =</span> <span class="dv">4</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="analysis.html#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> temp_dta</span>
+<span id="cb32-11"><a href="analysis.html#cb32-11" aria-hidden="true" tabindex="-1"></a>    , <span class="fu">aes</span>(<span class="at">x =</span> hli_overall_qrtl, <span class="at">y =</span> n, <span class="at">label =</span> n)</span>
+<span id="cb32-12"><a href="analysis.html#cb32-12" aria-hidden="true" tabindex="-1"></a>    , <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">5</span></span>
+<span id="cb32-13"><a href="analysis.html#cb32-13" aria-hidden="true" tabindex="-1"></a>    , <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.9</span>)</span>
+<span id="cb32-14"><a href="analysis.html#cb32-14" aria-hidden="true" tabindex="-1"></a>    , <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.2</span></span>
+<span id="cb32-15"><a href="analysis.html#cb32-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-16"><a href="analysis.html#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb32-17"><a href="analysis.html#cb32-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Count of treatment groups for cool-warm sites&quot;</span></span>
+<span id="cb32-18"><a href="analysis.html#cb32-18" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb32-19"><a href="analysis.html#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Cool-Warm Site&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-20"><a href="analysis.html#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Count Groups&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-21"><a href="analysis.html#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb32-22"><a href="analysis.html#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb32-23"><a href="analysis.html#cb32-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb32-24"><a href="analysis.html#cb32-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span></span>
+<span id="cb32-25"><a href="analysis.html#cb32-25" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb32-26"><a href="analysis.html#cb32-26" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-38-1.png" width="960" /></p>
+</div>
+</div>
+<div id="map-cool-and-warm-sites" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Map Cool and Warm Sites<a href="analysis.html#map-cool-and-warm-sites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="analysis.html#cb33-1" aria-hidden="true" tabindex="-1"></a>p_hli_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb33-2"><a href="analysis.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb33-3"><a href="analysis.html#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
+<span id="cb33-4"><a href="analysis.html#cb33-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> units</span>
+<span id="cb33-5"><a href="analysis.html#cb33-5" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="fl">0.8</span></span>
+<span id="cb33-6"><a href="analysis.html#cb33-6" aria-hidden="true" tabindex="-1"></a>      , <span class="at">alpha =</span> <span class="dv">0</span></span>
+<span id="cb33-7"><a href="analysis.html#cb33-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">color =</span> <span class="st">&quot;black&quot;</span> </span>
+<span id="cb33-8"><a href="analysis.html#cb33-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="analysis.html#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
+<span id="cb33-10"><a href="analysis.html#cb33-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> all_groups_topo_fnl <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(group <span class="sc">==</span> x)</span>
+<span id="cb33-11"><a href="analysis.html#cb33-11" aria-hidden="true" tabindex="-1"></a>      , <span class="fu">aes</span>(<span class="at">fill =</span> hli_overall_qrtl)</span>
+<span id="cb33-12"><a href="analysis.html#cb33-12" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="dv">0</span></span>
+<span id="cb33-13"><a href="analysis.html#cb33-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb33-14"><a href="analysis.html#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;turbo&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb33-15"><a href="analysis.html#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb33-16"><a href="analysis.html#cb33-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">paste</span>(x, <span class="st">&quot;- Heat Load Index&quot;</span>)</span>
+<span id="cb33-17"><a href="analysis.html#cb33-17" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> <span class="st">&quot;harvest treatment units in black&quot;</span></span>
+<span id="cb33-18"><a href="analysis.html#cb33-18" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb33-19"><a href="analysis.html#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb33-20"><a href="analysis.html#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb33-21"><a href="analysis.html#cb33-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span></span>
+<span id="cb33-22"><a href="analysis.html#cb33-22" aria-hidden="true" tabindex="-1"></a>      , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb33-23"><a href="analysis.html#cb33-23" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb33-24"><a href="analysis.html#cb33-24" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb33-25"><a href="analysis.html#cb33-25" aria-hidden="true" tabindex="-1"></a>      , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb33-26"><a href="analysis.html#cb33-26" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb33-27"><a href="analysis.html#cb33-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-28"><a href="analysis.html#cb33-28" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">unique</span>(all_groups_topo_fnl<span class="sc">$</span>group)) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-29"><a href="analysis.html#cb33-29" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(p_hli_fn)</span></code></pre></div>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-40-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-40-2.png" width="960" /></p>
 
 </div>
 </div>
