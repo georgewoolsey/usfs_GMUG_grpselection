@@ -1,0 +1,12 @@
+book_filename: "usfs_GMUG_grpselection"
+output_dir: "../docs"
+language:
+  ui:
+    chapter_name: "Chapter "
+delete_merged_file: true
+# rmd_subdir: ["src/"]
+# rmd_files: ["index.Rmd"
+#   , "01_data_processing_spatial.Rmd"
+#   , "02_data_processing_combine.Rmd"
+#   , "03_analysis_harvest_npp.Rmd"
+# ]
