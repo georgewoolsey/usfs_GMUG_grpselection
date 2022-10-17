@@ -749,10 +749,18 @@ if(file.exists("../data/all_groups_topo.gpkg") == TRUE & overwrite_it == FALSE){
   # functions to aggregate raster data to vector data
   topo_calc_fn <- function(dta){
     # calculate median aspect and slope by vector
-    temp_slope <- aggregate(topo %>% dplyr::select(slope_rad), dta, median) 
-    temp_aspect <- aggregate(topo %>% dplyr::select(aspect_rad), dta, median) 
-    temp_folded_aspect <- aggregate(topo %>% dplyr::select(folded_aspect_rad), dta, median)
-    temp_hli <- aggregate(topo %>% dplyr::select(hli), dta, median)
+    temp_slope <- aggregate(topo %>% dplyr::select(slope_rad), dta, median)  %>% 
+      dplyr::as_tibble() %>%
+      dplyr::select(slope_rad)
+    temp_aspect <- aggregate(topo %>% dplyr::select(aspect_rad), dta, median)  %>% 
+      dplyr::as_tibble() %>%
+      dplyr::select(aspect_rad)
+    temp_folded_aspect <- aggregate(topo %>% dplyr::select(folded_aspect_rad), dta, median) %>% 
+      dplyr::as_tibble() %>%
+      dplyr::select(folded_aspect_rad)
+    temp_hli <- aggregate(topo %>% dplyr::select(hli), dta, median) %>% 
+      dplyr::as_tibble() %>%
+      dplyr::select(hli)
     # vector center
     temp_center <- sf::st_centroid(dta)$geometry %>% 
       sf::st_transform(crs = 4326) %>% 

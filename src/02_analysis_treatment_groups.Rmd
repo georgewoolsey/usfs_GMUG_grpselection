@@ -218,7 +218,9 @@ all_groups_topo_fnl <- all_groups_topo %>%
         , ordered = TRUE
         , levels = c("Coolest", "Med. Cool", "Med. Warm", "Warmest")
       )
-  )
+  ) %>% 
+  sf::st_make_valid()
+
 sf::st_write(all_groups_topo_fnl, "../data/all_groups_topo_fnl.gpkg", append = FALSE)
 ```
 
