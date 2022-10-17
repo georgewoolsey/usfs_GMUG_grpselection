@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Analysis of HLI | GMUG National Forests Group Selection Study</title>
+  <title>Chapter 3 Analysis of HLI | GMUG National Forests Group Selection Study</title>
   <meta name="description" content="Using the bookdown package to write a book for GMUG group selection study planning. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Analysis of HLI | GMUG National Forests Group Selection Study" />
+  <meta property="og:title" content="Chapter 3 Analysis of HLI | GMUG National Forests Group Selection Study" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Using the bookdown package to write a book for GMUG group selection study planning. The output format for this example is bookdown::gitbook." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Analysis of HLI | GMUG National Forests Group Selection Study" />
+  <meta name="twitter:title" content="Chapter 3 Analysis of HLI | GMUG National Forests Group Selection Study" />
   
   <meta name="twitter:description" content="Using the bookdown package to write a book for GMUG group selection study planning. The output format for this example is bookdown::gitbook." />
   
@@ -233,7 +233,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="analysis" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">3</span> Analysis of HLI<a href="analysis.html#analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<h1><span class="header-section-number">Chapter 3</span> Analysis of HLI<a href="analysis.html#analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="analysis.html#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># turn off the s2 processing </span></span>
 <span id="cb24-2"><a href="analysis.html#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="do">## https://stackoverflow.com/questions/68478179/how-to-resolve-spherical-geometry-failures-when-joining-spatial-data</span></span>
 <span id="cb24-3"><a href="analysis.html#cb24-3" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">sf_use_s2</span>(<span class="cn">FALSE</span>)</span></code></pre></div>
@@ -336,7 +336,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb27-16"><a href="analysis.html#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
 <span id="cb27-17"><a href="analysis.html#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Reserves = black, Openings = white&quot;</span></span>
 <span id="cb27-18"><a href="analysis.html#cb27-18" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-33-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-33-1.png" width="960" /></p>
 </div>
 <div id="summary-of-groups-and-hli" class="section level2 hasAnchor" number="3.4">
 <h2><span class="header-section-number">3.4</span> Summary of groups and HLI<a href="analysis.html#summary-of-groups-and-hli" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -516,7 +516,7 @@ Reserves
 <span id="cb30-23"><a href="analysis.html#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb30-24"><a href="analysis.html#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
 <span id="cb30-25"><a href="analysis.html#cb30-25" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-36-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-36-1.png" width="960" /></p>
 <p>There is a difference in the HIL of cool and medium cool groups across the opening and reserve treatments.</p>
 </div>
 <div id="map-cool-and-warm-sites" class="section level2 hasAnchor" number="3.7">
@@ -550,7 +550,7 @@ Reserves
 <span id="cb31-27"><a href="analysis.html#cb31-27" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb31-28"><a href="analysis.html#cb31-28" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">unique</span>(all_groups_topo_fnl<span class="sc">$</span>group)) <span class="sc">%&gt;%</span> </span>
 <span id="cb31-29"><a href="analysis.html#cb31-29" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(p_hli_fn)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-37-1.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-37-2.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-37-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-37-2.png" width="960" /></p>
 
 </div>
 </div>

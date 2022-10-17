@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2 Data Preparation | GMUG National Forests Group Selection Study</title>
+  <title>Chapter 2 Data Preparation | GMUG National Forests Group Selection Study</title>
   <meta name="description" content="Using the bookdown package to write a book for GMUG group selection study planning. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2 Data Preparation | GMUG National Forests Group Selection Study" />
+  <meta property="og:title" content="Chapter 2 Data Preparation | GMUG National Forests Group Selection Study" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Using the bookdown package to write a book for GMUG group selection study planning. The output format for this example is bookdown::gitbook." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2 Data Preparation | GMUG National Forests Group Selection Study" />
+  <meta name="twitter:title" content="Chapter 2 Data Preparation | GMUG National Forests Group Selection Study" />
   
   <meta name="twitter:description" content="Using the bookdown package to write a book for GMUG group selection study planning. The output format for this example is bookdown::gitbook." />
   
@@ -233,7 +233,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="data_prep" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">2</span> Data Preparation<a href="data_prep.html#data_prep" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<h1><span class="header-section-number">Chapter 2</span> Data Preparation<a href="data_prep.html#data_prep" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data_prep.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># turn off the s2 processing </span></span>
 <span id="cb1-2"><a href="data_prep.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## https://stackoverflow.com/questions/68478179/how-to-resolve-spherical-geometry-failures-when-joining-spatial-data</span></span>
 <span id="cb1-3"><a href="data_prep.html#cb1-3" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">sf_use_s2</span>(<span class="cn">FALSE</span>)</span>
@@ -460,7 +460,7 @@ Reserves
 <span id="cb8-20"><a href="data_prep.html#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb8-21"><a href="data_prep.html#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
 <span id="cb8-22"><a href="data_prep.html#cb8-22" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-11-1.png" width="960" /></p>
 </div>
 <div id="gmug-and-treatment-area-map" class="section level3 hasAnchor" number="2.3.3">
 <h3><span class="header-section-number">2.3.3</span> GMUG and treatment area map<a href="data_prep.html#gmug-and-treatment-area-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -485,7 +485,7 @@ Reserves
 <span id="cb9-19"><a href="data_prep.html#cb9-19" aria-hidden="true" tabindex="-1"></a>    , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
 <span id="cb9-20"><a href="data_prep.html#cb9-20" aria-hidden="true" tabindex="-1"></a>    , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
 <span id="cb9-21"><a href="data_prep.html#cb9-21" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-12-1.png" width="960" /></p>
 </div>
 <div id="treatment-units-map" class="section level3 hasAnchor" number="2.3.4">
 <h3><span class="header-section-number">2.3.4</span> Treatment units map<a href="data_prep.html#treatment-units-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -510,7 +510,7 @@ Reserves
 <span id="cb10-19"><a href="data_prep.html#cb10-19" aria-hidden="true" tabindex="-1"></a>    , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
 <span id="cb10-20"><a href="data_prep.html#cb10-20" aria-hidden="true" tabindex="-1"></a>    , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
 <span id="cb10-21"><a href="data_prep.html#cb10-21" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
 </div>
 <div id="treatment-units-and-group-map" class="section level3 hasAnchor" number="2.3.5">
 <h3><span class="header-section-number">2.3.5</span> Treatment units and group map<a href="data_prep.html#treatment-units-and-group-map" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -534,7 +534,7 @@ Reserves
 <span id="cb11-18"><a href="data_prep.html#cb11-18" aria-hidden="true" tabindex="-1"></a>    , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
 <span id="cb11-19"><a href="data_prep.html#cb11-19" aria-hidden="true" tabindex="-1"></a>    , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
 <span id="cb11-20"><a href="data_prep.html#cb11-20" aria-hidden="true" tabindex="-1"></a>  ) </span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-14-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-14-1.png" width="960" /></p>
 </div>
 <div id="treatment-units-summary-of-groups" class="section level3 hasAnchor" number="2.3.6">
 <h3><span class="header-section-number">2.3.6</span> Treatment Units Summary of Groups<a href="data_prep.html#treatment-units-summary-of-groups" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -569,7 +569,7 @@ Reserves
 <span id="cb12-29"><a href="data_prep.html#cb12-29" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
 <span id="cb12-30"><a href="data_prep.html#cb12-30" aria-hidden="true" tabindex="-1"></a>    , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">13</span>)</span>
 <span id="cb12-31"><a href="data_prep.html#cb12-31" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-15-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-15-1.png" width="960" /></p>
 </div>
 </div>
 <div id="load-elevation-data" class="section level2 hasAnchor" number="2.4">
@@ -721,7 +721,7 @@ Reserves
 <span id="cb16-10"><a href="data_prep.html#cb16-10" aria-hidden="true" tabindex="-1"></a>    , <span class="at">zoom =</span> <span class="dv">1</span></span>
 <span id="cb16-11"><a href="data_prep.html#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , windowsize = c(1000, 800)</span></span>
 <span id="cb16-12"><a href="data_prep.html#cb16-12" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="_main_files/figure-html/topo_snapshot-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/topo_snapshot-1.png" width="960" /></p>
 </div>
 <div id="aerial-view---rgb" class="section level3 hasAnchor" number="2.6.2">
 <h3><span class="header-section-number">2.6.2</span> Aerial View - RGB<a href="data_prep.html#aerial-view---rgb" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -755,7 +755,7 @@ Reserves
 <span id="cb18-9"><a href="data_prep.html#cb18-9" aria-hidden="true" tabindex="-1"></a>    , <span class="at">zoom =</span> <span class="dv">1</span></span>
 <span id="cb18-10"><a href="data_prep.html#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , windowsize = c(1000, 800)</span></span>
 <span id="cb18-11"><a href="data_prep.html#cb18-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="_main_files/figure-html/feature_map_snapshot-1.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/feature_map_snapshot-1.png" width="960" /></p>
 </div>
 </div>
 <div id="hli" class="section level2 hasAnchor" number="2.7">
@@ -891,7 +891,7 @@ where <span class="math inline">\(\theta\)</span> = aspect in degrees east of no
 <span id="cb20-69"><a href="data_prep.html#cb20-69" aria-hidden="true" tabindex="-1"></a><span class="co"># cowplot::plot_grid(plotlist =  plts, ncol = 2)</span></span>
 <span id="cb20-70"><a href="data_prep.html#cb20-70" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
 <span id="cb20-71"><a href="data_prep.html#cb20-71" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_fn)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-24-2.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-24-3.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-24-4.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-24-5.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-24-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-24-2.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-24-3.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-24-4.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-24-5.png" width="960" /></p>
 </div>
 </div>
 <div id="attach-topography-and-hli-to-groups" class="section level2 hasAnchor" number="2.8">
@@ -988,7 +988,7 @@ where <span class="math inline">\(\theta\)</span> = aspect in degrees east of no
 <span id="cb22-41"><a href="data_prep.html#cb22-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-42"><a href="data_prep.html#cb22-42" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(vars)) <span class="sc">%&gt;%</span></span>
 <span id="cb22-43"><a href="data_prep.html#cb22-43" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(plt_grp_fn)</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-27-2.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-27-3.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-27-4.png" width="960" /><img src="_main_files/figure-html/unnamed-chunk-27-5.png" width="960" /></p>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-27-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-27-2.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-27-3.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-27-4.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-27-5.png" width="960" /></p>
 </div>
 </div>
 <div id="save-data" class="section level2 hasAnchor" number="2.9">

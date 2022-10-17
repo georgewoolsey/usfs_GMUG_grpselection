@@ -1,5 +1,9 @@
 book_filename: "usfs_GMUG_grpselection"
 output_dir: "../docs"
+output: 
+  bookdown::gitbook:
+    includes:
+      in_header: header.html
 language:
   ui:
     chapter_name: "Chapter "
