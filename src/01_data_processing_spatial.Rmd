@@ -216,7 +216,7 @@ all_groups %>% sf::st_set_geometry(NULL) %>%
   ) +
   facet_grid(group~.) +
   scale_x_continuous(breaks = scales::extended_breaks(n=10), labels = scales::comma) +
-  scale_fill_viridis_d(option = "cividis", alpha = 0.8) +
+  scale_fill_manual(values = c("gray80", "black")) +
   xlab(latex2exp::TeX("area $m^2$")) +
   ylab("Density") +
   labs(
