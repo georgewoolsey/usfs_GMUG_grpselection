@@ -45,7 +45,7 @@ my_color_pal_qual <- function(n) viridis::turbo(n = n * 4)[which(seq(1,n * 4,1) 
 # WHICH TAKES A LONG TIME
 #######################################################
 #######################################################
-overwrite_it <- FALSE
+overwrite_it <- TRUE
 ```
 
 
@@ -127,7 +127,7 @@ shp_import_fn <- function(pth){
 }
 
 # group selection openings
-openings <- shp_import_fn("../data/Bald_all_groups.shp") %>% 
+openings <- shp_import_fn("../data/Bald_all_groups_rev.shp") %>% 
   dplyr::mutate(group = "Openings")
 
 # group selection reserve groups
