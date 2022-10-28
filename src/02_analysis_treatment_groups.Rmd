@@ -214,7 +214,7 @@ all_groups_topo_fnl <- all_groups_topo %>%
   ) %>% 
   dplyr::mutate(
     hli_overall_qrtl = factor(
-        hli_group_qrtl
+        hli_overall_qrtl
         , ordered = TRUE
         , levels = c("Coolest", "Med. Cool", "Med. Warm", "Warmest")
       )
@@ -331,7 +331,6 @@ remove(list = ls()[grep("temp_",ls())])
 gc()
 ```
 
-
 ## Map Cool and Warm Sites
 
 ```{r}
@@ -366,3 +365,68 @@ c(unique(all_groups_topo_fnl$group)) %>%
   purrr::map(p_hli_fn)
 ```
 
+## Characteristics of Cool-Warm Sites
+
+### Summary statistics
+
+```{r, include=FALSE, eval=FALSE}
+# vars to aggregate
+summary_vars <- c(
+  "hli"
+  , "area_m2"
+)
+# aggregate data to daily level
+# named list of functions
+summary_fns <- list(
+  mean = ~mean(.x, na.rm = TRUE)
+  # , median = ~median(.x, na.rm = TRUE)
+  , min = ~min(.x, na.rm = TRUE)
+  , max = ~max(.x, na.rm = TRUE)
+  # , N = ~sum(ifelse(is.na(.x), 0, 1))
+)
+
+all_groups_topo_fnl %>%
+  sf::st_set_geometry(NULL) %>%
+  dplyr::group_by(hli_overall_qrtl) %>%
+  dplyr::summarise(
+    dplyr::across(
+      tidyselect::all_of(summary_vars)
+      , summary_fns
+      , .names = "{.col}_{.fn}"
+    )
+  ) %>%
+  dplyr::ungroup() %>%
+  kableExtra::kable(
+    caption = "Summary statistics by group type"
+    # , col.names = c()
+    , digits = 2
+  ) %>% 
+  kableExtra::kable_styling(font_size = 12) %>% 
+  kableExtra::column_spec(1, bold = TRUE, width = "18em")
+  
+  
+ggplot(data = all_groups_topo_fnl) + 
+  geom_density(
+    mapping = aes(x = hli, fill = hli_overall_qrtl)
+    , color = NA
+  ) + 
+  facet_grid(hli_overall_qrtl~.) +
+  labs(
+      title = "Mean HLI of Groups by treatement for cool-warm sites"
+    ) +
+  xlab("HLI") +
+  ylab("Density") +
+  scale_x_continuous(breaks = scales::extended_breaks(n=10), limits = c(min(all_groups_topo$hli)*0.98, 1.001) ) +
+  scale_fill_viridis_d(option = "turbo", alpha = 0.9) +
+  labs(
+    title = "Heat Load Index distribution by cool-warm site type"
+  ) +
+  theme_bw() + 
+  theme(
+    legend.position = "top"
+    , legend.title = element_blank()
+    , axis.text.y = element_text(size = 7)
+    , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+    , panel.border = element_blank()
+  ) 
+```

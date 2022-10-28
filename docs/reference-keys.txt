@@ -31,3 +31,5 @@ hli-quartiles-by-treatment-type
 hli-quartiles-overall
 counts-by-cool-warm-and-treatment-group
 map-cool-and-warm-sites
+characteristics-of-cool-warm-sites
+summary-statistics

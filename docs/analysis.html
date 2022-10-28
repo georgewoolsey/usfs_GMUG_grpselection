@@ -23,7 +23,7 @@
 <meta name="author" content="George Woolsey" />
 
 
-<meta name="date" content="2022-10-21" />
+<meta name="date" content="2022-10-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -217,6 +217,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis.html#counts-by-cool-warm-and-treatment-group" id="toc-counts-by-cool-warm-and-treatment-group"><span class="toc-section-number">3.5.3</span> Counts by cool-warm and treatment group<span></span></a></li>
 </ul></li>
 <li><a href="analysis.html#map-cool-and-warm-sites" id="toc-map-cool-and-warm-sites"><span class="toc-section-number">3.6</span> Map Cool and Warm Sites<span></span></a></li>
+<li><a href="analysis.html#characteristics-of-cool-warm-sites" id="toc-characteristics-of-cool-warm-sites"><span class="toc-section-number">3.7</span> Characteristics of Cool-Warm Sites<span></span></a>
+<ul>
+<li><a href="analysis.html#summary-statistics" id="toc-summary-statistics"><span class="toc-section-number">3.7.1</span> Summary statistics<span></span></a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -483,7 +487,7 @@ Reserves
 <span id="cb28-30"><a href="analysis.html#cb28-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
 <span id="cb28-31"><a href="analysis.html#cb28-31" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
 <span id="cb28-32"><a href="analysis.html#cb28-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">hli_overall_qrtl =</span> <span class="fu">factor</span>(</span>
-<span id="cb28-33"><a href="analysis.html#cb28-33" aria-hidden="true" tabindex="-1"></a>        hli_group_qrtl</span>
+<span id="cb28-33"><a href="analysis.html#cb28-33" aria-hidden="true" tabindex="-1"></a>        hli_overall_qrtl</span>
 <span id="cb28-34"><a href="analysis.html#cb28-34" aria-hidden="true" tabindex="-1"></a>        , <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
 <span id="cb28-35"><a href="analysis.html#cb28-35" aria-hidden="true" tabindex="-1"></a>        , <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Coolest&quot;</span>, <span class="st">&quot;Med. Cool&quot;</span>, <span class="st">&quot;Med. Warm&quot;</span>, <span class="st">&quot;Warmest&quot;</span>)</span>
 <span id="cb28-36"><a href="analysis.html#cb28-36" aria-hidden="true" tabindex="-1"></a>      )</span>
@@ -620,7 +624,13 @@ Reserves
 <span id="cb32-28"><a href="analysis.html#cb32-28" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">unique</span>(all_groups_topo_fnl<span class="sc">$</span>group)) <span class="sc">%&gt;%</span> </span>
 <span id="cb32-29"><a href="analysis.html#cb32-29" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(p_hli_fn)</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-40-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-40-2.png" width="960" /></p>
+</div>
+<div id="characteristics-of-cool-warm-sites" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> Characteristics of Cool-Warm Sites<a href="analysis.html#characteristics-of-cool-warm-sites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="summary-statistics" class="section level3 hasAnchor" number="3.7.1">
+<h3><span class="header-section-number">3.7.1</span> Summary statistics<a href="analysis.html#summary-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 
+</div>
 </div>
 </div>
             </section>
