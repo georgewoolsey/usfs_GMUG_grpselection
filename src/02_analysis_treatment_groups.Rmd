@@ -333,7 +333,7 @@ gc()
 
 ## Map Cool and Warm Sites
 
-```{r}
+```{r, results=FALSE}
 p_hli_fn <- function(x){
   ggplot() + 
     geom_sf(
@@ -369,11 +369,15 @@ c(unique(all_groups_topo_fnl$group)) %>%
 
 ### Summary statistics
 
-```{r, include=FALSE, eval=FALSE}
+```{r}
 # vars to aggregate
-summary_vars <- c(
+vars_temp <- c(
   "hli"
   , "area_m2"
+)
+vars_lab_temp <- c(
+  "HLI"
+  , latex2exp::TeX("Area ($m^{2}$)")
 )
 # aggregate data to daily level
 # named list of functions
@@ -390,7 +394,7 @@ all_groups_topo_fnl %>%
   dplyr::group_by(hli_overall_qrtl) %>%
   dplyr::summarise(
     dplyr::across(
-      tidyselect::all_of(summary_vars)
+      tidyselect::all_of(vars_temp)
       , summary_fns
       , .names = "{.col}_{.fn}"
     )
@@ -398,35 +402,85 @@ all_groups_topo_fnl %>%
   dplyr::ungroup() %>%
   kableExtra::kable(
     caption = "Summary statistics by group type"
-    # , col.names = c()
+    , col.names = c(
+      ""
+      , "Mean HLI"
+      , "Min. HLI"
+      , "Max. HLI"
+      , "Mean Area m sq."
+      , "Min. Area m sq."
+      , "Max. Area m sq."
+      
+    )
     , digits = 2
   ) %>% 
   kableExtra::kable_styling(font_size = 12) %>% 
   kableExtra::column_spec(1, bold = TRUE, width = "18em")
-  
-  
-ggplot(data = all_groups_topo_fnl) + 
-  geom_density(
-    mapping = aes(x = hli, fill = hli_overall_qrtl)
-    , color = NA
-  ) + 
-  facet_grid(hli_overall_qrtl~.) +
-  labs(
-      title = "Mean HLI of Groups by treatement for cool-warm sites"
-    ) +
-  xlab("HLI") +
-  ylab("Density") +
-  scale_x_continuous(breaks = scales::extended_breaks(n=10), limits = c(min(all_groups_topo$hli)*0.98, 1.001) ) +
-  scale_fill_viridis_d(option = "turbo", alpha = 0.9) +
-  labs(
-    title = "Heat Load Index distribution by cool-warm site type"
-  ) +
-  theme_bw() + 
-  theme(
-    legend.position = "top"
-    , legend.title = element_blank()
-    , axis.text.y = element_text(size = 7)
-    , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
-    , panel.border = element_blank()
-  ) 
 ```
+
+### HLI Distribution
+
+```{r, results=FALSE}
+p_fn <- function(my_var) {
+  (
+    ggplot() + 
+      geom_density(data = all_groups_topo_fnl,
+        mapping = aes_string(x = my_var, fill = "hli_overall_qrtl")
+        , color = NA
+      ) + 
+      facet_grid(hli_overall_qrtl~.) +
+      scale_fill_viridis_d(option = "turbo", alpha = 0.9) +
+      scale_x_continuous(breaks = scales::extended_breaks(n=10)) +
+      xlab(vars_lab_temp[which(vars_temp == my_var)]) +
+      ylab("Density") +
+      labs(
+        title = vars_lab_temp[which(vars_temp == my_var)]
+        , subtitle = "distribution by cool-warm site type"
+      ) +
+      theme_bw() + 
+      theme(
+        legend.position = "top"
+        , legend.title = element_blank()
+        , axis.text.y = element_text(size = 7)
+        , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+        , panel.border = element_blank()
+      )
+  )
+}
+# call function
+vars_temp %>% 
+  purrr::map(p_fn) 
+```
+
+### Length:Width ratio of group selection shape
+
+```{r, eval=FALSE, include=FALSE}
+# get bbox output as data frame
+for (i in 1:nrow(all_groups_topo_fnl)){
+  dta_temp <- data.frame(
+    shape_id = all_groups_topo_fnl$shape_id[i]
+    , group = all_groups_topo_fnl$group[i]
+    , xmin = sf::st_bbox(all_groups_topo_fnl$geom[i])[1]
+    , xmax = sf::st_bbox(all_groups_topo_fnl$geom[i])[3]
+    , ymin = sf::st_bbox(all_groups_topo_fnl$geom[i])[2]
+    , ymax = sf::st_bbox(all_groups_topo_fnl$geom[i])[4]
+  )  
+  if(i==1){
+    dta_join_temp <- dta_temp
+  }else{
+    dta_join_temp <- rbind(dta_join_temp, dta_temp)
+  }
+  remove(dta_temp)
+}
+
+# join to main data
+all_groups_topo_fnl <- all_groups_topo_fnl %>%
+  dplyr::left_join(dta_join_temp, by=c("shape_id"="shape_id", "group"="group")) %>% 
+  dplyr::mutate(
+    xlength_m = xmax - xmin
+    , ylength_m = ymax - ymin
+    , length_width_ratio = ylength_m/xlength_m
+    , ns_ew_ratio = ylength_m/xlength_m
+  )
+```
+
