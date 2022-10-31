@@ -418,7 +418,7 @@ all_groups_topo_fnl %>%
   kableExtra::column_spec(1, bold = TRUE, width = "18em")
 ```
 
-### HLI Distribution
+### HLI and Area Distribution
 
 ```{r, results=FALSE}
 p_fn <- function(my_var) {
@@ -452,9 +452,41 @@ vars_temp %>%
   purrr::map(p_fn) 
 ```
 
-### Length:Width ratio of group selection shape
+### HLI and Area Scatter
 
-```{r, eval=FALSE, include=FALSE}
+```{r, results=FALSE}
+    ggplot(data = all_groups_topo_fnl) + 
+      geom_point(
+        mapping = aes(
+          x = hli
+          , y = area_m2
+          , color = hli_overall_qrtl
+        )
+      ) + 
+      scale_color_viridis_d(option = "turbo", alpha = 0.9) +
+      scale_x_continuous(breaks = scales::extended_breaks(n=10)) +
+      scale_y_continuous(breaks = scales::extended_breaks(n=10), labels = scales::comma) +
+      xlab("HLI") +
+      ylab(latex2exp::TeX("Area ($m^{2}$)")) +
+      labs(
+        title = latex2exp::TeX("HLI and Area ($m^{2}$)")
+      ) +
+      theme_bw() + 
+      theme(
+        legend.position = "top"
+        , legend.title = element_blank()
+        , axis.text.y = element_text(size = 7)
+        , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+        , panel.border = element_blank()
+      ) +
+      guides(color = guide_legend(override.aes = list(size = 5)))
+```
+
+## Length:Width ratio of group selection shape
+
+Define a north-south shape orientation index where the metric is centered at 0.5. Values above 0.5 indicate shapes with more north-south orientation, values less than 0.5 indicate more east-west orientation, and values near 0.5 indicate more square shape (e.g. equal N-S and E-W orientation).
+
+```{r}
 # get bbox output as data frame
 for (i in 1:nrow(all_groups_topo_fnl)){
   dta_temp <- data.frame(
@@ -479,8 +511,109 @@ all_groups_topo_fnl <- all_groups_topo_fnl %>%
   dplyr::mutate(
     xlength_m = xmax - xmin
     , ylength_m = ymax - ymin
-    , length_width_ratio = ylength_m/xlength_m
-    , ns_ew_ratio = ylength_m/xlength_m
+    , north_south_orientation_index = ylength_m / (xlength_m+ylength_m)
+    , orientation_class = dplyr::case_when(
+      north_south_orientation_index < 0.4 ~ "More E-W"
+      , north_south_orientation_index <= .6 ~ "Square"
+      , north_south_orientation_index <= 1 ~ "More N-S"
+      , TRUE ~ "ERROR"
+    )
+  ) %>% 
+  dplyr::mutate(
+    orientation_class = factor(
+        orientation_class
+        , ordered = TRUE
+        , levels = c("More E-W", "Square", "More N-S")
+      )
   )
+```
+
+### Counts by shape orientation and treatment group
+
+```{r}
+temp_dta <- all_groups_topo_fnl %>% 
+  sf::st_set_geometry(NULL) %>% 
+  dplyr::group_by(orientation_class) %>% 
+  dplyr::summarise(
+    n = n()
+  )  %>% 
+  dplyr::mutate(nlab = paste0("n=",n))
+all_groups_topo_fnl %>% 
+  sf::st_set_geometry(NULL) %>% 
+  dplyr::group_by(group, orientation_class) %>% 
+  dplyr::summarise(n = n()) %>% 
+ggplot(.) +
+  geom_bar(aes(x = orientation_class, y = n, fill = group, label = n)
+    , stat = "identity", width = 0.7) +
+  geom_text(aes(x = orientation_class, y = n, fill = group, label = n)
+    , size = 3, position = position_stack(vjust = 0.5), color = "white") +
+  geom_text(data = temp_dta
+    , aes(x = orientation_class, y = n, label = n)
+    , color = "black", size = 4
+    , position = position_dodge(0.9)
+    , vjust = -0.2
+  ) +
+  labs(
+      title = "Count of treatment groups by shape orientation classification"
+    ) +
+  xlab("Shape Orientation") +
+  ylab("Count Groups") +
+  scale_fill_manual(values = c("gray80", "black")) +
+  theme_bw() +
+  theme(
+    legend.position = "top"
+    , legend.title = element_blank()
+  )
+```
+
+The majority of group selection shapes have a square orientation with a length:width ratio ~1 (i.e. a north-south orientation index ~0.5). Groups classified as "More E-W" have a north-south orientation index < 0.4. For example, if a square is drawn around the shape it will have a length:width (y-axis:x-axis) ratio of less than 2:3. Groups classified as "More N-S" have a north-south orientation index > 0.6. For example, if a square is drawn around the shape it will have a length:width (y-axis:x-axis) ratio of at least 3:2.
+
+## Map Group Shape Orientation
+
+```{r, results=FALSE}
+p_hli_fn <- function(x){
+  # cts <- seq(0, 1, length.out = 20)
+  return(
+  ggplot() + 
+    geom_sf(
+      data = units
+      , lwd = 0.8
+      , alpha = 0
+      , color = "black" 
+    ) +
+    geom_sf(
+      data = all_groups_topo_fnl %>% dplyr::filter(group == x)
+      # , aes(fill = cut(north_south_orientation_index, breaks = cts))
+      , aes(fill = orientation_class)
+      , lwd = 0
+    ) +
+    scale_fill_viridis_d(option = "cividis", alpha = 0.9, drop = FALSE) +
+    labs(
+      title = paste(x, "- Orientation of group shape")
+      , subtitle = "harvest treatment units in black"
+      , caption = "More N-S = L:W > 3:2 | More E-W = L:W < 2:3"
+    ) +
+    theme_bw() + 
+    theme(
+      legend.position = "top"
+      , legend.title = element_blank()
+      , axis.text.y = element_text(size = 7)
+      , axis.text.x = element_text(size = 7, angle = 35, hjust = 0.7)
+      , panel.border = element_blank()
+      # , plot.title = element_text(size = 8)
+      , plot.subtitle = element_text(size = 7)
+      , plot.caption = element_text(size = 7)
+    ) 
+  )
+}
+c(unique(all_groups_topo_fnl$group)) %>% 
+  purrr::map(p_hli_fn)
+```
+
+
+## Save Data
+
+```{r}
+sf::st_write(all_groups_topo_fnl, "../data/all_groups_topo_fnl.gpkg", append = FALSE)
 ```
 
