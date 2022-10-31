@@ -33,3 +33,9 @@ counts-by-cool-warm-and-treatment-group
 map-cool-and-warm-sites
 characteristics-of-cool-warm-sites
 summary-statistics
+hli-and-area-distribution
+hli-and-area-scatter
+lengthwidth-ratio-of-group-selection-shape
+counts-by-shape-orientation-and-treatment-group
+map-group-shape-orientation
+save-data-1
