@@ -1,6 +1,6 @@
 tab:unnamed-chunk-10
 tab:unnamed-chunk-34
-tab:unnamed-chunk-41
+tab:unnamed-chunk-42
 objective
 data_prep
 national-forest-management-data-download
@@ -27,6 +27,7 @@ load-data
 set-up-base-map
 spatial-groups-and-hli
 summary-of-groups-and-hli
+distribution-of-hli
 quartiles-of-hli
 hli-quartiles-by-treatment-type
 hli-quartiles-overall
