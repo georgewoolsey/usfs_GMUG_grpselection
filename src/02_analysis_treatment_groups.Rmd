@@ -369,7 +369,7 @@ c(unique(all_groups_topo_fnl$group)) %>%
 
 ### Summary statistics
 
-```{r}
+```{r, results='asis'}
 # vars to aggregate
 vars_temp <- c(
   "hli"
