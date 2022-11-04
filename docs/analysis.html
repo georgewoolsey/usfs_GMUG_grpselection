@@ -23,7 +23,7 @@
 <meta name="author" content="George Woolsey" />
 
 
-<meta name="date" content="2022-10-31" />
+<meta name="date" content="2022-11-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -225,7 +225,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><a href="analysis.html#lengthwidth-ratio-of-group-selection-shape" id="toc-lengthwidth-ratio-of-group-selection-shape"><span class="toc-section-number">3.8</span> Length:Width ratio of group selection shape<span></span></a>
 <ul>
-<li><a href="analysis.html#counts-by-shape-orientation-and-treatment-group" id="toc-counts-by-shape-orientation-and-treatment-group"><span class="toc-section-number">3.8.1</span> Counts by shape orientation and treatment group<span></span></a></li>
+<li><a href="analysis.html#distribution-of-n-s-orientation-index" id="toc-distribution-of-n-s-orientation-index"><span class="toc-section-number">3.8.1</span> Distribution of N-S Orientation Index<span></span></a></li>
+<li><a href="analysis.html#counts-by-shape-orientation-and-treatment-group" id="toc-counts-by-shape-orientation-and-treatment-group"><span class="toc-section-number">3.8.2</span> Counts by shape orientation and treatment group<span></span></a></li>
 </ul></li>
 <li><a href="analysis.html#map-group-shape-orientation" id="toc-map-group-shape-orientation"><span class="toc-section-number">3.9</span> Map Group Shape Orientation<span></span></a></li>
 <li><a href="analysis.html#save-data-1" id="toc-save-data-1"><span class="toc-section-number">3.10</span> Save Data<span></span></a></li>
@@ -749,7 +750,7 @@ Reserves
 </div>
 <div id="lengthwidth-ratio-of-group-selection-shape" class="section level2 hasAnchor" number="3.8">
 <h2><span class="header-section-number">3.8</span> Length:Width ratio of group selection shape<a href="analysis.html#lengthwidth-ratio-of-group-selection-shape" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Define a north-south shape orientation index where the metric is centered at 0.5. Values above 0.5 indicate shapes with more north-south orientation, values less than 0.5 indicate more east-west orientation, and values near 0.5 indicate more square shape (e.g. equal N-S and E-W orientation).</p>
+<p>Using a simple length:width ratio to determine the orientation of the group selection shape results in a ratio that is unbounded (e.g. <span class="math inline">\(-\infty \, \textsf{to} \, +\infty\)</span>) given very small values of length versus very large values of width and vice versa. Below we define a north-south shape orientation index where the metric is centered at 0.5 with a minimum value of 0 (length:width=0:1) and a maximum value of 1 (length:width=1:0). Values above 0.5 indicate shapes with more north-south orientation, values less than 0.5 indicate more east-west orientation, and values near 0.5 indicate more square shape (e.g. equal N-S and E-W orientation).</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="analysis.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get bbox output as data frame</span></span>
 <span id="cb36-2"><a href="analysis.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(all_groups_topo_fnl)){</span>
 <span id="cb36-3"><a href="analysis.html#cb36-3" aria-hidden="true" tabindex="-1"></a>  dta_temp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -774,104 +775,149 @@ Reserves
 <span id="cb36-22"><a href="analysis.html#cb36-22" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
 <span id="cb36-23"><a href="analysis.html#cb36-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">xlength_m =</span> xmax <span class="sc">-</span> xmin</span>
 <span id="cb36-24"><a href="analysis.html#cb36-24" aria-hidden="true" tabindex="-1"></a>    , <span class="at">ylength_m =</span> ymax <span class="sc">-</span> ymin</span>
-<span id="cb36-25"><a href="analysis.html#cb36-25" aria-hidden="true" tabindex="-1"></a>    , <span class="at">north_south_orientation_index =</span> ylength_m <span class="sc">/</span> (xlength_m<span class="sc">+</span>ylength_m)</span>
-<span id="cb36-26"><a href="analysis.html#cb36-26" aria-hidden="true" tabindex="-1"></a>    , <span class="at">orientation_class =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
-<span id="cb36-27"><a href="analysis.html#cb36-27" aria-hidden="true" tabindex="-1"></a>      north_south_orientation_index <span class="sc">&lt;</span> <span class="fl">0.4</span> <span class="sc">~</span> <span class="st">&quot;More E-W&quot;</span></span>
-<span id="cb36-28"><a href="analysis.html#cb36-28" aria-hidden="true" tabindex="-1"></a>      , north_south_orientation_index <span class="sc">&lt;=</span> .<span class="dv">6</span> <span class="sc">~</span> <span class="st">&quot;Square&quot;</span></span>
-<span id="cb36-29"><a href="analysis.html#cb36-29" aria-hidden="true" tabindex="-1"></a>      , north_south_orientation_index <span class="sc">&lt;=</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;More N-S&quot;</span></span>
-<span id="cb36-30"><a href="analysis.html#cb36-30" aria-hidden="true" tabindex="-1"></a>      , <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;ERROR&quot;</span></span>
-<span id="cb36-31"><a href="analysis.html#cb36-31" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb36-32"><a href="analysis.html#cb36-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb36-33"><a href="analysis.html#cb36-33" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb36-34"><a href="analysis.html#cb36-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_class =</span> <span class="fu">factor</span>(</span>
-<span id="cb36-35"><a href="analysis.html#cb36-35" aria-hidden="true" tabindex="-1"></a>        orientation_class</span>
-<span id="cb36-36"><a href="analysis.html#cb36-36" aria-hidden="true" tabindex="-1"></a>        , <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
-<span id="cb36-37"><a href="analysis.html#cb36-37" aria-hidden="true" tabindex="-1"></a>        , <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;More E-W&quot;</span>, <span class="st">&quot;Square&quot;</span>, <span class="st">&quot;More N-S&quot;</span>)</span>
-<span id="cb36-38"><a href="analysis.html#cb36-38" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb36-39"><a href="analysis.html#cb36-39" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<div id="counts-by-shape-orientation-and-treatment-group" class="section level3 hasAnchor" number="3.8.1">
-<h3><span class="header-section-number">3.8.1</span> Counts by shape orientation and treatment group<a href="analysis.html#counts-by-shape-orientation-and-treatment-group" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="analysis.html#cb37-1" aria-hidden="true" tabindex="-1"></a>temp_dta <span class="ot">&lt;-</span> all_groups_topo_fnl <span class="sc">%&gt;%</span> </span>
-<span id="cb37-2"><a href="analysis.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-3"><a href="analysis.html#cb37-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(orientation_class) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-4"><a href="analysis.html#cb37-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
-<span id="cb37-5"><a href="analysis.html#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>()</span>
-<span id="cb37-6"><a href="analysis.html#cb37-6" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span> </span>
-<span id="cb37-7"><a href="analysis.html#cb37-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">nlab =</span> <span class="fu">paste0</span>(<span class="st">&quot;n=&quot;</span>,n))</span>
-<span id="cb37-8"><a href="analysis.html#cb37-8" aria-hidden="true" tabindex="-1"></a>all_groups_topo_fnl <span class="sc">%&gt;%</span> </span>
-<span id="cb37-9"><a href="analysis.html#cb37-9" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-10"><a href="analysis.html#cb37-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(group, orientation_class) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-11"><a href="analysis.html#cb37-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb37-12"><a href="analysis.html#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(.) <span class="sc">+</span></span>
-<span id="cb37-13"><a href="analysis.html#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> orientation_class, <span class="at">y =</span> n, <span class="at">fill =</span> group, <span class="at">label =</span> n)</span>
-<span id="cb37-14"><a href="analysis.html#cb37-14" aria-hidden="true" tabindex="-1"></a>    , <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb37-15"><a href="analysis.html#cb37-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> orientation_class, <span class="at">y =</span> n, <span class="at">fill =</span> group, <span class="at">label =</span> n)</span>
-<span id="cb37-16"><a href="analysis.html#cb37-16" aria-hidden="true" tabindex="-1"></a>    , <span class="at">size =</span> <span class="dv">3</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-17"><a href="analysis.html#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> temp_dta</span>
-<span id="cb37-18"><a href="analysis.html#cb37-18" aria-hidden="true" tabindex="-1"></a>    , <span class="fu">aes</span>(<span class="at">x =</span> orientation_class, <span class="at">y =</span> n, <span class="at">label =</span> n)</span>
-<span id="cb37-19"><a href="analysis.html#cb37-19" aria-hidden="true" tabindex="-1"></a>    , <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">4</span></span>
-<span id="cb37-20"><a href="analysis.html#cb37-20" aria-hidden="true" tabindex="-1"></a>    , <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.9</span>)</span>
-<span id="cb37-21"><a href="analysis.html#cb37-21" aria-hidden="true" tabindex="-1"></a>    , <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.2</span></span>
-<span id="cb37-22"><a href="analysis.html#cb37-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb37-23"><a href="analysis.html#cb37-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb37-24"><a href="analysis.html#cb37-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Count of treatment groups by shape orientation classification&quot;</span></span>
-<span id="cb37-25"><a href="analysis.html#cb37-25" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb37-26"><a href="analysis.html#cb37-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Shape Orientation&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-27"><a href="analysis.html#cb37-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Count Groups&quot;</span>) <span class="sc">+</span></span>
-<span id="cb37-28"><a href="analysis.html#cb37-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb37-29"><a href="analysis.html#cb37-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb37-30"><a href="analysis.html#cb37-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb37-31"><a href="analysis.html#cb37-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span></span>
-<span id="cb37-32"><a href="analysis.html#cb37-32" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb37-33"><a href="analysis.html#cb37-33" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<span id="cb36-25"><a href="analysis.html#cb36-25" aria-hidden="true" tabindex="-1"></a>    , <span class="at">length_width_ratio =</span> ylength_m <span class="sc">/</span> xlength_m</span>
+<span id="cb36-26"><a href="analysis.html#cb36-26" aria-hidden="true" tabindex="-1"></a>    , <span class="at">north_south_orientation_index =</span> ylength_m <span class="sc">/</span> (xlength_m<span class="sc">+</span>ylength_m)</span>
+<span id="cb36-27"><a href="analysis.html#cb36-27" aria-hidden="true" tabindex="-1"></a>    , <span class="at">orientation_class =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb36-28"><a href="analysis.html#cb36-28" aria-hidden="true" tabindex="-1"></a>      north_south_orientation_index <span class="sc">&lt;</span> <span class="fl">0.4</span> <span class="sc">~</span> <span class="st">&quot;More E-W&quot;</span></span>
+<span id="cb36-29"><a href="analysis.html#cb36-29" aria-hidden="true" tabindex="-1"></a>      , north_south_orientation_index <span class="sc">&lt;=</span> .<span class="dv">6</span> <span class="sc">~</span> <span class="st">&quot;Square&quot;</span></span>
+<span id="cb36-30"><a href="analysis.html#cb36-30" aria-hidden="true" tabindex="-1"></a>      , north_south_orientation_index <span class="sc">&lt;=</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;More N-S&quot;</span></span>
+<span id="cb36-31"><a href="analysis.html#cb36-31" aria-hidden="true" tabindex="-1"></a>      , <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;ERROR&quot;</span></span>
+<span id="cb36-32"><a href="analysis.html#cb36-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-33"><a href="analysis.html#cb36-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , lw_class = dplyr::case_when(</span></span>
+<span id="cb36-34"><a href="analysis.html#cb36-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   length_width_ratio &lt; 2/3 ~ &quot;More E-W&quot;</span></span>
+<span id="cb36-35"><a href="analysis.html#cb36-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   , length_width_ratio &lt;= 3/2 ~ &quot;Square&quot;</span></span>
+<span id="cb36-36"><a href="analysis.html#cb36-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   , length_width_ratio &lt;= 1e+12 ~ &quot;More N-S&quot;</span></span>
+<span id="cb36-37"><a href="analysis.html#cb36-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   , TRUE ~ &quot;ERROR&quot;</span></span>
+<span id="cb36-38"><a href="analysis.html#cb36-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># )</span></span>
+<span id="cb36-39"><a href="analysis.html#cb36-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-40"><a href="analysis.html#cb36-40" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb36-41"><a href="analysis.html#cb36-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">orientation_class =</span> <span class="fu">factor</span>(</span>
+<span id="cb36-42"><a href="analysis.html#cb36-42" aria-hidden="true" tabindex="-1"></a>        orientation_class</span>
+<span id="cb36-43"><a href="analysis.html#cb36-43" aria-hidden="true" tabindex="-1"></a>        , <span class="at">ordered =</span> <span class="cn">TRUE</span></span>
+<span id="cb36-44"><a href="analysis.html#cb36-44" aria-hidden="true" tabindex="-1"></a>        , <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;More E-W&quot;</span>, <span class="st">&quot;Square&quot;</span>, <span class="st">&quot;More N-S&quot;</span>)</span>
+<span id="cb36-45"><a href="analysis.html#cb36-45" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb36-46"><a href="analysis.html#cb36-46" aria-hidden="true" tabindex="-1"></a>    <span class="co"># , lw_class = factor(</span></span>
+<span id="cb36-47"><a href="analysis.html#cb36-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     lw_class</span></span>
+<span id="cb36-48"><a href="analysis.html#cb36-48" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     , ordered = TRUE</span></span>
+<span id="cb36-49"><a href="analysis.html#cb36-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     , levels = c(&quot;More E-W&quot;, &quot;Square&quot;, &quot;More N-S&quot;)</span></span>
+<span id="cb36-50"><a href="analysis.html#cb36-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">#   )</span></span>
+<span id="cb36-51"><a href="analysis.html#cb36-51" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div id="distribution-of-n-s-orientation-index" class="section level3 hasAnchor" number="3.8.1">
+<h3><span class="header-section-number">3.8.1</span> Distribution of N-S Orientation Index<a href="analysis.html#distribution-of-n-s-orientation-index" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="analysis.html#cb37-1" aria-hidden="true" tabindex="-1"></a>all_groups_topo_fnl <span class="sc">%&gt;%</span> sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="analysis.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(</span>
+<span id="cb37-3"><a href="analysis.html#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> .</span>
+<span id="cb37-4"><a href="analysis.html#cb37-4" aria-hidden="true" tabindex="-1"></a>    , <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> north_south_orientation_index, <span class="at">group =</span> group)</span>
+<span id="cb37-5"><a href="analysis.html#cb37-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="analysis.html#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb37-7"><a href="analysis.html#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> ..density.., <span class="at">fill =</span> group)</span>
+<span id="cb37-8"><a href="analysis.html#cb37-8" aria-hidden="true" tabindex="-1"></a>    , <span class="at">bins =</span> <span class="dv">50</span></span>
+<span id="cb37-9"><a href="analysis.html#cb37-9" aria-hidden="true" tabindex="-1"></a>    , <span class="at">color =</span> <span class="st">&quot;gray25&quot;</span></span>
+<span id="cb37-10"><a href="analysis.html#cb37-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-11"><a href="analysis.html#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(</span>
+<span id="cb37-12"><a href="analysis.html#cb37-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xintercept =</span> <span class="fl">0.5</span>)</span>
+<span id="cb37-13"><a href="analysis.html#cb37-13" aria-hidden="true" tabindex="-1"></a>    , <span class="at">color =</span> <span class="st">&quot;gray45&quot;</span></span>
+<span id="cb37-14"><a href="analysis.html#cb37-14" aria-hidden="true" tabindex="-1"></a>    , <span class="at">lwd =</span> <span class="fl">0.8</span></span>
+<span id="cb37-15"><a href="analysis.html#cb37-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-16"><a href="analysis.html#cb37-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(group<span class="sc">~</span>.) <span class="sc">+</span></span>
+<span id="cb37-17"><a href="analysis.html#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.01</span>, <span class="fl">1.01</span>), <span class="at">breaks =</span> scales<span class="sc">::</span><span class="fu">extended_breaks</span>(<span class="at">n=</span><span class="dv">10</span>), <span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb37-18"><a href="analysis.html#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb37-19"><a href="analysis.html#cb37-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;North-South Orientation Index&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-20"><a href="analysis.html#cb37-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Density&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-21"><a href="analysis.html#cb37-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb37-22"><a href="analysis.html#cb37-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Group North-South Orientation Histogram&quot;</span></span>
+<span id="cb37-23"><a href="analysis.html#cb37-23" aria-hidden="true" tabindex="-1"></a>    , <span class="at">caption =</span> <span class="st">&quot;&gt;0.5 = More N-S | &lt;0.5 = More E-W&quot;</span></span>
+<span id="cb37-24"><a href="analysis.html#cb37-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb37-25"><a href="analysis.html#cb37-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb37-26"><a href="analysis.html#cb37-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb37-27"><a href="analysis.html#cb37-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span></span>
+<span id="cb37-28"><a href="analysis.html#cb37-28" aria-hidden="true" tabindex="-1"></a>    , <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb37-29"><a href="analysis.html#cb37-29" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-45-1.png" width="960" /></p>
+</div>
+<div id="counts-by-shape-orientation-and-treatment-group" class="section level3 hasAnchor" number="3.8.2">
+<h3><span class="header-section-number">3.8.2</span> Counts by shape orientation and treatment group<a href="analysis.html#counts-by-shape-orientation-and-treatment-group" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="analysis.html#cb38-1" aria-hidden="true" tabindex="-1"></a>temp_dta <span class="ot">&lt;-</span> all_groups_topo_fnl <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="analysis.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="analysis.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(orientation_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-4"><a href="analysis.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb38-5"><a href="analysis.html#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>()</span>
+<span id="cb38-6"><a href="analysis.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span> </span>
+<span id="cb38-7"><a href="analysis.html#cb38-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">nlab =</span> <span class="fu">paste0</span>(<span class="st">&quot;n=&quot;</span>,n))</span>
+<span id="cb38-8"><a href="analysis.html#cb38-8" aria-hidden="true" tabindex="-1"></a>all_groups_topo_fnl <span class="sc">%&gt;%</span> </span>
+<span id="cb38-9"><a href="analysis.html#cb38-9" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_set_geometry</span>(<span class="cn">NULL</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-10"><a href="analysis.html#cb38-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(group, orientation_class) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-11"><a href="analysis.html#cb38-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-12"><a href="analysis.html#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(.) <span class="sc">+</span></span>
+<span id="cb38-13"><a href="analysis.html#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> orientation_class, <span class="at">y =</span> n, <span class="at">fill =</span> group, <span class="at">label =</span> n)</span>
+<span id="cb38-14"><a href="analysis.html#cb38-14" aria-hidden="true" tabindex="-1"></a>    , <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb38-15"><a href="analysis.html#cb38-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> orientation_class, <span class="at">y =</span> n, <span class="at">fill =</span> group, <span class="at">label =</span> n)</span>
+<span id="cb38-16"><a href="analysis.html#cb38-16" aria-hidden="true" tabindex="-1"></a>    , <span class="at">size =</span> <span class="dv">3</span>, <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>), <span class="at">color =</span> <span class="st">&quot;white&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-17"><a href="analysis.html#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> temp_dta</span>
+<span id="cb38-18"><a href="analysis.html#cb38-18" aria-hidden="true" tabindex="-1"></a>    , <span class="fu">aes</span>(<span class="at">x =</span> orientation_class, <span class="at">y =</span> n, <span class="at">label =</span> n)</span>
+<span id="cb38-19"><a href="analysis.html#cb38-19" aria-hidden="true" tabindex="-1"></a>    , <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">4</span></span>
+<span id="cb38-20"><a href="analysis.html#cb38-20" aria-hidden="true" tabindex="-1"></a>    , <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.9</span>)</span>
+<span id="cb38-21"><a href="analysis.html#cb38-21" aria-hidden="true" tabindex="-1"></a>    , <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.2</span></span>
+<span id="cb38-22"><a href="analysis.html#cb38-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb38-23"><a href="analysis.html#cb38-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb38-24"><a href="analysis.html#cb38-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">&quot;Count of treatment groups by shape orientation classification&quot;</span></span>
+<span id="cb38-25"><a href="analysis.html#cb38-25" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb38-26"><a href="analysis.html#cb38-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Shape Orientation&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-27"><a href="analysis.html#cb38-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Count Groups&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-28"><a href="analysis.html#cb38-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb38-29"><a href="analysis.html#cb38-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb38-30"><a href="analysis.html#cb38-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb38-31"><a href="analysis.html#cb38-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span></span>
+<span id="cb38-32"><a href="analysis.html#cb38-32" aria-hidden="true" tabindex="-1"></a>    , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb38-33"><a href="analysis.html#cb38-33" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-46-1.png" width="960" /></p>
 <p>The majority of group selection shapes have a square orientation with a length:width ratio ~1 (i.e. a north-south orientation index ~0.5). Groups classified as “More E-W” have a north-south orientation index &lt; 0.4. For example, if a square is drawn around the shape it will have a length:width (y-axis:x-axis) ratio of less than 2:3. Groups classified as “More N-S” have a north-south orientation index &gt; 0.6. For example, if a square is drawn around the shape it will have a length:width (y-axis:x-axis) ratio of at least 3:2.</p>
 </div>
 </div>
 <div id="map-group-shape-orientation" class="section level2 hasAnchor" number="3.9">
 <h2><span class="header-section-number">3.9</span> Map Group Shape Orientation<a href="analysis.html#map-group-shape-orientation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="analysis.html#cb38-1" aria-hidden="true" tabindex="-1"></a>p_hli_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb38-2"><a href="analysis.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># cts &lt;- seq(0, 1, length.out = 20)</span></span>
-<span id="cb38-3"><a href="analysis.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
-<span id="cb38-4"><a href="analysis.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb38-5"><a href="analysis.html#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
-<span id="cb38-6"><a href="analysis.html#cb38-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> units</span>
-<span id="cb38-7"><a href="analysis.html#cb38-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="fl">0.8</span></span>
-<span id="cb38-8"><a href="analysis.html#cb38-8" aria-hidden="true" tabindex="-1"></a>      , <span class="at">alpha =</span> <span class="dv">0</span></span>
-<span id="cb38-9"><a href="analysis.html#cb38-9" aria-hidden="true" tabindex="-1"></a>      , <span class="at">color =</span> <span class="st">&quot;black&quot;</span> </span>
-<span id="cb38-10"><a href="analysis.html#cb38-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb38-11"><a href="analysis.html#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
-<span id="cb38-12"><a href="analysis.html#cb38-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> all_groups_topo_fnl <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(group <span class="sc">==</span> x)</span>
-<span id="cb38-13"><a href="analysis.html#cb38-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># , aes(fill = cut(north_south_orientation_index, breaks = cts))</span></span>
-<span id="cb38-14"><a href="analysis.html#cb38-14" aria-hidden="true" tabindex="-1"></a>      , <span class="fu">aes</span>(<span class="at">fill =</span> orientation_class)</span>
-<span id="cb38-15"><a href="analysis.html#cb38-15" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="dv">0</span></span>
-<span id="cb38-16"><a href="analysis.html#cb38-16" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb38-17"><a href="analysis.html#cb38-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;cividis&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb38-18"><a href="analysis.html#cb38-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
-<span id="cb38-19"><a href="analysis.html#cb38-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">paste</span>(x, <span class="st">&quot;- Orientation of group shape&quot;</span>)</span>
-<span id="cb38-20"><a href="analysis.html#cb38-20" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> <span class="st">&quot;harvest treatment units in black&quot;</span></span>
-<span id="cb38-21"><a href="analysis.html#cb38-21" aria-hidden="true" tabindex="-1"></a>      , <span class="at">caption =</span> <span class="st">&quot;More N-S = L:W &gt; 3:2 | More E-W = L:W &lt; 2:3&quot;</span></span>
-<span id="cb38-22"><a href="analysis.html#cb38-22" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
-<span id="cb38-23"><a href="analysis.html#cb38-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb38-24"><a href="analysis.html#cb38-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
-<span id="cb38-25"><a href="analysis.html#cb38-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span></span>
-<span id="cb38-26"><a href="analysis.html#cb38-26" aria-hidden="true" tabindex="-1"></a>      , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb38-27"><a href="analysis.html#cb38-27" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb38-28"><a href="analysis.html#cb38-28" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
-<span id="cb38-29"><a href="analysis.html#cb38-29" aria-hidden="true" tabindex="-1"></a>      , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb38-30"><a href="analysis.html#cb38-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># , plot.title = element_text(size = 8)</span></span>
-<span id="cb38-31"><a href="analysis.html#cb38-31" aria-hidden="true" tabindex="-1"></a>      , <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb38-32"><a href="analysis.html#cb38-32" aria-hidden="true" tabindex="-1"></a>      , <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
-<span id="cb38-33"><a href="analysis.html#cb38-33" aria-hidden="true" tabindex="-1"></a>    ) </span>
-<span id="cb38-34"><a href="analysis.html#cb38-34" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb38-35"><a href="analysis.html#cb38-35" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb38-36"><a href="analysis.html#cb38-36" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">unique</span>(all_groups_topo_fnl<span class="sc">$</span>group)) <span class="sc">%&gt;%</span> </span>
-<span id="cb38-37"><a href="analysis.html#cb38-37" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(p_hli_fn)</span></code></pre></div>
-<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-46-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-46-2.png" width="960" /></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="analysis.html#cb39-1" aria-hidden="true" tabindex="-1"></a>p_hli_fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb39-2"><a href="analysis.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># cts &lt;- seq(0, 1, length.out = 20)</span></span>
+<span id="cb39-3"><a href="analysis.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(</span>
+<span id="cb39-4"><a href="analysis.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb39-5"><a href="analysis.html#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
+<span id="cb39-6"><a href="analysis.html#cb39-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> units</span>
+<span id="cb39-7"><a href="analysis.html#cb39-7" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="fl">0.8</span></span>
+<span id="cb39-8"><a href="analysis.html#cb39-8" aria-hidden="true" tabindex="-1"></a>      , <span class="at">alpha =</span> <span class="dv">0</span></span>
+<span id="cb39-9"><a href="analysis.html#cb39-9" aria-hidden="true" tabindex="-1"></a>      , <span class="at">color =</span> <span class="st">&quot;black&quot;</span> </span>
+<span id="cb39-10"><a href="analysis.html#cb39-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb39-11"><a href="analysis.html#cb39-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
+<span id="cb39-12"><a href="analysis.html#cb39-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> all_groups_topo_fnl <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(group <span class="sc">==</span> x)</span>
+<span id="cb39-13"><a href="analysis.html#cb39-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># , aes(fill = cut(north_south_orientation_index, breaks = cts))</span></span>
+<span id="cb39-14"><a href="analysis.html#cb39-14" aria-hidden="true" tabindex="-1"></a>      , <span class="fu">aes</span>(<span class="at">fill =</span> orientation_class)</span>
+<span id="cb39-15"><a href="analysis.html#cb39-15" aria-hidden="true" tabindex="-1"></a>      , <span class="at">lwd =</span> <span class="dv">0</span></span>
+<span id="cb39-16"><a href="analysis.html#cb39-16" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb39-17"><a href="analysis.html#cb39-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;cividis&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.9</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb39-18"><a href="analysis.html#cb39-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb39-19"><a href="analysis.html#cb39-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="fu">paste</span>(x, <span class="st">&quot;- Orientation of group shape&quot;</span>)</span>
+<span id="cb39-20"><a href="analysis.html#cb39-20" aria-hidden="true" tabindex="-1"></a>      , <span class="at">subtitle =</span> <span class="st">&quot;harvest treatment units in black&quot;</span></span>
+<span id="cb39-21"><a href="analysis.html#cb39-21" aria-hidden="true" tabindex="-1"></a>      , <span class="at">caption =</span> <span class="st">&quot;More N-S = L:W &gt; 3:2 | More E-W = L:W &lt; 2:3&quot;</span></span>
+<span id="cb39-22"><a href="analysis.html#cb39-22" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb39-23"><a href="analysis.html#cb39-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb39-24"><a href="analysis.html#cb39-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb39-25"><a href="analysis.html#cb39-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;top&quot;</span></span>
+<span id="cb39-26"><a href="analysis.html#cb39-26" aria-hidden="true" tabindex="-1"></a>      , <span class="at">legend.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb39-27"><a href="analysis.html#cb39-27" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb39-28"><a href="analysis.html#cb39-28" aria-hidden="true" tabindex="-1"></a>      , <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">angle =</span> <span class="dv">35</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>)</span>
+<span id="cb39-29"><a href="analysis.html#cb39-29" aria-hidden="true" tabindex="-1"></a>      , <span class="at">panel.border =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb39-30"><a href="analysis.html#cb39-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># , plot.title = element_text(size = 8)</span></span>
+<span id="cb39-31"><a href="analysis.html#cb39-31" aria-hidden="true" tabindex="-1"></a>      , <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb39-32"><a href="analysis.html#cb39-32" aria-hidden="true" tabindex="-1"></a>      , <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>)</span>
+<span id="cb39-33"><a href="analysis.html#cb39-33" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb39-34"><a href="analysis.html#cb39-34" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb39-35"><a href="analysis.html#cb39-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb39-36"><a href="analysis.html#cb39-36" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">unique</span>(all_groups_topo_fnl<span class="sc">$</span>group)) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-37"><a href="analysis.html#cb39-37" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(p_hli_fn)</span></code></pre></div>
+<p><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-47-1.png" width="960" /><img src="usfs_GMUG_grpselection_files/figure-html/unnamed-chunk-47-2.png" width="960" /></p>
 </div>
 <div id="save-data-1" class="section level2 hasAnchor" number="3.10">
 <h2><span class="header-section-number">3.10</span> Save Data<a href="analysis.html#save-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="analysis.html#cb39-1" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(all_groups_topo_fnl, <span class="st">&quot;../data/all_groups_topo_fnl.gpkg&quot;</span>, <span class="at">append =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="analysis.html#cb40-1" aria-hidden="true" tabindex="-1"></a>sf<span class="sc">::</span><span class="fu">st_write</span>(all_groups_topo_fnl, <span class="st">&quot;../data/all_groups_topo_fnl.gpkg&quot;</span>, <span class="at">append =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 
 </div>
 </div>

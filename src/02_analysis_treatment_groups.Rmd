@@ -484,7 +484,7 @@ vars_temp %>%
 
 ## Length:Width ratio of group selection shape
 
-Define a north-south shape orientation index where the metric is centered at 0.5. Values above 0.5 indicate shapes with more north-south orientation, values less than 0.5 indicate more east-west orientation, and values near 0.5 indicate more square shape (e.g. equal N-S and E-W orientation).
+Using a simple length:width ratio to determine the orientation of the group selection shape results in a ratio that is unbounded (e.g. $-\infty \, \textsf{to}  \, +\infty$) given very small values of length versus very large values of width and vice versa. Below we define a north-south shape orientation index where the metric is centered at 0.5 with a minimum value of 0 (length:width=0:1) and a maximum value of 1 (length:width=1:0). Values above 0.5 indicate shapes with more north-south orientation, values less than 0.5 indicate more east-west orientation, and values near 0.5 indicate more square shape (e.g. equal N-S and E-W orientation).
 
 ```{r}
 # get bbox output as data frame
@@ -511,6 +511,7 @@ all_groups_topo_fnl <- all_groups_topo_fnl %>%
   dplyr::mutate(
     xlength_m = xmax - xmin
     , ylength_m = ymax - ymin
+    , length_width_ratio = ylength_m / xlength_m
     , north_south_orientation_index = ylength_m / (xlength_m+ylength_m)
     , orientation_class = dplyr::case_when(
       north_south_orientation_index < 0.4 ~ "More E-W"
@@ -518,6 +519,12 @@ all_groups_topo_fnl <- all_groups_topo_fnl %>%
       , north_south_orientation_index <= 1 ~ "More N-S"
       , TRUE ~ "ERROR"
     )
+    # , lw_class = dplyr::case_when(
+    #   length_width_ratio < 2/3 ~ "More E-W"
+    #   , length_width_ratio <= 3/2 ~ "Square"
+    #   , length_width_ratio <= 1e+12 ~ "More N-S"
+    #   , TRUE ~ "ERROR"
+    # )
   ) %>% 
   dplyr::mutate(
     orientation_class = factor(
@@ -525,8 +532,48 @@ all_groups_topo_fnl <- all_groups_topo_fnl %>%
         , ordered = TRUE
         , levels = c("More E-W", "Square", "More N-S")
       )
+    # , lw_class = factor(
+    #     lw_class
+    #     , ordered = TRUE
+    #     , levels = c("More E-W", "Square", "More N-S")
+    #   )
   )
 ```
+
+### Distribution of N-S Orientation Index
+
+```{r}
+all_groups_topo_fnl %>% sf::st_set_geometry(NULL) %>% 
+  ggplot(
+    data = .
+    , mapping = aes(x = north_south_orientation_index, group = group)
+  ) +
+  geom_histogram(
+    aes(y = ..density.., fill = group)
+    , bins = 50
+    , color = "gray25"
+  ) +
+  geom_vline(
+    aes(xintercept = 0.5)
+    , color = "gray45"
+    , lwd = 0.8
+  ) +
+  facet_grid(group~.) +
+  scale_x_continuous(limits = c(-0.01, 1.01), breaks = scales::extended_breaks(n=10), labels = scales::comma) +
+  scale_fill_manual(values = c("gray80", "black")) +
+  xlab("North-South Orientation Index") +
+  ylab("Density") +
+  labs(
+    title = "Group North-South Orientation Histogram"
+    , caption = ">0.5 = More N-S | <0.5 = More E-W"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "none"
+    , plot.caption = element_text(size = 7)
+  )
+```
+
 
 ### Counts by shape orientation and treatment group
 
