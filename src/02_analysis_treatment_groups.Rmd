@@ -484,7 +484,7 @@ vars_temp %>%
 
 ## Length:Width ratio of group selection shape
 
-Using a simple length:width ratio to determine the orientation of the group selection shape results in a ratio that is unbounded (e.g. $-\infty \, \textsf{to}  \, +\infty$) given very small values of length versus very large values of width and vice versa. Below we define a north-south shape orientation index where the metric is centered at 0.5 with a minimum value of 0 (length:width=0:1) and a maximum value of 1 (length:width=1:0). Values above 0.5 indicate shapes with more north-south orientation, values less than 0.5 indicate more east-west orientation, and values near 0.5 indicate more square shape (e.g. equal N-S and E-W orientation).
+Using a simple length:width ratio to determine the orientation of the group selection shape results in a ratio that is unbounded (e.g. $10^{-\infty} \; \textrm{to}  \; 10^{+\infty}$) given very small values of length versus very large values of width and vice versa. Below we define a north-south shape orientation index where the metric is centered at 0.5 (length:width = 1:1) with a minimum value of 0 (length:width = 0:1) and a maximum value of 1 (length:width = 1:0). Values above 0.5 indicate shapes with more north-south orientation, values less than 0.5 indicate more east-west orientation, and values near 0.5 indicate more square shape (e.g. equal N-S and E-W orientation).
 
 ```{r}
 # get bbox output as data frame
@@ -573,7 +573,6 @@ all_groups_topo_fnl %>% sf::st_set_geometry(NULL) %>%
     , plot.caption = element_text(size = 7)
   )
 ```
-
 
 ### Counts by shape orientation and treatment group
 
